@@ -1,0 +1,32 @@
+<div name="clip-form-div">
+    <form class="clip-form" id="clip-form" action="submit">
+        <div>
+            <form id="submit-clip-form" action="submit_clip">
+                <label for="fencer-name-left" class="form-question">Who is the fencer on the left?
+                </label>
+                <input type="text" for="fencer-name-left" /><br />
+                <label for="fencer-name-right" class="form-question">Who is the fencer on the right?
+                </label>
+                <input type="text" for="fencer-name-right" /><br />
+                <label for="strip_location" class="form-question">Where on the strip did the touch occur?</label><br />
+                <% @score_strip_locations.each do |strip_location| %>
+                    <label for="strip_location"><%= strip_location.to_s.gsub("_", " ")%>:  </label>
+                    <input type="radio" for="strip_location" name="strip_location" id="<%= strip_location.to_s%>"/><br />
+                <% end %>
+                <label for="initiated-action" class="form-question">Who initiated the action?</label><br/>
+                <label for="initiated-action"> FOTL: </label>
+                <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-left"/> <br/>
+                <label for="initiated-action"> FOTR: </label>
+                <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-right" /><br/>
+                <label for="initiated-action"> Neither: </label>
+                <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-neither" /><br/>
+                <label for="body_location" class="form-question">Where did the touch occur?</label><br/>
+                <% @score_body_locations.each do |body_location| %>
+                    <label for="body_location"><%= body_location.to_s.gsub("_", " ")%>:  </label>
+                    <input type="radio" for="body_location" name="body_location" id="<%= body_location.to_s%>"/><br />
+                <% end %>
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </form>
+</div>
