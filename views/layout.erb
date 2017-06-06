@@ -5,10 +5,12 @@
         <link rel="stylesheet" type="text/css" href="<%= url("css/bootstrap-3.3.7-dist/css/bootstrap.min.css")%>"
     </head>
     <body>
-        <header>
-        </header>
-        <div class="content">
-            <%= yield%>
+        <div class="container-fluid">
+            <header>
+            </header>
+            <div class="content">
+                <%= yield%>
+            </div>
         </div>
     </body>
 </html>
