@@ -4,52 +4,57 @@
 <div name="clip-form-div">
     <form class="clip-form" id="clip-form" action="submit">
         <div>
-            <form id="submit-clip-form" action="submit_clip">
-                <div class="input-group">
-                    <div class="row">
-                        <label for="fencer-name-left" class="form-question h4">Who is the fencer on the left? 
-                        </label>
-                        <input type="text" for="fencer-name-left" /><br />
-
-                        <label for="fencer-name-right" class="form-question h4">Who is the fencer on the right?
-                        </label>
-                        <input type="text" for="fencer-name-right" /><br />
-                    </div>
-                </div>
-
+            <div class="input-group">
                 <div class="row">
-                    <div class="btn-group col-md-2">
-                        <label for="strip_location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.</label><br />
-                        <% @score_strip_locations.each do |strip_location| %>
-                            <label for="strip_location" class="h5"><%= strip_location.to_s.gsub("_", " ")%>:  </label>
-                            <input type="radio" for="strip_location" name="strip_location" id="<%= strip_location.to_s%>"/><br />
+                    <label for="fotl-name" class="form-question h4">Who is the fencer on the left? 
+                    </label>
+                    <input type="text" id="fotl-name" name="fotl-name"/><br />
+
+                    <label for="fotr-name" class="form-question h4">Who is the fencer on the right?
+                    </label>
+                    <input type="text" id="fotr-name" name="fotr-name"/><br />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="btn-group col-md-2">
+                    <label for="strip_location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.</label><br />
+                    <% @score_strip_locations.each do |strip_location| %>
+                        <label class="h5"><%= strip_location.to_s.gsub("_", " ")%>:
+                            <input type="radio" name="strip_location" id="strip_location" value="<%= strip_location.to_s%>"></label><br />
+                    <% end %>
+                </div>
+
+                <div class="btn-group col-md-3">
+                    <label for="initiated-action" class="form-question h4">Who initiated the action?</label><br/>
+                    <label class="h5"> FOTL:
+                        <input type="radio" name="initiated-action" id="initiated-action-left" value="fotl">
+                    </label>
+                    <br/>
+                    <label class="h5"> FOTR: 
+                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-right" value="fotr"><br/>
+                    </label>
+                    <br/>
+                    <label class="h5"> Neither: 
+                        <input type="radio" name="initiated-action" id="initiated-action-neither" value="neither">
+                    </label>
+                    <br/>
+
+                </div>
+
+                <div class="btn-group col-md-3">
+                    <label for="body_location" class="form-question h4">Where was the hit?</label><br/>
+                    <select name="score-body-select" id="score-body-select">
+                        <% @score_body_locations.each do |body_location| %>
+                            <option id="<%= body_location.to_s%>" value="<%= body_location.to_s%>"><%= body_location.to_s.gsub("_", " ")%></option>
+                            <br/>
                         <% end %>
-                    </div>
-
-                    <div class="btn-group col-md-3">
-                        <label for="initiated-action" class="form-question h4">Who initiated the action?</label><br/>
-                        <label for="initiated-action" class="h5"> FOTL: </label>
-                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-left"/> <br/>
-                        <label for="initiated-action" class="h5"> FOTR: </label>
-                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-right" /><br/>
-                        <label for="initiated-action" class="h5"> Neither: </label>
-                        <input type="radio" name="initiated-action" id="initiated-action-neither" /><br/>
-                    </div>
-
-                    <div class="btn-group col-md-3">
-                        <label for="body_location" class="form-question h4">Where was the hit?</label><br/>
-                        <select id="score-body-select">
-                            <% @score_body_locations.each do |body_location| %>
-                                <option id="<%= body_location.to_s%>" value="<%= body_location.to_s%>"><%= body_location.to_s.gsub("_", " ")%></option>
-                                <br/>
-                            <% end %>
-                        </select>
-                    </div>
+                    </select>
                 </div>
-                <div class="submit-button col-md-4">
-                    <input type="submit" value="Submit" class="btn btn-default"/>
-                </div>
-            </form>
+            </div>
+            <div class="submit-button col-md-4">
+                <input type="submit" value="Submit" class="btn btn-default"/>
+            </div>
         </div>
     </form>
-    </div>
+</div>
