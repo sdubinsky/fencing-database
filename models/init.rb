@@ -1,3 +1,3 @@
-require 'gfycat'
-require 'post_response'
-require 'stats_id'
+require_relative 'gfycat'
+require_relative 'form_response'
+require_relative 'stats_id'

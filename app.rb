@@ -14,6 +14,14 @@ get '/' do
   erb :clip_form
 end
 
-get '/submit/?' do 
+get '/submit/?' do
+  response = FormResponse.create(
+    fotl_name: params['fotl-name'],
+    fotr_name: params['fotr-name'],
+    initiated: params['initiated-action'],
+    strip_location: params['strip-location'],
+    body_location: params['score-body-select']
+  )
+  response.save
   redirect '/'
 end

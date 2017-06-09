@@ -18,10 +18,10 @@
 
             <div class="row">
                 <div class="btn-group col-md-2">
-                    <label for="strip_location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.</label><br />
+                    <label for="strip-location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.</label><br />
                     <% @score_strip_locations.each do |strip_location| %>
                         <label class="h5"><%= strip_location.to_s.gsub("_", " ")%>:
-                            <input type="radio" name="strip_location" id="strip_location" value="<%= strip_location.to_s%>"></label><br />
+                            <input type="radio" name="strip-location" id="strip_location" value="<%= strip_location.to_s%>"></label><br />
                     <% end %>
                 </div>
 
