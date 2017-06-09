@@ -1,9 +1,9 @@
 require 'sinatra'
-require 'models/init.rb'
+require 'sequel'
+require './models/init'
 
 configure :development do
   set :show_exceptions, true
-  DB = Sequel.connect 'postgres://localhost:5432/fencingstats'
 end
 
 set :root, File.dirname(__FILE__)
