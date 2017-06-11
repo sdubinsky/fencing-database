@@ -1,4 +1,5 @@
 class Gfycat < Sequel::Model
+  one_to_many :form_responses
   def self.random_gfycat_id
     maxval = Gfycat.count
     random_id = rand(maxval) + 1
