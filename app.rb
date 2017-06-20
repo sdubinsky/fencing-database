@@ -1,5 +1,15 @@
 require 'sinatra'
 require 'sequel'
+require 'psych'
+config = Psych.load_file("./config.yml")
+db_config = config['database']
+if db_config['db_username'] or db_config['db_password']
+  login = "#{db_config['db_username']}:#{db_config['db_password']}@"
+else
+  login = ''
+end
+Sequel.connect("postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}")
+
 require './models/init'
 
 configure :development do
