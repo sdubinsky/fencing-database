@@ -8,7 +8,8 @@ if db_config['db_username'] or db_config['db_password']
 else
   login = ''
 end
-Sequel.connect("postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}")
+connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
+DB = Sequel.connect(connstr)
 
 require './models/init'
 
