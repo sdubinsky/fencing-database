@@ -8,4 +8,4 @@ set :deploy_to, '/home/ec2-user/fencing-database'
 
 set :linked_files, fetch(:linked_files, []).push('config.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log')
-set :bundle_bins, fetch(:bundle_bins, []).push('ruby')
+set :bundle_bins, fetch(:bundle_bins, []).push('ruby', 'god')
