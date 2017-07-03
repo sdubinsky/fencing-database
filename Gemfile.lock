@@ -9,6 +9,9 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (>= 1.9.0)
+    capistrano-bundler (1.2.0)
+      capistrano (~> 3.1)
+      sshkit (~> 1.2)
     capistrano-harrow (0.5.3)
     daemons (1.2.4)
     eventmachine (1.2.3)
@@ -51,6 +54,7 @@ PLATFORMS
 
 DEPENDENCIES
   capistrano (~> 3.6.1)
+  capistrano-bundler (~> 1.2)
   pg (~> 0.20)
   rerun
   sequel (~> 4.47)
