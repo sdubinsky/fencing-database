@@ -31,7 +31,7 @@ namespace :deploy do
     on roles :web do
       within release_path do
         invoke "bundler:install"
-        execute :god, '-c server.god -D'
+        execute :god, '-c server.god'
       end
     end
   end
