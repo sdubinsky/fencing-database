@@ -50,5 +50,6 @@ get '/submit_gfycat/?' do
     tournament: params['tournament'],
     weapon: params['weapon'],
     gender: params['gender']
-  )
+  ).save
+  status 200
 end
