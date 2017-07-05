@@ -2,60 +2,52 @@
     <div class='gfyitem' data-id='<%= @gfycat.gfycat_gfy_id %>' data-max-height="500" data-responsive="true"></div>
 </div>
 <div name="clip-form-div">
-    <form class="clip-form" id="clip-form" action="submit">
-        <div>
-            <div class="input-group">
-                <div class="row">
-                    <label for="fotl-name" class="form-question h4">Who is the fencer on the left? 
-                    </label>
-                    <input type="text" id="fotl-name" name="fotl-name"/><br />
+    <form class="clip-form form-inline" id="clip-form" action="submit">
+        <div class="form-group">
+            <div class="col-md-3">
+                <label for="fotl-name" class="form-question h4">Who is the fencer on the left? 
+                </label>
+                <input type="text" id="fotl-name" name="fotl-name"/><br />
 
-                    <label for="fotr-name" class="form-question h4">Who is the fencer on the right?
-                    </label>
-                    <input type="text" id="fotr-name" name="fotr-name"/><br />
-                </div>
+                <label for="fotr-name" class="form-question h4">Who is the fencer on the right?
+                </label>
+                <input type="text" id="fotr-name" name="fotr-name"/><br />
             </div>
 
-            <div class="row">
-                <div class="btn-group col-md-2">
-                    <label for="strip-location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.</label><br />
+            <div class="form-group col-md-2">
+                <label for="strip-location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label><br />
+                <select class="form-control">
                     <% @score_strip_locations.each do |strip_location| %>
-                        <label class="h5"><%= strip_location.to_s.gsub("_", " ")%>:
-                            <input type="radio" name="strip-location" id="strip_location" value="<%= strip_location.to_s%>"></label><br />
+                        <option name="strip-location" id="strip-location" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
                     <% end %>
-                </div>
-
-                <div class="btn-group col-md-3">
-                    <label for="initiated-action" class="form-question h4">Who initiated the action?</label><br/>
-                    <label class="h5"> FOTL:
-                        <input type="radio" name="initiated-action" id="initiated-action-left" value="fotl">
-                    </label>
-                    <br/>
-                    <label class="h5"> FOTR: 
-                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-right" value="fotr"><br/>
-                    </label>
-                    <br/>
-                    <label class="h5"> Neither: 
-                        <input type="radio" name="initiated-action" id="initiated-action-neither" value="neither">
-                    </label>
-                    <br/>
-
-                </div>
-
-                <div class="btn-group col-md-3">
-                    <label for="body_location" class="form-question h4">Where was the hit?</label><br/>
-                    <select name="score-body-select" id="score-body-select">
-                        <% @score_body_locations.each do |body_location| %>
-                            <option id="<%= body_location.to_s%>" value="<%= body_location.to_s%>"><%= body_location.to_s.gsub("_", " ")%></option>
-                            <br/>
-                        <% end %>
-                    </select>
-                </div>
+                </select>
             </div>
 
-            <input id="gfycat-id" name="gfycat-id" value="<%= @gfycat.id%>"
-            <div class="submit-button col-md-4">
-                <input type="submit" value="Submit" class="btn btn-default"/>
+            <div class="form-group radio col-md-3">
+                <label for="initiated-action" class="h4">Who initiated the action?</label><br/>
+                <label class="h5 radio-inline"> FOTL:
+                    <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-left" value="fotl" class="form-control radio">
+                </label>
+                <label class="h5 radio-inline"> FOTR: 
+                    <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-right" value="fotr" class="form-control radio"><br/>
+                </label>
+                <label class="h5 radio-inline"> Neither: 
+                    <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-neither" value="neither" class="form-control radio">
+                </label>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="body_location" class="form-question h4">Where was the hit?</label><br/>
+                <select class="form-control" name="score-body-select" id="score-body-select">
+                    <% @score_body_locations.each do |body_location| %>
+                        <option id="<%= body_location.to_s%>" class="col-md-16" value="<%= body_location.to_s%>"><%= body_location.to_s.gsub("_", " ")%></option>
+                    <% end %>
+                </select>
+            </div>
+
+            <input id="gfycat-id" name="gfycat-id" value="<%= @gfycat.id%>" hidden="true">
+            <div class="form-group submit-button">
+                <input type="submit" value="Submit" class="btn btn-default btn-lg pull-right"/>
             </div>
         </div>
     </form>
