@@ -38,7 +38,8 @@ get '/submit/?' do
     initiated: params['initiated-action'],
     strip_location: params['strip-location'],
     body_location: params['score-body-select'],
-    gfycat_id: params['gfycat-id']
+    gfycat_id: params['gfycat-id'],
+    created_date: Time.now.to_i
   )
   response.save
   redirect '/'
@@ -49,7 +50,8 @@ get '/submit_gfycat/?' do
     gfycat_gfy_id: params['gfycat_id'],
     tournament: params['tournament'],
     weapon: params['weapon'],
-    gender: params['gender']
+    gender: params['gender'],
+    created_date: Time.now.to_i
   ).save
   status 200
 end
