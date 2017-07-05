@@ -3,7 +3,7 @@ namespace 'db' do
   desc 'migrate db'
   task :migrate do
     on roles(:web) do
-      s = capture :cat, "/home/ec2-user/fencing-database/config.yml"
+      s = capture :cat, "/home/ec2-user/fencing-database/current/config.yml"
       db_config = Psych.load(s)['database']
       connstr = "postgres://#{db_config['db_username']}:#{db_config['db_password']}@#{db_config['db_address']}/#{db_config['db_name']}"
       puts connstr
