@@ -3,12 +3,12 @@ namespace 'db' do
   desc 'migrate db'
   task :migrate do
     on roles(:web) do
-      s = capture :cat, "/home/ec2-user/fencing-database/current/config.yml"
+      s = capture :cat, "#{release_path}/config.yml"
       db_config = Psych.load(s)['database']
       connstr = "postgres://#{db_config['db_username']}:#{db_config['db_password']}@#{db_config['db_address']}/#{db_config['db_name']}"
       puts connstr
       
-      execute :sequel, '-m', "/home/ec2-user/fencing-database/db/migrations", "postgres://#{db_config['db_username']}:#{db_config['db_password']}@#{db_config['db_address']}/#{db_config['db_name']}"
+      execute :sequel, '-m', "#{release_path}/db/migrations", "postgres://#{db_config['db_username']}:#{db_config['db_password']}@#{db_config['db_address']}/#{db_config['db_name']}"
     end
   end
   desc 'migrate db locally'
