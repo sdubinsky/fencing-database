@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'sequel'
 require 'psych'
+require 'json'
+
 config = Psych.load_file("./config.yml")
 db_config = config['database']
 if db_config['db_username'] or db_config['db_password']
@@ -45,13 +47,23 @@ get '/submit/?' do
   redirect '/'
 end
 
-get '/submit_gfycat/?' do
-  gfycat = Gfycat.new(
-    gfycat_gfy_id: params['gfycat_id'],
-    tournament: params['tournament'],
-    weapon: params['weapon'],
-    gender: params['gender'],
-    created_date: Time.now.to_i
-  ).save
+post '/submit_gfycats/?' do
+  request.body.rewind
+  payload = JSON.parse request.body.read
+  payload['gfycats'].each do |gfy|
+    begin
+      Gfycat.new(
+        gfycat_gfy_id: gfy['gfycat_id'],
+        tournament: gfy['tournament'],
+        weapon: gfy['weapon'],
+        gender: gfy['gender'],
+        created_date: Time.now.to_i
+      ).save
+    rescue Sequel::UniqueConstraintViolation
+      puts "duplicate gfy id: #{gfy['gfycat_id']}"
+    end
+  end
+  
   status 200
+
 end
