@@ -40,7 +40,7 @@ get '/submit/?' do
     initiated: params['initiated-action'],
     strip_location: params['strip-location'],
     body_location: params['score-body-select'],
-    gfycat_id: params['gfycat-id'],
+    stats_id: params['gfycat-id'],
     created_date: Time.now.to_i
   )
   response.save
