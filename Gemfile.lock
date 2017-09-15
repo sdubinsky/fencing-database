@@ -15,6 +15,7 @@ GEM
     capistrano-harrow (0.5.3)
     daemons (1.2.4)
     eventmachine (1.2.3)
+    excon (0.59.0)
     ffi (1.9.18)
     god (0.13.7)
     i18n (0.8.4)
@@ -56,6 +57,7 @@ PLATFORMS
 DEPENDENCIES
   capistrano (~> 3.6.1)
   capistrano-bundler (~> 1.2)
+  excon (~> 0.59)
   god (~> 0.13)
   pg (~> 0.20)
   rerun
