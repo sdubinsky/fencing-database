@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sequel'
 require 'psych'
 require 'json'
+require 'excon'
 
 config = Psych.load_file("./config.yml")
 db_config = config['database']
@@ -68,7 +69,8 @@ post '/submit_gfycats/?' do
 end
 
 get '/update_gfycat_list/?' do 
-  all_gfycats = JSON.parse Net:HTTP.get('https://api.gfycat.com', '/v1/users/fencingdatabase/gfycats')['gfycats']
+  all_gfycats = JSON.parse Excon.get('https://api.gfycat.com/v1/users/fencingdatabase/gfycats').body
+  all_gfycats = all_gfycats['gfycats']
   old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
   new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
   new_gfycats.each do |gfy|
@@ -81,9 +83,10 @@ get '/update_gfycat_list/?' do
         gender: tags['gender'],
         created_date: Time.now.to_i
       ).save
+      puts "added new gfycat ID #{gfy['gfyName']}"
     rescue Sequel::UniqueConstraintViolation
-      puts "duplicate gfy id: #{gfy['gfycat_id']}"
+      puts "duplicate gfy id: #{gfy['gfyName']}"
     end
-
+    status 200
   end
 end
