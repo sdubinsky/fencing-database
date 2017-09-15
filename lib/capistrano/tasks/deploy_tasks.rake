@@ -26,6 +26,14 @@ namespace :deploy do
     end
   end
 
+  task :hard_restart_server do
+    on roles :web do
+      within release_path do
+        execute :god, 'terminate'
+        execute :god, '-c server.god'
+      end
+    end
+  end
   desc 'start god process and server'
   task :cold_start do
     on roles :web do
@@ -35,6 +43,6 @@ namespace :deploy do
       end
     end
   end
-  after 'cleanup', 'restart_server' 
+  after 'cleanup', 'hard_restart_server' 
 end
 
