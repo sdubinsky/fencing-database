@@ -65,5 +65,25 @@ post '/submit_gfycats/?' do
   end
   
   status 200
+end
 
+get '/update_gfycat_list/?' do 
+  all_gfycats = JSON.parse Net:HTTP.get('https://api.gfycat.com', '/v1/users/fencingdatabase/gfycats')['gfycats']
+  old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
+  new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
+  new_gfycats.each do |gfy|
+    tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+    begin
+      Gfycat.new(
+        gfycat_gfy_id: gfy['gfyName'],
+        tournament: tags['tournament'],
+        weapon: tags['weapon'],
+        gender: tags['gender'],
+        created_date: Time.now.to_i
+      ).save
+    rescue Sequel::UniqueConstraintViolation
+      puts "duplicate gfy id: #{gfy['gfycat_id']}"
+    end
+
+  end
 end
