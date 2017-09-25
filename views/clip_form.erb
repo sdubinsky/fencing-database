@@ -16,9 +16,9 @@
 
             <div class="form-group col-md-2">
                 <label for="strip-location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label><br />
-                <select class="form-control">
+                <select class="form-control" name="strip-location">
                     <% @score_strip_locations.each do |strip_location| %>
-                        <option name="strip-location" id="strip-location" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
+                        <option name="strip-location" id="<% strip_location.to_s %>" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
                     <% end %>
                 </select>
             </div>
