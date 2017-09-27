@@ -68,25 +68,37 @@ post '/submit_gfycats/?' do
   status 200
 end
 
-get '/update_gfycat_list/?' do 
-  all_gfycats = JSON.parse Excon.get('https://api.gfycat.com/v1/users/fencingdatabase/gfycats').body
-  all_gfycats = all_gfycats['gfycats']
-  old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
-  new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
-  new_gfycats.each do |gfy|
-    tags = Hash[gfy['tags'].map{|x| x.split ": "}]
-    begin
-      Gfycat.new(
-        gfycat_gfy_id: gfy['gfyName'],
-        tournament: tags['tournament'],
-        weapon: tags['weapon'],
-        gender: tags['gender'],
-        created_date: Time.now.to_i
-      ).save
-      puts "added new gfycat ID #{gfy['gfyName']}"
-    rescue Sequel::UniqueConstraintViolation
-      puts "duplicate gfy id: #{gfy['gfyName']}"
+get '/update_gfycat_list/?' do
+  Thread.new do
+    next_round = JSON.parse Excon.get('https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500').body
+    all_gfycats = next_round['gfycats']
+    cursor = next_round['cursor']
+    until cursor.empty? do
+      puts "getting next round"
+      next_round = JSON.parse Excon.get("https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500&cursor=#{cursor}").body
+      cursor = next_round['cursor']
+      puts cursor
+      all_gfycats = all_gfycats + next_round['gfycats']
     end
-    status 200
+    puts all_gfycats.length
+    old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
+    new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
+    new_gfycats.each do |gfy|
+      tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+      begin
+        Gfycat.new(
+          gfycat_gfy_id: gfy['gfyName'],
+          tournament: tags['tournament'],
+          weapon: tags['weapon'],
+          gender: tags['gender'],
+          created_date: Time.now.to_i
+        ).save
+        puts "added new gfycat ID #{gfy['gfyName']}"
+      rescue Sequel::UniqueConstraintViolation
+        puts "duplicate gfy id: #{gfy['gfyName']}"
+      end
+    end
   end
+  status 200
 end
+
