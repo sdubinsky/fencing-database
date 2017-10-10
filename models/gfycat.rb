@@ -5,4 +5,8 @@ class Gfycat < Sequel::Model
     raise RuntimeError.new("no gfycats found") if not gfycat
     gfycat
   end
+  def self.tournaments
+    tournaments = Gfycat.select(:tournament).distinct.map{|t| t[:tournament]}
+    tournaments
+  end
 end

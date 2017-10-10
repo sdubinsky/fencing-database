@@ -23,13 +23,12 @@ end
 set :root, File.dirname(__FILE__)
 
 get '/' do
-  @score_strip_locations = [:fotl_warning_strip, :fotl_half, :middle, :fotr_half, :fotr_warning_strip]
+  @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
     @gfycat = Gfycat.random_gfycat_id
   rescue RuntimeError
-    status 500
-    return
+    return "Please seed the DB by sending a GET request to /update_gfycat_list"
   end
   erb :clip_form
 end
@@ -67,6 +66,19 @@ end
   
 #   status 200
 # end
+
+get '/stats/?' do
+  @tournaments = ['all'] + Gfycat.tournaments
+  @genders = ['male', 'female']
+  @total = FormResponse.total
+  @location = FormResponse.most_popular_location tournament: params['tournament-filter']
+  @most_popular_location = @location[:strip_location] || "unknown part"
+  puts @most_popular_location.to_s
+  @most_popular_location = @most_popular_location.gsub("fotr", "FOTR").gsub("fotl", "FOTL").gsub("_", " ") 
+  @most_hit_location = FormResponse.most_popular_hit tournament: params['tournament-filter']
+  @most_popular_hit = @most_hit_location[:body_location]
+  @most_popular_hit = @most_popular_hit.gsub("_", " ") or ""
+  erb :stats
 end
 
 get '/update_gfycat_list/?' do

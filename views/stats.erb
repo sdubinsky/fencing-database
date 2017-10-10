@@ -1,0 +1,20 @@
+<div name="stats">
+    <form class="stats-filter form-inline" id="stats-filter-form" action="stats">
+        <label for="tournament-filter" class="form-question h4">Tournament: </label>
+        <select class="form-control" name="tournament-filter">
+            <%  @tournaments.each do |tournament| %>
+                <option name="tournament-filter" id="<%=%> tournament %> " value="<%= tournament %>"><%= tournament.to_s.capitalize %></option>
+            <% end %>
+        </select>
+        <input type="submit" value="Submit" class="btn btn-default "/>
+    </form>
+    <div name="total-responses" class="stats">
+        Total responses: <%= @total %><br/>
+    </div>
+    <div name="stats-strip-location" class="stats">
+        Most touches occur on <%= @most_popular_location %> of the strip<br />
+    </div>
+    <div name="stats-hit-location" class="stats">
+        Most people get hit on the <%= @most_popular_hit %> <br />
+    </div>
+</div>
