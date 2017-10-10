@@ -70,10 +70,9 @@ end
 get '/stats/?' do
   @tournaments = ['all'] + Gfycat.tournaments
   @genders = ['male', 'female']
-  @total = FormResponse.total
+  @total = FormResponse.total tournament: params['tournament-filter']
   @location = FormResponse.most_popular_location tournament: params['tournament-filter']
-  @most_popular_location = @location[:strip_location] || "unknown part"
-  puts @most_popular_location.to_s
+  @most_popular_location = @location[:strip_location]
   @most_popular_location = @most_popular_location.gsub("fotr", "FOTR").gsub("fotl", "FOTL").gsub("_", " ") 
   @most_hit_location = FormResponse.most_popular_hit tournament: params['tournament-filter']
   @most_popular_hit = @most_hit_location[:body_location]
