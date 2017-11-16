@@ -92,7 +92,7 @@ get '/update_gfycat_list/?' do
       puts cursor
       all_gfycats = all_gfycats + next_round['gfycats']
     end
-    puts all_gfycats.length
+
     old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
     new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
     new_gfycats.each do |gfy|
