@@ -103,7 +103,9 @@ get '/update_gfycat_list/?' do
           tournament: tags['tournament'],
           weapon: tags['weapon'],
           gender: tags['gender'],
-          created_date: Time.now.to_i
+          created_date: Time.now.to_i,
+          fotl_name: tags['leftname'],
+          fotr_name: tags['rightname']
         ).save
         puts "added new gfycat ID #{gfy['gfyName']}"
       rescue Sequel::UniqueConstraintViolation
