@@ -4,23 +4,13 @@
 <div name="clip-form-div">
     <form class="clip-form form-inline" id="clip-form" action="submit">
         <div class="form-group">
-            <div class="col-md-3">
-                <label for="fotl-name" class="form-question h4">Who is the fencer on the left? 
-                </label>
-                <input type="text" id="fotl-name" name="fotl-name"/><br />
-
-                <label for="fotr-name" class="form-question h4">Who is the fencer on the right?
-                </label>
-                <input type="text" id="fotr-name" name="fotr-name"/><br />
-            </div>
-
             <div class="form-group col-md-2">
-                <label for="strip-location" class="form-question h4">Where was the hit fencer standing?  Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label><br />
+                <label for="strip-location" class="form-question h4">Where was the hit fencer standing?</label><br />
                 <select class="form-control" name="strip-location">
                     <% @score_strip_locations.each do |strip_location| %>
                         <option name="strip-location" id="<% strip_location.to_s %>" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
                     <% end %>
-                </select>
+                </select><label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label>
             </div>
 
             <div class="form-group radio col-md-3">
