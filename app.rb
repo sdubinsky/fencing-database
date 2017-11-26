@@ -47,26 +47,6 @@ get '/submit/?' do
   redirect '/'
 end
 
-# post '/submit_gfycats/?' do
-#   request.body.rewind
-#   payload = JSON.parse request.body.read
-#   payload['gfycats'].each do |gfy|
-#     begin
-#       Gfycat.new(
-#         gfycat_gfy_id: gfy['gfycat_id'],
-#         tournament: gfy['tournament'],
-#         weapon: gfy['weapon'],
-#         gender: gfy['gender'],
-#         created_date: Time.now.to_i
-#       ).save
-#     rescue Sequel::UniqueConstraintViolation
-#       puts "duplicate gfy id: #{gfy['gfycat_id']}"
-#     end
-#   end
-  
-#   status 200
-# end
-
 get '/stats/?' do
   @tournaments = ['all'] + Gfycat.tournaments
   @genders = ['male', 'female']
