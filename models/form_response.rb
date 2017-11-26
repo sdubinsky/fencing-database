@@ -29,7 +29,7 @@ class FormResponse < Sequel::Model
   
   def self.heatmap_colors filters = {}
     colors = {}
-    heatmap_colors = ['#0000AF', '#0000CD', '#0000EB', '#0000FF', '#4646FF', '#AF0000', '#C30000', '#D70000', '#EB0000', '#FF0000']
+    heatmap_colors = ['#FFE9E9', '#FFCCCC', '#FF9999', '#FF6666', '#FF3333', '#FF0000', '#CC0000', '#990000', '#660000', '#330000']
     query = DB[:gfycats].select(:id)
     if filters[:tournament] and filters[:tournament] != "all"
       query = DB[:gfycats].where(tournament: filters[:tournament]).select(:id)
