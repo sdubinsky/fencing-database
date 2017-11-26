@@ -8,7 +8,6 @@
 .heatmap-segment {
     border: solid 1px;
     background-color: white;
-    opacity: 0.75;
 }
 
 #fotl-warning-box, #fotr-warning-box {
