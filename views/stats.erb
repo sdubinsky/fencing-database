@@ -1,3 +1,4 @@
+
 <div name="stats">
     <form class="stats-filter form-inline" id="stats-filter-form" action="stats">
         <label for="tournament-filter" class="form-question h4">Tournament: </label>
@@ -16,5 +17,13 @@
     </div>
     <div name="stats-hit-location" class="stats">
         Most people get hit on the <%= @most_popular_hit %> <br />
+    </div>
+    <br/>
+    <div id="heatmap" class="heatmap">
+        <div id="fotl-warning-box" class="heatmap-segment" style="background-color:<%= @color_map['fotl_warning_box'] || '#FFFFFF'%>;"></div>
+        <div id="fotl-half" class="heatmap-segment" style="background-color:<%= @color_map['fotl_half'] || '#FFFFFF'%>;"></div>
+        <div id="middle" class="heatmap-segment" style="background-color:<%= @color_map['middle'] || '#FFFFFF'%>;"></div>
+        <div id="fotr-half" class="heatmap-segment" style="background-color:<%= @color_map['fotr_half'] || '#FFFFFF'%>;"></div>
+        <div id="fotr-warning-box" class="heatmap-segment" style="background-color:<%= @color_map['fotr_warning_box'] || '#FFFFFF'%>;"></div>
     </div>
 </div>
