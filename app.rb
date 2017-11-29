@@ -57,7 +57,7 @@ get '/stats/?' do
   @most_hit_location = FormResponse.most_popular_hit tournament: params['tournament-filter']
   @most_popular_hit = @most_hit_location[:body_location]
   @most_popular_hit = @most_popular_hit.gsub("_", " ") or ""
-  @color_map = FormResponse.heatmap_colors
+  @color_map = FormResponse.heatmap_colors tournament: params['tournament-filter']
   erb :stats
 end
 

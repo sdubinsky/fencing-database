@@ -7,7 +7,6 @@ class FormResponse < Sequel::Model
       query = DB[:gfycats].where(tournament: filters[:tournament]).select(:id)
     end
     ret = query.join(:form_responses, stats_id: :id)
-    puts ret.sql
     ret.count
   end
 
@@ -29,7 +28,7 @@ class FormResponse < Sequel::Model
   
   def self.heatmap_colors filters = {}
     colors = {}
-    heatmap_colors = ['#FFE9E9', '#FFCCCC', '#FF9999', '#FF6666', '#FF3333', '#FF0000', '#CC0000', '#990000', '#660000', '#330000']
+    heatmap_colors = ['#FFFFFF', '#FFE9E9', '#FFCCCC', '#FF9999', '#FF6666', '#FF3333', '#FF0000', '#CC0000', '#990000', '#660000', '#330000']
     query = DB[:gfycats].select(:id)
     if filters[:tournament] and filters[:tournament] != "all"
       query = DB[:gfycats].where(tournament: filters[:tournament]).select(:id)
@@ -37,8 +36,6 @@ class FormResponse < Sequel::Model
     ret = query.join(:form_responses, stats_id: :id).select(:strip_location).group_and_count(:strip_location).all
     total = ret.reduce(0){|t, c| t + c[:count]}
     ret.each do |location|
-      index = (location[:count].to_f / total * 10).to_i
-      puts index
       colors[location[:strip_location]] = heatmap_colors[(location[:count].to_f / total * 10).to_i]
     end
     colors
