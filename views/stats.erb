@@ -4,10 +4,16 @@
         <label for="tournament-filter" class="form-question h4">Tournament: </label>
         <select class="form-control" name="tournament-filter">
             <%  @tournaments.each do |tournament| %>
-                <option name="tournament-filter" id="<%=%> tournament %> " value="<%= tournament %>"><%= tournament.to_s.capitalize %></option>
+                <option name="tournament-filter" id="<%= tournament %>" value="<%= tournament %>"><%= tournament.to_s.capitalize %></option>
             <% end %>
         </select>
-        <input type="submit" value="Submit" class="btn btn-default "/>
+        <br/>
+        <label for="fencer-filter" class="form-question h4">Fencer name: </label>
+        <select class="form-control" name="fencer-filter">
+            <%  @fencer_names.each do |fencer_name| %>
+                <option name="fencer-filter" id="<%= fencer_name %>" value="<%= fencer_name%>"><%= fencer_name.to_s.capitalize %></option>
+            <% end %>
+            <input type="submit" value="Submit" class="btn btn-default "/>
     </form>
     <div name="total-responses" class="stats">
         Total responses: <%= @total %><br/>

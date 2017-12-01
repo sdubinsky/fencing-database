@@ -42,7 +42,7 @@ GEM
     rerun (0.11.0)
       listen (~> 3.0)
     ruby_dep (1.5.0)
-    sequel (4.47.0)
+    sequel (4.49.0)
     sinatra (1.4.8)
       rack (~> 1.5)
       rack-protection (~> 1.4)

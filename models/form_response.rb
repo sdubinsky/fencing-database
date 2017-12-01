@@ -2,20 +2,13 @@ require 'pry'
 class FormResponse < Sequel::Model
   many_to_one :gfycat
   def self.total filters = {}
-    query = DB[:gfycats].select(:id)
-    if filters[:tournament] and filters[:tournament] != "all"
-      query = DB[:gfycats].where(tournament: filters[:tournament]).select(:id)
-    end
-    ret = query.join(:form_responses, stats_id: :id)
-    ret.count
+    query = build_query filters
+    query.count 
   end
 
-  def self.most_popular_location filters = {}
-    query = DB[:gfycats].select(:id)
-    if filters[:tournament] and filters[:tournament] != "all"
-      query = DB[:gfycats].where(tournament: filters[:tournament]).select(:id)
-    end
-    ret = query.join(:form_responses, stats_id: :id).select(:strip_location).group_and_count(:strip_location).limit(1).first
+  def self.most_popular_location filters = {} 
+    query = build_query filters   
+    query.select(:strip_location).group_and_count(:strip_location).limit(1).first
     ret ||= {strip_location: "unknown part", count: 0}
     ret[:strip_location] ||= "unknown part"
     ret
@@ -29,15 +22,25 @@ class FormResponse < Sequel::Model
   def self.heatmap_colors filters = {}
     colors = {}
     heatmap_colors = ['#FFFFFF', '#FFE9E9', '#FFCCCC', '#FF9999', '#FF6666', '#FF3333', '#FF0000', '#CC0000', '#990000', '#660000', '#330000']
-    query = DB[:gfycats].select(:id)
-    if filters[:tournament] and filters[:tournament] != "all"
-      query = DB[:gfycats].where(tournament: filters[:tournament]).select(:id)
-    end
-    ret = query.join(:form_responses, stats_id: :id).select(:strip_location).group_and_count(:strip_location).all
-    total = ret.reduce(0){|t, c| t + c[:count]}
-    ret.each do |location|
+    query = build_query filters
+    query = query.select(:strip_location).group_and_count(:strip_location)
+    total = query.reduce(0){|t, c| t + c[:count]}
+    query.each do |location|
       colors[location[:strip_location]] = heatmap_colors[(location[:count].to_f / total * 10).to_i]
     end
     colors
+  end
+
+  def self.build_query filters = {}
+    query = DB[:gfycats]
+    query = query.join(:form_responses, stats_id: :id)
+    if filters[:tournament] and filters[:tournament] != "all"
+      query = query.where(tournament: filters[:tournament])
+    end
+    if filters[:fencer_name] and filters[:fencer_name] != "all"
+      query = query.where{Sequel.|({fotl_name: filters[:fencer_name]}, {fotr_name: filters[:fencer_name]})}
+    end
+    puts query.sql
+    query
   end
 end

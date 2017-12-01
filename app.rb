@@ -3,6 +3,7 @@ require 'sequel'
 require 'psych'
 require 'json'
 require 'excon'
+require 'logger'
 
 config = Psych.load_file("./config.yml")
 db_config = config['database']
@@ -50,14 +51,15 @@ end
 get '/stats/?' do
   @tournaments = ['all'] + Gfycat.tournaments
   @genders = ['male', 'female']
-  @total = FormResponse.total tournament: params['tournament-filter']
+  @total = FormResponse.total tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
   @location = FormResponse.most_popular_location tournament: params['tournament-filter']
   @most_popular_location = @location[:strip_location]
   @most_popular_location = @most_popular_location.gsub("fotr", "FOTR").gsub("fotl", "FOTL").gsub("_", " ") 
   @most_hit_location = FormResponse.most_popular_hit tournament: params['tournament-filter']
   @most_popular_hit = @most_hit_location[:body_location]
   @most_popular_hit = @most_popular_hit.gsub("_", " ") or ""
-  @color_map = FormResponse.heatmap_colors tournament: params['tournament-filter']
+  @color_map = FormResponse.heatmap_colors tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
+  @fencer_names = ['all'] + Gfycat.fencer_names
   erb :stats
 end
 
@@ -67,17 +69,20 @@ get '/update_gfycat_list/?' do
     all_gfycats = next_round['gfycats']
     cursor = next_round['cursor']
     until cursor.empty? do
-      puts "getting next round"
       next_round = JSON.parse Excon.get("https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500&cursor=#{cursor}").body
       cursor = next_round['cursor']
-      puts cursor
       all_gfycats = all_gfycats + next_round['gfycats']
     end
-
     old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
     new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
     new_gfycats.each do |gfy|
-      tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+      puts gfy['gfyName']
+      if gfy['tags']
+        tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+      else
+        puts "Error: #{gfy['gfyName']} missing tags"
+        next
+      end
       begin
         Gfycat.new(
           gfycat_gfy_id: gfy['gfyName'],
@@ -91,8 +96,11 @@ get '/update_gfycat_list/?' do
         puts "added new gfycat ID #{gfy['gfyName']}"
       rescue Sequel::UniqueConstraintViolation
         puts "duplicate gfy id: #{gfy['gfyName']}"
+      rescue => e
+        puts e
       end
     end
+    puts 'done with gfycats'
   end
   status 200
 end
