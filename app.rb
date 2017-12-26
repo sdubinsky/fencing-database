@@ -17,17 +17,27 @@ DB = Sequel.connect(connstr)
 
 require './models/init'
 
+logger = Logger.new("$stdout")
+
 configure :development do
   set :show_exceptions, true
+  logger.level = Logger::DEBUG
 end
 
 set :root, File.dirname(__FILE__)
+'''
+TODO:
+1. Download all gfys, update their names.
+2. Save that code along with the heidenheim code
+3. Make sure that the fencer filter accounts for who scores the touch
+'''
 
-get '/' do
+get '/' do 
   @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
     @gfycat = Gfycat.random_gfycat_id
+    logger.info "Showing #{@gfycat.gfycat_gfy_id}"
   rescue RuntimeError
     return "Please seed the DB by sending a GET request to /update_gfycat_list"
   end
@@ -36,8 +46,6 @@ end
 
 get '/submit/?' do
   response = FormResponse.create(
-    fotl_name: params['fotl-name'],
-    fotr_name: params['fotr-name'],
     initiated: params['initiated-action'],
     strip_location: params['strip-location'],
     body_location: params['score-body-select'],
@@ -45,6 +53,7 @@ get '/submit/?' do
     created_date: Time.now.to_i
   )
   response.save
+  logger.info("new submission: #{response.to_s}")
   redirect '/'
 end
 
@@ -76,11 +85,11 @@ get '/update_gfycat_list/?' do
     old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
     new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
     new_gfycats.each do |gfy|
-      puts gfy['gfyName']
+      Logger.info "adding #{gfy['gfyName']}"
       if gfy['tags']
         tags = Hash[gfy['tags'].map{|x| x.split ": "}]
       else
-        puts "Error: #{gfy['gfyName']} missing tags"
+        logger.error "#{gfy['gfyName']} missing tags"
         next
       end
       begin
@@ -91,17 +100,56 @@ get '/update_gfycat_list/?' do
           gender: tags['gender'],
           created_date: Time.now.to_i,
           fotl_name: tags['leftname'],
-          fotr_name: tags['rightname']
+          fotr_name: tags['rightname'],
+          touch: tags['touch']
         ).save
-        puts "added new gfycat ID #{gfy['gfyName']}"
+        logger.info "added new gfycat ID #{gfy['gfyName']}"
       rescue Sequel::UniqueConstraintViolation
-        puts "duplicate gfy id: #{gfy['gfyName']}"
+        logger.error "duplicate gfy id: #{gfy['gfyName']}"
       rescue => e
-        puts e
+        logger.info e.to_s
       end
     end
-    puts 'done with gfycats'
+    logger.debug 'done with gfycats'
   end
   status 200
 end
 
+get '/fix_gfycat_tags/?' do
+  Thread.new do
+    next_round = JSON.parse Excon.get('https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500').body
+    all_gfycats = next_round['gfycats']
+    cursor = next_round['cursor']
+    until cursor.empty? do
+      next_round = JSON.parse Excon.get("https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500&cursor=#{cursor}").body
+      cursor = next_round['cursor']
+      all_gfycats = all_gfycats + next_round['gfycats']
+    end
+    old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
+    new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
+    new_gfycats.each do |gfy|
+      Logger.info "adding #{gfy['gfyName']}"
+      if gfy['tags']
+        tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+      else
+        logger.error "#{gfy['gfyName']} missing tags"
+        next
+      end
+      
+      begin
+        DB[:gfycats].where(gfycat_gfy_id: gfy['gfyName']).update(
+          tournament: tags['tournament'],
+          weapon: tags['weapon'],
+          gender: tags['gender'],
+          fotl_name: tags['leftname'],
+          fotr_name: tags['rightname'],
+          touch: tags['touch']
+        )
+      rescue Sequel::UniqueConstraintViolation
+        logger.error "duplicate gfy id: #{gfy['gfyName']}"
+      rescue => e
+        logger.info e.to_s 
+      end
+    end
+  end
+end

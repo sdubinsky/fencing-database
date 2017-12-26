@@ -33,7 +33,7 @@ class FormResponse < Sequel::Model
 
   def self.build_query filters = {}
     query = DB[:gfycats]
-    query = query.join(:form_responses, stats_id: :id)
+    query = query.join(:form_responses, stats_id: :gfycat_gfy_id)
     if filters[:tournament] and filters[:tournament] != "all"
       query = query.where(tournament: filters[:tournament])
     end
