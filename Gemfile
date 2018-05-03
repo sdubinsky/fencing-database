@@ -4,7 +4,7 @@ group :development do
   gem 'capistrano-bundler', '~> 1.2'
 end
 gem 'pry'
-gem 'sinatra', '~> 1.4'
+gem 'sinatra', '~> 2.0'
 gem 'rerun'
 gem 'pg', '~> 0.20'
 gem 'thin', '~> 1.7'
