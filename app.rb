@@ -14,9 +14,8 @@ else
 end
 connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
 DB = Sequel.connect(connstr)
-
 require './models/init'
-
+Sequel::Model.db.extension(:pagination)
 logger = Logger.new("$stdout")
 
 configure :development do
@@ -70,6 +69,14 @@ get '/stats/?' do
   @color_map = FormResponse.heatmap_colors tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
   @fencer_names = ['all'] + Gfycat.fencer_names
   erb :stats
+end
+
+get '/touches/?' do
+  logger.info params.to_s
+  @fencers = Fencer.select.order_by(:last_name)
+  @nationalities = Fencer.select(:nationality).distinct.map{|a| a.nationality.to_s.upcase }.sort
+  @strip_locations = FormResponse.select(:strip_location).distinct.map{|a| a.strip_location.to_s.split("_").map{|b| b.capitalize}.join(" ")}.select{|a| a.strip != ''}
+  erb :touches
 end
 
 get '/update_gfycat_list/?' do
