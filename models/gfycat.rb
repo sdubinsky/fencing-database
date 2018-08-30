@@ -40,6 +40,9 @@ class Gfycat < Sequel::Model
         logger.error "#{gfy['gfyName']} missing tags"
         next
       end
+
+      left_score = tags['leftscore'] || -1
+      right_score = tags['rightscore'] || -1
       begin
         Gfycat.new(
           gfycat_gfy_id: gfy['gfyName'],
@@ -49,6 +52,8 @@ class Gfycat < Sequel::Model
           created_date: Time.now.to_i,
           fotl_name: tags['leftname'],
           fotr_name: tags['rightname'],
+          left_score: tags['leftscore'],
+          right_score: tags['rightscore'],
           touch: tags['touch']
         ).save
         logger.info "added new gfycat ID #{gfy['gfyName']}"
