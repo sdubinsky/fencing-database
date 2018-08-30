@@ -30,7 +30,8 @@ class Gfycat < Sequel::Model
       cursor = next_round['cursor']
       all_gfycats = all_gfycats + next_round['gfycats']
     end
-    old_gfycats = Gfycat.map(:gfycat_gfy_id)
+    #EnchantedTatteredBasilisk is just a random gfy that keeps getting mixed in, I don't know why
+    old_gfycats = Gfycat.map(:gfycat_gfy_id) + "EnchantedTatteredBasilisk"
     new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
     new_gfycats.each do |gfy|
       logger.info "adding #{gfy['gfyName']}"
