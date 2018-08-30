@@ -20,14 +20,6 @@ DB = Sequel.connect(connstr)
 
 require './models/init'
 
-'''
-1. Take list of all names from DB.
-2. Concatenate last name and first initial.
-3. Remove all spaces.
-4. Lowercase all.
-5. Find name with lowest levenshtein distance.
-'''
-
 def check_name gfy_name
   names1 = Fencer.where(last_name: gfy_name)
   return names1.first if names1 and names1.count == 1
