@@ -2,15 +2,13 @@ require 'logger'
 require 'excon'
 class Gfycat < Sequel::Model
   one_to_many :form_responses
+  many_to_one :tournament, key: :tournament_id, primary_key: :tournament_id
   def self.random_gfycat_id
     gfycat = Gfycat.all.sample
     raise RuntimeError.new("no gfycats found") if not gfycat
     gfycat
   end
-  def self.tournaments
-    tournaments = Gfycat.select(:tournament).distinct.map{|t| t[:tournament]}
-    tournaments
-  end
+
   def self.fencer_names 
     fencer_names = Gfycat.select(:fotl_name).all
     fencer_names = fencer_names + Gfycat.select(:fotr_name).all
@@ -47,7 +45,7 @@ class Gfycat < Sequel::Model
       begin
         Gfycat.new(
           gfycat_gfy_id: gfy['gfyName'],
-          tournament: tags['tournament'],
+          tournament_id: Tournament.first(tournament_id: tags['tournament']),
           weapon: tags['weapon'],
           gender: tags['gender'],
           created_date: Time.now.to_i,
