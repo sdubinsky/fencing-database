@@ -56,11 +56,49 @@ class Gfycat < Sequel::Model
           touch: tags['touch']
         ).save
         logger.info "added new gfycat ID #{gfy['gfyName']}"
+        normalize_names
       rescue Sequel::UniqueConstraintViolation
         logger.error "duplicate gfy id: #{gfy['gfyName']}"
       rescue => e
         logger.info e.to_s
       end
+    end
+  end
+
+  def normalize_names
+    def check_names gfy_name
+      #Finds matches where:
+      #1. The only name available is the last name, and it has exactly one match
+      #2. There's a last name and some of the first name, and it has exactly one match
+      #3. There's a last name, and some of the first name, and only the last name matches
+      #4. All of the above, except the first name is multipart not the last name
+
+      
+      names1 = Fencer.where(last_name: gfy_name)
+      return names1.first if names1 and names1.count == 1
+      names2 = Fencer.where(last_name: gfy_name.split(" ")[0...-1], first_name: /^#{gfy_name.split(" ")[-1]}/i)
+      return names2.first if names2 and names2.count == 1
+      names3 = Fencer.where(last_name: gfy_name.split(" ")[0...-1])
+      return names3.first if names3 and names3.count == 1
+
+      names4 = Fencer.where(last_name: gfy_name.split(" ")[0...2], first_name: /^#{gfy_name.split(" ")[2..-1]}/i)
+      return names4.first if names4 and names4.count == 1
+      names5 = Fencer.where(last_name: gfy_name.split(" ")[0...2])
+      return names5.first if names5 and names5.count == 1
+    end
+    
+    right_name = check_names fotr_name
+    if right_name
+      update(
+        right_fencer_id: right_name.id
+      )
+    end
+
+    left_name = check_names fotl_name
+    if left_name
+      update(
+        left_fencer_id: left_name.id
+      )
     end
   end
 end
