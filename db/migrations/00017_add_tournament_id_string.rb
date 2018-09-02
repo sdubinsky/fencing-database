@@ -6,7 +6,7 @@ Sequel.migration do
     
     alter_table :gfycats do
       drop_column :tournament
-      add_foreign_key :tournament, key: tournament_id, type: String
+      add_foreign_key :tournament, :tournaments, key: :tournament_id, type: String
     end
   end
 end
