@@ -1,3 +1,5 @@
 require_relative 'gfycat'
 require_relative 'form_response'
 require_relative 'fencer'
+require_relative 'bout'
+require_relative 'tournament'
