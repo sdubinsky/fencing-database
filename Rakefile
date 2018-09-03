@@ -26,11 +26,11 @@ namespace :db do
     Sequel.connect db_address do |db|
       require './models/init'
       #Update gfys with any bouts that already exist
-      db[:gfycats].where(bout_id: nil).update(bout_id: Bout.select(:id).where(left_fencer_id: Sequel.lit("gfycats.left_fencer_id"), right_fencer_id: Sequel.lit("gfycats.right_fencer_id"), tournament_id: Sequel.lit("gfycats.tournament_id")))
+      db[:gfycats].where(bout_id: nil).update(bout_id: Bout.select(:id).where(left_fencer_id: Sequel[:gfycats][:left_fencer_id] right_fencer_id: Sequel[:gfycats][:right_fencer_id], tournament_id: Sequel[:gfycats][:tournament_id]))
       #create new bouts from gfys that don't have bouts attached, but that should.  This is defined as gfys that have a left_fencer_id, a right_fencer_id, and a tournament, but no bout.
       Bout.insert([:left_fencer_id, :right_fencer_id,:tournament_id], Gfycat.distinct.select(:left_fencer_id, :right_fencer_id, :tournament_id).where(bout_id: nil).where(Sequel.~(left_fencer_id: nil)).where(Sequel.~(right_fencer_id: nil)))
       #reupdate with new bouts
-      db[:gfycats].where(bout_id: nil).update(bout_id: Bout.select(:id).where(left_fencer_id: Sequel.lit("gfycats.left_fencer_id"), right_fencer_id: Sequel.lit("gfycats.right_fencer_id"), tournament_id: Sequel.lit("gfycats.tournament_id")))
+      db[:gfycats].where(bout_id: nil).update(bout_id: Bout.select(:id).where(left_fencer_id: Sequel[:gfycats][:left_fencer_id] right_fencer_id: Sequel[:gfycats][:right_fencer_id], tournament_id: Sequel[:gfycats][:tournament_id]))
     end
   end
 end
