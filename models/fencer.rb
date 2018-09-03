@@ -16,4 +16,14 @@ class Fencer < Sequel::Model
     left_ids = left_query.select(:right_fencer_id)
     Fencer.where(Sequel[id: left_ids] | Sequel[id: right_ids])
   end
+
+  #In case of duplicate names, list all possibilities
+  def self.find_name_possibilities name
+    name.upcase!
+    Fencer.where(last_name: name)
+      .or(last_name: name.split(" ")[0..-1].join(" "),
+          first_name: /^#{name.split(" ")[-1]}/i)
+      .or(last_name: name.split(" ")[0..-1].join(" "))
+      .or(last_name: name.split(" ")[0])
+  end
 end
