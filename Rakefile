@@ -26,6 +26,7 @@ namespace :db do
     Sequel.connect db_address do |db|
       require './models/init'
       Gfycat.where(left_fencer_id: nil).or(right_fencer_id: nil).each{|gfy| gfy.normalize_names}
+      Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'epee').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'epee').select(:right_fencer_id)).update(weapon: 'epee')
     end
   end
   
