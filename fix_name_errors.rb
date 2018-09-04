@@ -32,21 +32,25 @@ Sequel.connect db_address do |db|
   require './models/init'
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, valid: true).distinct(:fotl_name, :tournament_id).each do |gfy|
     #If there's no name to be found, it's probably misspelled
-    if Fencer.find_name_possibilities(gfy.fotl_name).count == 0
+    options = Fencer.find_name_possibilities(gfy.fotl_name)
+    options = options.where(gender: gfy.gender) if gfy.gender
+    if options.count == 0
       if CanonicalName.first(gfy_name: gfy.fotl_name)
         gfy.update(left_fencer_id: CanonicalName.first(gfy_name: gfy.fotl_name).fencer_id)
       else
-        real_fencer = ask_for_fencer gfy.fotl_name, gfy.gfycat_gfy_id
+        real_fencer = ask_for_fencer gfy.fotl_name, gfy
         if real_fencer
           gfy.update(left_fencer_id: real_fencer.id)
           CanonicalName.create(gfy_name: gfy.fotl_name, fencer_id: real_fencer.id).save
         end
       end
-    elsif Fencer.find_name_possibilities(gfy.fotl_name).count == 1
-      gfy.update(left_fencer_id: Fencer.find_name_possibilities(gfy.fotl_name).first.id)
+    elsif options.count == 1
+      gfy.update(left_fencer_id: options.first.id)
     else
-      name = get_canonical_name gfy.fotl_name, gfy.gfycat_gfy_id
+      name = get_canonical_name gfy.fotl_name, gfy
       gfy.update(left_fencer_id: name.id) if name
     end
   end
+
+  
 end
