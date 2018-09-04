@@ -2,20 +2,24 @@ require 'sequel'
 
 db_address = ENV["DATABASE_URL"] || "postgres://localhost/fencingstats"
 
-def ask_for_fencer name, gfy_id
-  puts "What's the correct name for #{name}(#{gfy_id})?"
+def ask_for_fencer name, gfy
+  puts "What's the correct name for #{name}(gfycat.com/#{gfy.gfycat_gfy_id})?"
   answer = gets.chomp
-  get_canonical_name answer, gfy_id
+  get_canonical_name answer, gfy
 end
 
-def get_canonical_name name, gfy_id
-  puts "Name: #{name} (#{gfy_id})"
+def get_canonical_name name, gfy
+  puts "Name: #{name} (gfycat.com/#{gfy.gfycat_gfy_id})"
   options = Fencer.find_name_possibilities(name).order_by(:first_name)
+  options = options.where(gender: gfy.gender) if gfy.gender
+  if options.count == 0
+    return
+  end
   if options.count == 1
     return options.first
   end
   options.each_with_index do |option, i|
-    puts "#{i}. #{option.name}"
+    puts "#{i}. #{option.name} (#{option.gender}, #{option.nationality})"
   end
   answer = gets.chomp
   if answer == 'skip'
