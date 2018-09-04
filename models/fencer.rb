@@ -19,11 +19,6 @@ class Fencer < Sequel::Model
 
   #In case of duplicate names, list all possibilities
   def self.find_name_possibilities name
-    name.upcase!
-    Fencer.where(last_name: name)
-      .or(last_name: name.split(" ")[0..-1].join(" "),
-          first_name: /^#{name.split(" ")[-1]}/i)
-      .or(last_name: name.split(" ")[0..-1].join(" "))
-      .or(last_name: name.split(" ")[0])
+    Fencer.where(Sequel.join([:last_name, :first_name], ' ').ilike(name + "%")).or(Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%"))
   end
 end

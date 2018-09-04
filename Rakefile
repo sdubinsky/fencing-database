@@ -20,6 +20,15 @@ namespace :db do
     end
   end
 
+  desc "normalize gfycat names"
+  task :normalize_names do |t|
+    require 'sequel'
+    Sequel.connect db_address do |db|
+      require './models/init'
+      Gfycat.where(left_fencer_id: nil).or(right_fencer_id: nil).each{|gfy| gfy.normalize_names}
+    end
+  end
+  
   desc "Add new bouts"
   task :add_bouts do |t|
     require 'sequel'
