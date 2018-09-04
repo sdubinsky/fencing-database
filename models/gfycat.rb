@@ -76,7 +76,12 @@ class Gfycat < Sequel::Model
       update(
         right_fencer_id: right_name.first.id
       )
-
+    elsif right_name.count == 0
+      if CanonicalName.where(gfy_name: fotr_name).count > 0
+        update(
+          right_fencer_id: CanonicalName.first(gfy_name: fotr_name).fencer_id
+        )
+      end
     end
 
     left_name = Fencer.find_name_possibilities(fotl_name).where(gender: gender)
@@ -84,6 +89,13 @@ class Gfycat < Sequel::Model
       update(
         left_fencer_id: left_name.first.id
       )
+    elsif left_name.count == 0
+      if CanonicalName.where(gfy_name: fotl_name).count > 0
+        update(
+          left_fencer_id: CanonicalName.first(gfy_name: fotl_name).fencer_id
+        )
+      end
+
     end
   end
 end
