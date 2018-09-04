@@ -3,6 +3,7 @@ GEM
   specs:
     airbrussh (1.3.0)
       sshkit (>= 1.6.1, != 1.7.0)
+    byebug (10.0.2)
     capistrano (3.6.1)
       airbrussh (>= 1.0.0)
       capistrano-harrow
@@ -36,6 +37,9 @@ GEM
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-byebug (3.6.0)
+      byebug (~> 10.0)
+      pry (~> 0.10)
     rack (2.0.5)
     rack-protection (2.0.3)
       rack
@@ -72,6 +76,7 @@ DEPENDENCIES
   levenshtein (~> 0.2.2)
   pg (~> 0.20)
   pry
+  pry-byebug
   rerun
   sequel (~> 4.47)
   sinatra (~> 2.0)
