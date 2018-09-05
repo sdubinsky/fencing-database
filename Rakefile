@@ -41,6 +41,8 @@ namespace :db do
       Bout.insert([:left_fencer_id, :right_fencer_id,:tournament_id], Gfycat.distinct.select(:left_fencer_id, :right_fencer_id, :tournament_id).where(bout_id: nil).where(Sequel.~(left_fencer_id: nil)).where(Sequel.~(right_fencer_id: nil)))
       #reupdate with new bouts
       db[:gfycats].where(bout_id: nil).update(bout_id: Bout.select(:id).where(left_fencer_id: Sequel[:gfycats][:left_fencer_id], right_fencer_id: Sequel[:gfycats][:right_fencer_id], tournament_id: Sequel[:gfycats][:tournament_id]))
+      #Also add bouts to gfys that have duplicate names
+      db[:gfycats].with(:g2, db[:gfycats].distinct.select(:left_fencer_id, :right_fencer_id, :fotl_name, :fotr_name, :bout_id, :tournament_id).exclude(left_fencer_id: nil).exclude(right_fencer_id: nil).exclude(bout_id: nil)).from(:gfycats, :g2).where(Sequel[:gfycats][:fotl_name] => Sequel[:g2][:fotl_name], Sequel[:g2][:fotl_name] => Sequel[:gfycats][:fotl_name], Sequel[:g2][:fotr_name] => Sequel[:gfycats][:fotr_name]).update(bout_id: Sequel[:g2][:bout_id], left_fencer_id: Sequel[:g2][:left_fencer_id], right_fencer_id: Sequel[:g2][:right_fencer_id])
     end
   end
 end
