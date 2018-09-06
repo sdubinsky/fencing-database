@@ -3,7 +3,7 @@ Sequel.migration do
     create_table :canonical_names do
       primary_key :id
       String :gfy_name
-      foreign_key :fencer_id, :fencers
+      String :canonical_name
     end
   end
 end
