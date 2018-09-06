@@ -2,17 +2,20 @@ require 'sequel'
 
 db_address = ENV["DATABASE_URL"] || "postgres://localhost/fencingstats"
 
-def ask_for_fencer name, gfy
+def ask_for_canonical_name name, gfy
   puts "What's the correct name for #{name}(gfycat.com/#{gfy.gfycat_gfy_id})?"
   answer = gets.chomp
-  get_canonical_name answer, gfy
+  CanonicalName.create(gfy_name: name, canonical_name: answer)
+  get_correct_fencer answer, gfy
 end
 
-def get_canonical_name name, gfy
+def get_correct_fencer name, gfy
   puts "Name: #{name} (gfycat.com/#{gfy.gfycat_gfy_id})"
   options = Fencer.find_name_possibilities(name).order_by(:first_name)
   options = options.where(gender: gfy.gender) if gfy.gender
+
   if options.count == 0
+    puts "error: No matching fencers found for #{name}"
     return
   end
   if options.count == 1
@@ -28,50 +31,44 @@ def get_canonical_name name, gfy
   options.all[answer.to_i]
 end
 
+def process_name gfy, side
+  if side == :left
+    fencer_id = :left_fencer_id
+    name = gfy.fotl_name
+  elsif side == :right
+    fencer_id = :right_fencer_id
+    name = gfy.fotr_name
+  end
+  #canonical names are strictly for typos.  If the canonical version exists, it means
+  #it doesn't exist in the fencer table.
+  if CanonicalName.where(gfy_name: name).exists?
+    options = Fencer.find_name_possibilities(CanonicalName.first(gfy_name: name).canonical_name)
+  else
+    options = Fencer.find_name_possibilities(gfy.name)
+  end
+  options = options.where(gender: gfy.gender) if gfy.gender
+
+  #If there are no matches, it's a typo of some kind.  This will set the canonical name
+  if options.count == 0
+    real_fencer = ask_for_canonical_name name, gfy
+  elsif options.count == 1
+    real_fencer = options.first
+  else
+    real_fencer = get_correct_fencer name, gfy
+  end
+  return real_fencer
+end
+
 Sequel.connect db_address do |db|
   require './models/init'
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, valid: true).distinct(:fotl_name, :tournament_id).each do |gfy|
-    #If there's no name to be found, it's probably misspelled
-    options = Fencer.find_name_possibilities(gfy.fotl_name)
-    options = options.where(gender: gfy.gender) if gfy.gender
-    if options.count == 0
-      if CanonicalName.first(gfy_name: gfy.fotl_name)
-        gfy.update(left_fencer_id: CanonicalName.first(gfy_name: gfy.fotl_name).fencer_id)
-      else
-        real_fencer = ask_for_fencer gfy.fotl_name, gfy
-        if real_fencer
-          gfy.update(left_fencer_id: real_fencer.id)
-          CanonicalName.create(gfy_name: gfy.fotl_name, fencer_id: real_fencer.id).save
-        end
-      end
-    elsif options.count == 1
-      gfy.update(left_fencer_id: options.first.id)
-    else
-      name = get_canonical_name gfy.fotl_name, gfy
-      gfy.update(left_fencer_id: name.id) if name
-    end
+    result = process_name gfy, :left
+    gfy.update(left_fencer_id: result.id)
   end
 
-    Gfycat.where(bout_id: nil).where(right_fencer_id: nil, valid: true).distinct(:fotr_name, :tournament_id).each do |gfy|
-    #If there's no name to be found, it's probably misspelled
-    options = Fencer.find_name_possibilities(gfy.fotr_name)
-    options = options.where(gender: gfy.gender) if gfy.gender
-    if options.count == 0
-      if CanonicalName.first(gfy_name: gfy.fotr_name)
-        gfy.update(right_fencer_id: CanonicalName.first(gfy_name: gfy.fotr_name).fencer_id)
-      else
-        real_fencer = ask_for_fencer gfy.fotr_name, gfy
-        if real_fencer
-          gfy.update(right_fencer_id: real_fencer.id)
-          CanonicalName.create(gfy_name: gfy.fotr_name, fencer_id: real_fencer.id).save
-        end
-      end
-    elsif options.count == 1
-      gfy.update(right_fencer_id: options.first.id)
-    else
-      name = get_canonical_name gfy.fotr_name, gfy
-      gfy.update(right_fencer_id: name.id) if name
-    end
+  Gfycat.where(bout_id: nil).where(right_fencer_id: nil, valid: true).distinct(:fotr_name, :tournament_id).each do |gfy|
+    result = process_name gfy, :right
+    gfy.update(right_fencer_id: result.id)
   end
 
   
