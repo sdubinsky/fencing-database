@@ -52,5 +52,27 @@ Sequel.connect db_address do |db|
     end
   end
 
+    Gfycat.where(bout_id: nil).where(right_fencer_id: nil, valid: true).distinct(:fotr_name, :tournament_id).each do |gfy|
+    #If there's no name to be found, it's probably misspelled
+    options = Fencer.find_name_possibilities(gfy.fotr_name)
+    options = options.where(gender: gfy.gender) if gfy.gender
+    if options.count == 0
+      if CanonicalName.first(gfy_name: gfy.fotr_name)
+        gfy.update(right_fencer_id: CanonicalName.first(gfy_name: gfy.fotr_name).fencer_id)
+      else
+        real_fencer = ask_for_fencer gfy.fotr_name, gfy
+        if real_fencer
+          gfy.update(right_fencer_id: real_fencer.id)
+          CanonicalName.create(gfy_name: gfy.fotr_name, fencer_id: real_fencer.id).save
+        end
+      end
+    elsif options.count == 1
+      gfy.update(right_fencer_id: options.first.id)
+    else
+      name = get_canonical_name gfy.fotr_name, gfy
+      gfy.update(right_fencer_id: name.id) if name
+    end
+  end
+
   
 end
