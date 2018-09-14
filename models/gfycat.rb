@@ -71,33 +71,30 @@ class Gfycat < Sequel::Model
   end
 
   def normalize_names
-    right_name = Fencer.find_name_possibilities(fotr_name)
+    if CanonicalName.where(gfy_name: fotr_name).count == 1
+      name = CanonicalName.first(gfy_name: fotr_name).canonical_name
+    else
+      name = fotr_name
+    end
+    right_name = Fencer.find_name_possibilities(name)
     right_name = right_name.where(gender: gender) if gender
     if right_name.count == 1
       update(
         right_fencer_id: right_name.first.id
       )
-    elsif right_name.count == 0
-      if CanonicalName.where(gfy_name: fotr_name).count > 0
-        update(
-          right_fencer_id: CanonicalName.first(gfy_name: fotr_name).fencer_id
-        )
-      end
     end
 
-    left_name = Fencer.find_name_possibilities(fotl_name)
+    if CanonicalName.where(gfy_name: fotl_name).count == 1
+      name = CanonicalName.first(gfy_name: fotl_name).canonical_name
+    else
+      name = fotl_name
+    end
+    left_name = Fencer.find_name_possibilities(name)
     left_name = left_name.where(gender: gender) if gender
     if left_name.count == 1
       update(
         left_fencer_id: left_name.first.id
       )
-    elsif left_name.count == 0
-      if CanonicalName.where(gfy_name: fotl_name).count > 0
-        update(
-          left_fencer_id: CanonicalName.first(gfy_name: fotl_name).fencer_id
-        )
-      end
-
     end
   end
 end
