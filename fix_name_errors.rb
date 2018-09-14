@@ -41,11 +41,12 @@ def process_name gfy, side
   end
   #canonical names are strictly for typos.  If the canonical version exists, it means
   #it doesn't exist in the fencer table.
+
   if CanonicalName.where(gfy_name: name).count == 1
-    options = Fencer.find_name_possibilities(CanonicalName.first(gfy_name: name).canonical_name)
-  else
-    options = Fencer.find_name_possibilities(name)
+    name = CanonicalName.first(gfy_name: name).canonical_name
   end
+  options = Fencer.find_name_possibilities(name)
+
   options = options.where(gender: gfy.gender) if gfy.gender
 
   #If there are no matches, it's a typo of some kind.  This will set the canonical name
@@ -61,6 +62,16 @@ end
 
 Sequel.connect db_address do |db|
   require './models/init'
+
+  Gfycat.where(bout_id: nil).where(left_fencer_id: nil, right_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
+    result = process_name gfy, :left
+    gfy.update(left_fencer_id: result.id) if result
+
+    
+    result = process_name gfy, :right
+    gfy.update(right_fencer_id: result.id) if result
+  end
+  
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
     result = process_name gfy, :left
     gfy.update(left_fencer_id: result.id) if result
