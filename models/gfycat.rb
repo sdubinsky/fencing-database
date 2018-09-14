@@ -2,6 +2,7 @@ require 'logger'
 require 'excon'
 class Gfycat < Sequel::Model
   one_to_many :form_responses
+  many_to_one :bout
   many_to_one :tournament, key: :tournament_id, primary_key: :tournament_id
   def self.random_gfycat_id
     gfycat = Gfycat.all.sample
