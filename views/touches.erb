@@ -1,28 +1,31 @@
 <div name="touches" >
     <div class="touches-filter-form">
         <form class="form-inline" id="touches-filter-form" action="touches" >
-            <label for="fencer-filter" class="form-question h4">Select Fencers: </label>
-            <select class="form-control" name="fencer-filter">
-                <% @fencers.each do |fencer| %>
-                    <option name="fencer-filter" id="<%=fencer.name %>" value="<%=fencer.id%>"> <%=fencer.name%></option>
-                <% end %>
+            <label for="lastname" class="form-question h4">Last Name: </label>
+            <input type="text" id="lastname" name="lastname" />
+            <label for="firstname" class="form-question h4">First Name: </label>
+            <input type="text" id="firstname" name="lastname" />
+            <label for="score-fencer" class="form-question h4">Fencer's Score: </label>
+            <select id="score-fencer" name="score-fencer">
+                <option id="score-fencer" value="any">Any</option>
+            <% 1.upto 15 do |score| %>
+                <option id="score-fencer" value="<%=score%>"><%=score%></option>
+            <% end %>
+            <option id="score-fencer" value="highest">Highest</option>
             </select>
-            <br />
-            <label for="nationality-filter" class="form-question h4">Select Nationalities: </label>
-            <select class="form-control" name="nationality-filter">
-                <% @nationalities.each do |nationality| %>
-                    <option name="nationality-filter" id="<%=nationality %>" value="<%=nationality%>"> <%=nationality%></option>
+            <label for="score-opponent" class="form-question h4">Opponent's Score: </label>
+            <select id="score-opponent" name="score-opponent">
+                <option id="score-opponent" value="any">Any</option>
+                <% 1.upto 15 do |score| %>
+                    <option id="score-opponent" value="<%=score%>"><%=score%></option>
                 <% end %>
+                <option id="score-opponent" value="highest">Highest</option>
             </select>
-            <br />
-            <label for="strip-location-filter" class="form-question h4">Select Strip Locations: </label>
-            <select class="form-control" name="strip-location-filter">
-                <% @strip_locations.each do |strip_location| %>
-                    <option name="strip-location-filter" id="<%=strip_location%>" value="<%=strip_location.downcase.gsub(" ", "_")%>"> <%=strip_location%></option>
-                <% end %>
-            </select>
-            <br />
             <input type="submit" value="Filter" class="btn btn-default btn-lg" />
         </form>
+    </div>
+    <div class="touches-display">
+        <% @gfycats.each do |gfy| %>
+            <div class='gfyitem' data-id='<%= gfy %>' data-max-height="500" data-responsive="true"></div>
     </div>
 </div>
