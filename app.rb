@@ -16,7 +16,7 @@ connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}
 DB = Sequel.connect(connstr)
 require './models/init'
 Sequel::Model.db.extension(:pagination)
-logger = Logger.new("$stdout")
+logger = Logger.new($stdout)
 
 configure :development do
   set :show_exceptions, true
@@ -72,16 +72,19 @@ get '/stats/?' do
 end
 
 get '/touches/?' do
-  logger.info params.to_s
-  @fencers = Fencer.select.order_by(:last_name)
-  @nationalities = Fencer.select(:nationality).distinct.map{|a| a.nationality.to_s.upcase }.sort
-  @strip_locations = FormResponse.select(:strip_location).distinct.map{|a| a.strip_location.to_s.split("_").map{|b| b.capitalize}.join(" ")}.select{|a| a.strip != ''}
+  unless params.empty?
+    @gfycats = get_touches_query_gfycats params
+  else
+    @gfycats = []
+  end
+  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
+  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
   erb :touches
 end
 
 get '/update_gfycat_list/?' do
-    Gfycat.update_gfycat_list
-    logger.debug 'done with gfycats'
+  Gfycat.update_gfycat_list
+  logger.debug 'done with gfycats'
   status 200
 end
 
@@ -122,4 +125,40 @@ get '/fix_gfycat_tags/?' do
       end
     end
   end
+end
+
+def get_touches_query_gfycats params
+  left_query = Bout.join(:fencers, id: :left_fencer_id).join(:gfycats, bout_id: Sequel[:bouts][:id])
+  right_query = Bout.join(:fencers, id: :right_fencer_id).join(:gfycats, bout_id: Sequel[:bouts][:id])
+  
+  if params["lastname"]
+    left_query = left_query.where(last_name: params["lastname"].upcase)
+    right_query = right_query.where(last_name: params["lastname"].upcase)
+  end
+
+  if params["firstname"]
+    left_query = left_query.where(first_name: params["firstname"].capitalize)
+    right_query = right_query.where(first_name: params["firstname"].capitalize)
+  end
+  if params["tournamentid"]
+    left_query = left_query.where(Sequel[:bouts][:tournament_id] => params["tournamentid"])
+    right_query = right_query.where(Sequel[:bouts][:tournament_id] => params["tournamentid"])
+  end
+
+  if params['fencer-score'] == 'highest' and params['opponent-score'] == 'highest'
+    left_query = left_query.group_by(:bout_id).order_by(:left_score, :right_score).reverse
+    right_query = right_query.group_by(:bout_id).order_by(:right_score, :left_score).reverse
+  elsif params['fencer-score'] == 'highest'
+    left_query = left_query.group_by(:bout_id).order_by(:left_score).reverse
+    right_query = right_query.group_by(:bout_id).order_by(:right_score).reverse
+  elsif params['opponent-score'] == 'highest'
+    left_query = left_query.group_by(:bout_id).order_by(:right_score).reverse
+    right_query = right_query.group_by(:bout_id).order_by(:left_score).reverse
+  end
+
+  if params["fencer-score"] and params['fencer-score'] != 'any'
+    left_query = left_query.where(left_score: params['fencer-score'].to_i)
+    right_query = right_query.where(right_score: params['fencer-score'].to_i)
+  end
+  left_query.distinct.select(:gfycat_gfy_id).map{|a| a[:gfycat_gfy_id]} + right_query.distinct.select(:gfycat_gfy_id).map{|a| a[:gfycat_gfy_id]}
 end
