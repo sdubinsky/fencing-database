@@ -188,5 +188,7 @@ def get_touches_query_gfycats params
   right_query = right_query.distinct.select(:gfycat_gfy_id)
 
   logger.info right_query.sql
-  gfycat_ids.sort
+  gfycat_ids = left_query.map{|a| a[:gfycat_gfy_id]} + right_query.map{|a| a[:gfycat_gfy_id]}
+  
+  gfycat_ids.sort.uniq
 end
