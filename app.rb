@@ -129,8 +129,8 @@ get '/fix_gfycat_tags/?' do
 end
 
 def get_touches_query_gfycats params
-  left_query = Bout.join(:fencers, id: :left_fencer_id).join(:gfycats, bout_id: Sequel[:bouts][:id])
-  right_query = Bout.join(:fencers, id: :right_fencer_id).join(:gfycats, bout_id: Sequel[:bouts][:id])
+  left_query = Bout.join(:fencers, id: :left_fencer_id)
+  right_query = Bout.join(:fencers, id: :right_fencer_id)
   
   if params["lastname"]
     left_query = left_query.where(last_name: params["lastname"].upcase)
@@ -142,24 +142,51 @@ def get_touches_query_gfycats params
     right_query = right_query.where(first_name: params["firstname"].capitalize)
   end
   if params["tournamentid"]
-    left_query = left_query.where(Sequel[:bouts][:tournament_id] => params["tournamentid"])
-    right_query = right_query.where(Sequel[:bouts][:tournament_id] => params["tournamentid"])
+    left_query = left_query.where(Sequel[:query][:tournament_id] => params["tournamentid"])
+    right_query = right_query.where(Sequel[:query][:tournament_id] => params["tournamentid"])
   end
 
-  if params['fencer-score'] == 'highest' and params['opponent-score'] == 'highest'
-    left_query = left_query.group_by(:bout_id).order_by(:left_score, :right_score).reverse
-    right_query = right_query.group_by(:bout_id).order_by(:right_score, :left_score).reverse
-  elsif params['fencer-score'] == 'highest'
-    left_query = left_query.group_by(:bout_id).order_by(:left_score).reverse
-    right_query = right_query.group_by(:bout_id).order_by(:right_score).reverse
-  elsif params['opponent-score'] == 'highest'
-    left_query = left_query.group_by(:bout_id).order_by(:right_score).reverse
-    right_query = right_query.group_by(:bout_id).order_by(:left_score).reverse
-  end
+  if params['score-fencer'] == 'highest'
+    left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).qualify.join(
+      Gfycat.select(:bout_id, :left_score,
+                    Sequel.function(:max, :right_score).as(:right_score))
+        .qualify.join(
+          Gfycat.distinct
+            .select(:bout_id, Sequel.function(:max, :left_score).as(:left_score))
+            .where(touch: ['left', 'double'], valid: true)
+            .group_by(:bout_id)
+            .order_by(:left_score), bout_id: :bout_id, left_score: :left_score)
+        .where(valid: true)
+        .group_by(:bout_id, :left_score).qualify,
+      bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
+                  .qualify.where(valid: true)
 
-  if params["fencer-score"] and params['fencer-score'] != 'any'
-    left_query = left_query.where(left_score: params['fencer-score'].to_i)
-    right_query = right_query.where(right_score: params['fencer-score'].to_i)
+    right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).qualify.join(
+      Gfycat.select(:bout_id, :right_score,
+                    Sequel.function(:max, :left_score).as(:left_score))
+        .qualify.join(
+          Gfycat.distinct
+            .select(:bout_id, Sequel.function(:max, :right_score).as(:right_score))
+            .where(touch: ['right', 'double'], valid: true)
+            .group_by(:bout_id)
+            .order_by(:right_score), bout_id: :bout_id, right_score: :right_score)
+        .where(valid: true)
+        .group_by(:bout_id, :right_score).qualify,
+      bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
+                   .qualify.where(valid: true)
+  elsif params["score-fencer"] and params['score-fencer'] != 'any'
+    left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score_fencer'].to_i, touch: ['left', 'double'], valid: true)
+
+    right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score_fencer'].to_i, touch: ['right', 'double'], valid: true)
+  else
+    left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(valid: true, touch: ['left', 'double'])
+    right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).where(valid: true, touch: ['right', 'double'])
   end
-  left_query.distinct.select(:gfycat_gfy_id).map{|a| a[:gfycat_gfy_id]} + right_query.distinct.select(:gfycat_gfy_id).map{|a| a[:gfycat_gfy_id]}
+  left_query = left_query.join(left_gfys, bout_id: Sequel[:bouts][:id])
+  right_query = right_query.join(right_gfys, bout_id: Sequel[:bouts][:id])
+  left_query = left_query.distinct.select(:gfycat_gfy_id)
+  right_query = right_query.distinct.select(:gfycat_gfy_id)
+
+  logger.info right_query.sql
+  gfycat_ids.sort
 end
