@@ -149,7 +149,7 @@ def get_touches_query_gfycats params
   if params['score-fencer'] == 'highest'
     left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).qualify.join(
       Gfycat.select(:bout_id, :left_score,
-                    Sequel.function(:max, :right_score).as(:right_score))
+                    Sequel.function(:min, :right_score).as(:right_score))
         .qualify.join(
           Gfycat.distinct
             .select(:bout_id, Sequel.function(:max, :left_score).as(:left_score))
@@ -159,11 +159,11 @@ def get_touches_query_gfycats params
         .where(valid: true)
         .group_by(:bout_id, :left_score).qualify,
       bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
-                  .qualify.where(valid: true)
+                  .qualify.where(valid: true, touch: ['left', 'double'])
 
     right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).qualify.join(
       Gfycat.select(:bout_id, :right_score,
-                    Sequel.function(:max, :left_score).as(:left_score))
+                    Sequel.function(:min, :left_score).as(:left_score))
         .qualify.join(
           Gfycat.distinct
             .select(:bout_id, Sequel.function(:max, :right_score).as(:right_score))
@@ -173,7 +173,7 @@ def get_touches_query_gfycats params
         .where(valid: true)
         .group_by(:bout_id, :right_score).qualify,
       bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
-                   .qualify.where(valid: true)
+                   .qualify.where(valid: true, touch: ['right', 'double'])
   elsif params["score-fencer"] and params['score-fencer'] != 'any'
     left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score_fencer'].to_i, touch: ['left', 'double'], valid: true)
 
