@@ -13,13 +13,12 @@
             <% end %>
             <option id="score-fencer" value="highest">Highest</option>
             </select>
-            <label for="score-opponent" class="form-question h4">Opponent's Score: </label>
-            <select id="score-opponent" name="score-opponent">
-                <option id="score-opponent" value="any">Any</option>
-                <% 1.upto 15 do |score| %>
-                    <option id="score-opponent" value="<%=score%>"><%=score%></option>
+            <label for="tournament" class="form-question h4">Tournament: </label>
+            <select id="tournament" name="tournament">
+                <option id="tournament" value="all">All</option>
+                <% @tournaments.each do |tournament| %>
+                    <option id="tournament" value="<%=tournament.tournament_id%>"><%=tournament.tournament_name + ", " + tournament.tournament_year%>
                 <% end %>
-                <option id="score-opponent" value="highest">Highest</option>
             </select>
             <input type="submit" value="Filter" class="btn btn-default btn-lg" />
         </form>
