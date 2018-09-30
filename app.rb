@@ -79,6 +79,7 @@ get '/touches/?' do
   end
   @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
+  @tournaments = Tournament
   erb :touches
 end
 
