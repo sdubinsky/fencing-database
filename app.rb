@@ -146,6 +146,7 @@ def get_touches_query_gfycats params
     right_query = right_query.where(Sequel[:query][:tournament_id] => params["tournamentid"])
   end
 
+  #use min because the gfy with the lowest opponent's score is the one they scored on.
   if params['score-fencer'] == 'highest'
     left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).qualify.join(
       Gfycat.select(:bout_id, :left_score,
