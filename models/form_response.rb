@@ -35,7 +35,7 @@ class FormResponse < Sequel::Model
     query = DB[:gfycats]
     query = query.join(:form_responses, stats_id: :gfycat_gfy_id)
     if filters[:tournament] and filters[:tournament] != "all"
-      query = query.where(tournament: filters[:tournament])
+      query = query.where(tournament_id: filters[:tournament])
     end
     if filters[:fencer_name] and filters[:fencer_name] != "all"
       query = query.where{Sequel.|({fotl_name: filters[:fencer_name]}, {fotr_name: filters[:fencer_name]})}

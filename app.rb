@@ -57,7 +57,8 @@ get '/submit/?' do
 end
 
 get '/stats/?' do
-  @tournaments = ['all'] + Gfycat.tournaments
+  @tournaments = Tournament.all
+  
   @genders = ['male', 'female']
   @total = FormResponse.total tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
   @location = FormResponse.most_popular_location tournament: params['tournament-filter']

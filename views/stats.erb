@@ -3,8 +3,9 @@
     <form class="stats-filter form-inline" id="stats-filter-form" action="stats">
         <label for="tournament-filter" class="form-question h4">Tournament: </label>
         <select class="form-control" name="tournament-filter">
+            <option name="tournament-filter" id="all" value="all">All</option>
             <%  @tournaments.each do |tournament| %>
-                <option name="tournament-filter" id="<%= tournament %>" value="<%= tournament %>"><%= tournament.to_s.capitalize %></option>
+                <option name="tournament-filter" id="<%= tournament.id %>" value="<%= tournament.tournament_id %>"><%= tournament.tournament_name %></option>
             <% end %>
         </select>
         <br/>
