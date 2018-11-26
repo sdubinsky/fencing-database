@@ -133,12 +133,12 @@ def get_touches_query_gfycats params
   left_query = Bout.join(:fencers, id: :left_fencer_id)
   right_query = Bout.join(:fencers, id: :right_fencer_id)
   
-  if params["lastname"]
+  if params["lastname"] and not params["lastname"].empty?
     left_query = left_query.where(last_name: params["lastname"].upcase)
     right_query = right_query.where(last_name: params["lastname"].upcase)
   end
 
-  if params["firstname"]
+  if params["firstname"] and not params["firstname"].empty?
     left_query = left_query.where(first_name: params["firstname"].capitalize)
     right_query = right_query.where(first_name: params["firstname"].capitalize)
   end
