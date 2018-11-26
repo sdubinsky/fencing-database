@@ -142,9 +142,9 @@ def get_touches_query_gfycats params
     left_query = left_query.where(first_name: params["firstname"].capitalize)
     right_query = right_query.where(first_name: params["firstname"].capitalize)
   end
-  if params["tournamentid"]
-    left_query = left_query.where(Sequel[:query][:tournament_id] => params["tournamentid"])
-    right_query = right_query.where(Sequel[:query][:tournament_id] => params["tournamentid"])
+  if params["tournament"] and params['tournament'] != "all"
+    left_query = left_query.where(tournament_id: params["tournament"])
+    right_query = right_query.where(tournament_id: params["tournament"])
   end
 
   #use min because the gfy with the lowest opponent's score is the one they scored on.
