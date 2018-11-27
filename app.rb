@@ -16,6 +16,9 @@ connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}
 DB = Sequel.connect(connstr)
 require './models/init'
 Sequel::Model.db.extension(:pagination)
+
+require './helpers'
+include Helpers
 logger = Logger.new($stdout)
 
 configure :development do
@@ -74,7 +77,7 @@ end
 
 get '/touches/?' do
   unless params.empty?
-    @gfycats = get_touches_query_gfycats params
+    @gfycats = Helpers.get_touches_query_gfycats DB, params
   else
     @gfycats = []
   end
@@ -91,106 +94,8 @@ get '/update_gfycat_list/?' do
 end
 
 get '/fix_gfycat_tags/?' do
-  Thread.new do
-    next_round = JSON.parse Excon.get('https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500').body
-    all_gfycats = next_round['gfycats']
-    cursor = next_round['cursor']
-    until cursor.empty? do
-      next_round = JSON.parse Excon.get("https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500&cursor=#{cursor}").body
-      cursor = next_round['cursor']
-      all_gfycats = all_gfycats + next_round['gfycats']
-    end
-    old_gfycats = DB[:gfycats].map(:gfycat_gfy_id)
-    new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
-    new_gfycats.each do |gfy|
-      Logger.info "adding #{gfy['gfyName']}"
-      if gfy['tags']
-        tags = Hash[gfy['tags'].map{|x| x.split ": "}]
-      else
-        logger.error "#{gfy['gfyName']} missing tags"
-        next
-      end
-      
-      begin
-        DB[:gfycats].where(gfycat_gfy_id: gfy['gfyName']).update(
-          tournament: tags['tournament'],
-          weapon: tags['weapon'],
-          gender: tags['gender'],
-          fotl_name: tags['leftname'],
-          fotr_name: tags['rightname'],
-          touch: tags['touch']
-        )
-      rescue Sequel::UniqueConstraintViolation
-        logger.error "duplicate gfy id: #{gfy['gfyName']}"
-      rescue => e
-        logger.info e.to_s 
-      end
-    end
-  end
+  Helpers.fix_gfycat_tags DB, params
 end
 
-def get_touches_query_gfycats params
-  left_query = Bout.join(:fencers, id: :left_fencer_id)
-  right_query = Bout.join(:fencers, id: :right_fencer_id)
   
-  if params["lastname"] and not params["lastname"].empty?
-    left_query = left_query.where(last_name: params["lastname"].upcase)
-    right_query = right_query.where(last_name: params["lastname"].upcase)
-  end
-
-  if params["firstname"] and not params["firstname"].empty?
-    left_query = left_query.where(first_name: params["firstname"].capitalize)
-    right_query = right_query.where(first_name: params["firstname"].capitalize)
-  end
-  if params["tournament"] and params['tournament'] != "all"
-    left_query = left_query.where(tournament_id: params["tournament"])
-    right_query = right_query.where(tournament_id: params["tournament"])
-  end
-
-  #use min because the gfy with the lowest opponent's score is the one they scored on.
-  if params['score-fencer'] == 'highest'
-    left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).qualify.join(
-      Gfycat.select(:bout_id, :left_score,
-                    Sequel.function(:min, :right_score).as(:right_score))
-        .qualify.join(
-          Gfycat.distinct
-            .select(:bout_id, Sequel.function(:max, :left_score).as(:left_score))
-            .where(touch: ['left', 'double'], valid: true)
-            .group_by(:bout_id)
-            .order_by(:left_score), bout_id: :bout_id, left_score: :left_score)
-        .where(valid: true)
-        .group_by(:bout_id, :left_score).qualify,
-      bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
-                  .qualify.where(valid: true, touch: ['left', 'double'])
-
-    right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).qualify.join(
-      Gfycat.select(:bout_id, :right_score,
-                    Sequel.function(:min, :left_score).as(:left_score))
-        .qualify.join(
-          Gfycat.distinct
-            .select(:bout_id, Sequel.function(:max, :right_score).as(:right_score))
-            .where(touch: ['right', 'double'], valid: true)
-            .group_by(:bout_id)
-            .order_by(:right_score), bout_id: :bout_id, right_score: :right_score)
-        .where(valid: true)
-        .group_by(:bout_id, :right_score).qualify,
-      bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
-                   .qualify.where(valid: true, touch: ['right', 'double'])
-  elsif params["score-fencer"] and params['score-fencer'] != 'any'
-    left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score_fencer'].to_i, touch: ['left', 'double'], valid: true)
-
-    right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score_fencer'].to_i, touch: ['right', 'double'], valid: true)
-  else
-    left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(valid: true, touch: ['left', 'double'])
-    right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).where(valid: true, touch: ['right', 'double'])
-  end
-  left_query = left_query.join(left_gfys, bout_id: Sequel[:bouts][:id])
-  right_query = right_query.join(right_gfys, bout_id: Sequel[:bouts][:id])
-  left_query = left_query.distinct.select(:gfycat_gfy_id)
-  right_query = right_query.distinct.select(:gfycat_gfy_id)
-
-  logger.info right_query.sql
-  gfycat_ids = left_query.map{|a| a[:gfycat_gfy_id]} + right_query.map{|a| a[:gfycat_gfy_id]}
-  
-  gfycat_ids.sort.uniq
 end
