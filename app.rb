@@ -97,5 +97,11 @@ get '/fix_gfycat_tags/?' do
   Helpers.fix_gfycat_tags DB, params
 end
 
-  
+get '/api/bouts/?:id_number?' do
+  begin
+    Bout.json params["id_number"]
+  rescue BoutNotFoundError
+    status 404
+    return "Bout not found"
+  end
 end
