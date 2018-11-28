@@ -118,3 +118,14 @@ get '/api/tournaments/?:name?' do
     Tournament.json
   end
 end
+
+get '/api/fencers/?:id?' do
+  if params["id"]
+    fencer = Fencer[params["id"].to_i]
+    return fencer.to_json if fencer
+    status 404
+    return "fencer not found"
+  else
+    Fencer.json
+  end
+end

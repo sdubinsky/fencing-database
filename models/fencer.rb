@@ -1,5 +1,14 @@
 require 'pry'
+require 'json'
 class Fencer < Sequel::Model
+  def bouts
+    Bout.where(left_fencer_id: id).or(right_fencer_id: id)
+  end
+
+  def gfycats
+    Gfycat.where(left_fencer_id: id).or(right_fencer_id: id)
+  end
+
   def name
     self.last_name.split.map{|a| a.capitalize}.join(" ") + ", " + self.first_name.split.map{|a| a.capitalize}.join(" ")
   end
@@ -20,5 +29,32 @@ class Fencer < Sequel::Model
   #In case of duplicate names, list all possibilities
   def self.find_name_possibilities name
     Fencer.where(Sequel.join([:last_name, :first_name], ' ').ilike(name + "%")).or(Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%"))
+  end
+
+  def as_dict
+    {
+      id: id,
+      last_name: last_name,
+      first_name: first_name,
+      nationality: nationality,
+      gender: gender,
+      birthdate: birthday,
+      weapon: weapon,
+      bouts: bouts.map{|a| a.id},
+      gfycats: gfycats.map{|a| a.gfycat_gfy_id}
+    }
+  end
+
+  def to_json
+    as_dict.to_json
+  end
+
+  def self.json
+    fencers = Fencer.all.map{|a| a.as_dict}
+    puts fencers.length
+    {
+      count: fencers.length,
+      fencers: fencers
+    }.to_json
   end
 end
