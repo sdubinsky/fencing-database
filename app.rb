@@ -98,10 +98,23 @@ get '/fix_gfycat_tags/?' do
 end
 
 get '/api/bouts/?:id_number?' do
-  begin
-    Bout.json params["id_number"]
-  rescue BoutNotFoundError
+  if params["id_number"]
+    bout = Bout[params["id_number"].to_i]
+    return bout.to_json if bout
     status 404
-    return "Bout not found"
+    return "bout not found"
+  else
+    Bout.json
+  end
+end
+
+get '/api/tournaments/?:name?' do
+  if params["name"]
+    tournament = Tournament.first(tournament_id: params["name"])
+    return tournament.to_json if tournament
+    status 404
+    return "tournament not found"
+  else
+    Tournament.json
   end
 end

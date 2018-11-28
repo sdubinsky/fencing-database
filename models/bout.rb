@@ -14,43 +14,28 @@ class Bout < Sequel::Model
     end
   end
 
-  def self.json id_number=nil
-    if id_number
-      bout = Bout[id_number]
-      raise BoutNotFoundError if bout == nil
-      {
-        count: 1,
-        bout: {
-          bout_id: bout.id,
-          fotl_last_name: bout.left_fencer.last_name,
-          fotl_first_name: bout.left_fencer.first_name,
-          fotr_last_name: bout.right_fencer.last_name,
-          fotr_first_name: bout.right_fencer.first_name,
-          gfycats: bout.gfycats.map{|g| g.gfycat_gfy_id},
-          tournament_name: bout.tournament.tournament_name,
-          tournament_year: bout.tournament.tournament_year
-        }
-      }.to_json
-    else
-      bouts = Bout.all.map do |bout|
-        {
-          bout_id: bout.id,
-          fotl_last_name: bout.left_fencer.last_name,
-          fotl_first_name: bout.left_fencer.first_name,
-          fotr_last_name: bout.right_fencer.last_name,
-          fotr_first_name: bout.right_fencer.first_name,
-          gfycats: bout.gfycats.map{|g| g.gfycat_gfy_id},
-          tournament_name: bout.tournament.tournament_name,
-          tournament_year: bout.tournament.tournament_year
-        }
-      end
-      puts bouts
-      {
-        count: bouts.length,
-        bouts: bouts
-      }.to_json
-    end
+  def as_dict
+    {
+      bout_id: id,
+      fotl_last_name: left_fencer.last_name,
+      fotl_first_name: left_fencer.first_name,
+      fotr_last_name: right_fencer.last_name,
+      fotr_first_name: right_fencer.first_name,
+      gfycats: gfycats.map{|g| g.gfycat_gfy_id},
+      tournament_name: tournament.tournament_name,
+      tournament_year: tournament.tournament_year
+    }
+  end
+
+  def to_json
+    as_dict.to_json
+  end
+  
+  def self.json
+    bouts = Bout.all.map{|bout| bout.as_dict}
+    {
+      count: bouts.length,
+      bouts: bouts
+    }.to_json
   end
 end
-
-class BoutNotFoundError < Exception; end
