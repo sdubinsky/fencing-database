@@ -1,6 +1,19 @@
+require 'psych'
 require 'rake/testtask'
 namespace :db do
-  db_address = ENV["DATABASE_URL"] || "postgres://localhost/fencingstats"
+  
+  if  ENV["DATABASE_URL"]
+    db_address = ENV["DATABASE_URL"]
+  else
+    config = Psych.load_file("./config.yml")
+    db_config = config['database']
+    if db_config['db_username'] or db_config['db_password']
+      login = "#{db_config['db_username']}:#{db_config['db_password']}@"
+    else
+      login = ''
+    end
+    db_address = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
+  end
   desc "Run migrations"
   task :migrate, [:version] do |t, args|
     require "sequel/core"
@@ -28,6 +41,12 @@ namespace :db do
       Gfycat.where(left_fencer_id: nil).or(right_fencer_id: nil).each{|gfy| gfy.normalize_names}
       Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'epee').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'epee').select(:right_fencer_id)).update(weapon: 'epee')
     end
+  end
+
+  desc "fix name errors"
+  task :fix_name_errors do |t|
+    require 'sequel'
+    Sequel.connect db_address do |db|
   end
   
   desc "Add new bouts"

@@ -1,3 +1,4 @@
+#Script to process the fencer names downloaded from the FIE.
 f1 = File.open("fencers_names/all_fencers.html", 'rb')
 f2 = File.open("fencers_names/fencers.sql", 'w')
 f2.puts "insert into fencers (last_name, first_name, nationality, birthday, gender) values"

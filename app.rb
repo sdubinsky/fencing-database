@@ -83,7 +83,7 @@ get '/touches/?' do
   end
   @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
-  @tournaments = Tournament
+  @tournaments = Tournament.order_by(:tournament_name)
   erb :touches
 end
 
@@ -127,5 +127,14 @@ get '/api/fencers/?:id?' do
     return "fencer not found"
   else
     Fencer.json
+  end
+end
+
+get '/api/gfycats/?:gfycat_gfy_id?' do
+  if params["gfycat_gfy_id"]
+    gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
+    return gfy.to_json if gfy
+    status 404
+    return "gfycat not found"
   end
 end
