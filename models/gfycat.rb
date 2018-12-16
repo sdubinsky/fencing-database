@@ -23,7 +23,6 @@ class Gfycat < Sequel::Model
       exclude(left_fencer_id: nil, right_fencer_id: nil).
       exclude(Sequel.&(Sequel.~(left_fencer_id: nil), Sequel.~(right_fencer_id: nil)))
   end
-
   def self.update_gfycat_list
     logger = Logger.new $stdout
     next_round = JSON.parse Excon.get('https://api.gfycat.com/v1/users/fencingdatabase/gfycats?count=500').body
@@ -36,7 +35,7 @@ class Gfycat < Sequel::Model
       all_gfycats = all_gfycats + next_round['gfycats']
     end
     #EnchantedTatteredBasilisk is just a random gfy that keeps getting mixed in, I don't know why
-    old_gfycats = Gfycat.map(:gfycat_gfy_id) + "EnchantedTatteredBasilisk"
+    old_gfycats = Gfycat.map(:gfycat_gfy_id) << "EnchantedTatteredBasilisk"
     new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
     new_gfycats.each do |gfy|
       logger.info "adding #{gfy['gfyName']}"
@@ -49,10 +48,12 @@ class Gfycat < Sequel::Model
 
       left_score = tags['leftscore'] || -1
       right_score = tags['rightscore'] || -1
+      tournament = Tournament.first(tournament_id: tags['tournament'])
+      tournament_id = tournament ? tournament.tournament_id : nil 
       begin
         Gfycat.new(
           gfycat_gfy_id: gfy['gfyName'],
-          tournament_id: Tournament.first(tournament_id: tags['tournament']),
+          tournament_id: tournament_id,
           weapon: tags['weapon'],
           gender: tags['gender'],
           created_date: Time.now.to_i,
@@ -72,30 +73,34 @@ class Gfycat < Sequel::Model
   end
 
   def normalize_names
-    if CanonicalName.where(gfy_name: fotr_name).count == 1
-      name = CanonicalName.first(gfy_name: fotr_name).canonical_name
-    else
-      name = fotr_name
-    end
-    right_name = Fencer.find_name_possibilities(name)
-    right_name = right_name.where(gender: gender) if gender
-    if right_name.count == 1
-      update(
-        right_fencer_id: right_name.first.id
-      )
-    end
+    begin
+      if CanonicalName.where(gfy_name: fotr_name).count == 1
+        name = CanonicalName.first(gfy_name: fotr_name).canonical_name
+      else
+        name = fotr_name
+      end
+      right_name = Fencer.find_name_possibilities(name)
+      right_name = right_name.where(gender: gender) if gender
+      if right_name.count == 1
+        update(
+          right_fencer_id: right_name.first.id
+        )
+      end
 
-    if CanonicalName.where(gfy_name: fotl_name).count == 1
-      name = CanonicalName.first(gfy_name: fotl_name).canonical_name
-    else
-      name = fotl_name
+      if CanonicalName.where(gfy_name: fotl_name).count == 1
+        name = CanonicalName.first(gfy_name: fotl_name).canonical_name
+      else
+        name = fotl_name
+      end
+      left_name = Fencer.find_name_possibilities(name)
+      left_name = left_name.where(gender: gender) if gender
+      if left_name.count == 1
+        update(
+          left_fencer_id: left_name.first.id
+        )
+      end
     end
-    left_name = Fencer.find_name_possibilities(name)
-    left_name = left_name.where(gender: gender) if gender
-    if left_name.count == 1
-      update(
-        left_fencer_id: left_name.first.id
-      )
-    end
+  rescue
+    "problem with gfy: #{gfycat_gfy_id}"
   end
 end

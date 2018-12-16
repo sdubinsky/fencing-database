@@ -1,10 +1,15 @@
-<div name="touches" >
+<div name="touches" class="touches">
     <div class="touches-filter-form">
         <form class="form-inline" id="touches-filter-form" action="touches" >
-            <label for="lastname" class="form-question h4">Last Name: </label>
-            <input type="text" id="lastname" name="lastname" />
+            <div class=touches-firstname">
             <label for="firstname" class="form-question h4">First Name: </label>
             <input type="text" id="firstname" name="firstname" />
+            </div>
+            <div class="touches-lastname">
+            <label for="lastname" class="form-question h4">Last Name: </label>
+            <input type="text" id="lastname" name="lastname" /><br />
+            </div>
+            <div class=touches-score">
             <label for="score-fencer" class="form-question h4">Fencer's Score: </label>
             <select id="score-fencer" name="score-fencer">
                 <option id="score-fencer" value="any">Any</option>
@@ -13,6 +18,8 @@
             <% end %>
             <option id="score-fencer" value="highest">Highest</option>
             </select>
+            </div>
+            <div class="touches-tournament">
             <label for="tournament" class="form-question h4">Tournament: </label>
             <select id="tournament" name="tournament">
                 <option id="tournament" value="all">All</option>
@@ -20,12 +27,13 @@
                     <option id="tournament" value="<%=tournament.tournament_id%>"><%=tournament.tournament_name + ", " + tournament.tournament_year%>
                 <% end %>
             </select>
+            </div>
             <input type="submit" value="Filter" class="btn btn-default btn-lg" />
         </form>
     </div>
     <div class="touches-display">
         <% @gfycats.each do |gfy| %>
-            <div class='gfyitem' data-id='<%= gfy %>' data-max-height="500" data-responsive="true"></div>
+            <div class="gfycat" style='position:relative; padding-bottom:70.80%'><iframe src='https://gfycat.com/ifr/<%= gfy %>' frameborder='0' scrolling='no' width='100%' height='100%' style='position:absolute;top:0;left:0;' allowfullscreen></iframe></div>
         <% end %>
     </div>
 </div>
