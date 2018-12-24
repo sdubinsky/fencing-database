@@ -1,7 +1,25 @@
-.touches select {
-    max-width: 20%;
+.touches {
+    display: flex;
+    justify-content: space-around;
+}
+.touches-filter-form {
+    display: inline;
+    max-width: 40%;
 }
 
-.touches gfycat {
-    
+
+
+.touches-filter-form * {
+    margin: 1em;
+}
+
+.touches-display {
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+}
+
+.video {
+    max-width: 100%;
+    height: fit-content;
 }

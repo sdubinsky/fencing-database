@@ -2,38 +2,43 @@
     <div class="touches-filter-form">
         <form class="form-inline" id="touches-filter-form" action="touches" >
             <div class=touches-firstname">
-            <label for="firstname" class="form-question h4">First Name: </label>
-            <input type="text" id="firstname" name="firstname" />
+                <label for="firstname" class="form-question h4">First Name: </label>
+                <input type="text" id="firstname" name="firstname" />
             </div>
             <div class="touches-lastname">
-            <label for="lastname" class="form-question h4">Last Name: </label>
-            <input type="text" id="lastname" name="lastname" /><br />
+                <label for="lastname" class="form-question h4">Last Name: </label>
+                <input type="text" id="lastname" name="lastname" /><br />
             </div>
             <div class=touches-score">
-            <label for="score-fencer" class="form-question h4">Fencer's Score: </label>
-            <select id="score-fencer" name="score-fencer">
-                <option id="score-fencer" value="any">Any</option>
-            <% 1.upto 15 do |score| %>
-                <option id="score-fencer" value="<%=score%>"><%=score%></option>
-            <% end %>
-            <option id="score-fencer" value="highest">Highest</option>
-            </select>
+                <label for="score-fencer" class="form-question h4">Fencer's Score: </label>
+                <select id="score-fencer" name="score-fencer">
+                    <option id="score-fencer" value="any">Any</option>
+                    <% 1.upto 15 do |score| %>
+                        <option id="score-fencer" value="<%=score%>"><%=score%></option>
+                    <% end %>
+                    <option id="score-fencer" value="highest">Highest</option>
+                </select>
             </div>
             <div class="touches-tournament">
-            <label for="tournament" class="form-question h4">Tournament: </label>
-            <select id="tournament" name="tournament">
-                <option id="tournament" value="all">All</option>
-                <% @tournaments.each do |tournament| %>
-                    <option id="tournament" value="<%=tournament.tournament_id%>"><%=tournament.tournament_name + ", " + tournament.tournament_year%>
-                <% end %>
-            </select>
+                <label for="tournament" class="form-question h4">Tournament: </label>
+                <select id="tournament" name="tournament">
+                    <option id="tournament" value="all">All</option>
+                    <% @tournaments.each do |tournament| %>
+                        <option id="tournament" value="<%=tournament.tournament_id%>"><%=tournament.tournament_name + ", " + tournament.tournament_year%>
+                    <% end %>
+                </select>
             </div>
             <input type="submit" value="Filter" class="btn btn-default btn-lg" />
         </form>
     </div>
     <div class="touches-display">
         <% @gfycats.each do |gfy| %>
-            <div class="gfycat" style='position:relative; padding-bottom:70.80%'><iframe src='https://gfycat.com/ifr/<%= gfy %>' frameborder='0' scrolling='no' width='100%' height='100%' style='position:absolute;top:0;left:0;' allowfullscreen></iframe></div>
+            <video class="video media" id="video-capitalclumsycoati" alt="fencing gfy" height="720" width="1280" autoplay muted loop poster="https://thumbs.gfycat.com/<%= gfy %>-mobile.jpg" tabindex="-1">
+                <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= gfy %>.webm" type="video/webm">
+                <source src="https://giant.gfycat.com/<%= gfy %>.mp4" type="video/mp4">
+                <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4">
+                <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= gfy %>.mp4">
+            </video>
         <% end %>
     </div>
 </div>
