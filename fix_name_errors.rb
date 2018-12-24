@@ -1,5 +1,5 @@
 require 'sequel'
-
+require 'pry'
 db_address = ENV["DATABASE_URL"] || "postgres://localhost/fencingstats"
 
 def ask_for_canonical_name name, gfy
@@ -39,6 +39,8 @@ def process_name gfy, side
     fencer_id = :right_fencer_id
     name = gfy.fotr_name
   end
+
+  puts "name is nil for gfy #{gfy.gfycat_gfy_id}" unless name
   #canonical names are strictly for typos.  If the canonical version exists, it means
   #it doesn't exist in the fencer table.
 
