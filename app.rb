@@ -77,10 +77,18 @@ end
 
 get '/touches/?' do
   unless params.empty?
+    params['page'] = 1 unless params['page']
     @gfycats = Helpers.get_touches_query_gfycats DB, params
+    @get_string = params.map do |k, v|
+      if k == 'page'
+        next
+      end
+      "#{k}=#{v}"
+    end.compact.join "&"
   else
     @gfycats = []
   end
+
   @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
   @tournaments = Tournament.order_by(:tournament_name)
