@@ -94,9 +94,9 @@ module Helpers
         bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
                      .qualify.where(valid: true, touch: ['right', 'double'])
     elsif params["score-fencer"] and params['score-fencer'] != 'any'
-      left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score_fencer'].to_i, touch: ['left', 'double'], valid: true)
+      left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score-fencer'].to_i, touch: ['left', 'double'], valid: true)
 
-      right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score_fencer'].to_i, touch: ['right', 'double'], valid: true)
+      right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score-fencer'].to_i, touch: ['right', 'double'], valid: true)
     else
       left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(valid: true, touch: ['left', 'double'])
       right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).where(valid: true, touch: ['right', 'double'])
