@@ -2,15 +2,10 @@
     display: flex;
     justify-content: space-around;
 }
-.touches-filter-form {
+
+.touches-filter {
     display: inline;
     max-width: 40%;
-}
-
-
-
-.touches-filter-form * {
-    margin: 1em;
 }
 
 .touches-display {
