@@ -1,3 +1,4 @@
+require 'pry'
 require 'json'
 require 'excon'
 require 'logger'
@@ -105,9 +106,10 @@ module Helpers
     left_query = left_query.distinct.select(:gfycat_gfy_id)
     right_query = right_query.distinct.select(:gfycat_gfy_id)
 
-    logger.info right_query.sql
-    gfycat_ids = left_query.map{|a| a[:gfycat_gfy_id]} + right_query.map{|a| a[:gfycat_gfy_id]}
-    
-    gfycat_ids.sort.uniq
+    final_query = left_query.union(right_query)
+    page = (params["page"] || 1).to_i
+    final_query = final_query.paginate(page, 10)
+    logger.info final_query.sql
+    final_query.map{|gfy| gfy[:gfycat_gfy_id]}
   end
 end
