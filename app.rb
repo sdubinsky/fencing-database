@@ -5,14 +5,19 @@ require 'json'
 require 'excon'
 require 'logger'
 
-config = Psych.load_file("./config.yml")
-db_config = config['database']
-if db_config['db_username'] or db_config['db_password']
-  login = "#{db_config['db_username']}:#{db_config['db_password']}@"
+if ENV['DATABASE_URL']
+  connstr = ENV['DATABASE_URL']
 else
-  login = ''
+  config = Psych.load_file("./config.yml")
+  db_config = config['database']
+  if db_config['db_username'] or db_config['db_password']
+    login = "#{db_config['db_username']}:#{db_config['db_password']}@"
+  else
+    login = ''
+  end
+  connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
 end
-connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
+
 DB = Sequel.connect(connstr)
 require './models/init'
 Sequel::Model.db.extension(:pagination)
