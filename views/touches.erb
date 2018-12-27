@@ -42,5 +42,15 @@
                 <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= gfy %>.mp4">
             </video>
         <% end %>
+        <% if params['page'] %>
+            <div class="touches-pagination">
+                <% if params['page'].to_i > 1 %>
+                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i - 1%>">Prev</a>
+                <% end %>
+                <% unless @gfycats.empty? %>
+                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i + 1%>">Next</a>
+                <% end %>
+            </div>
+        <% end %>
     </div>
 </div>
