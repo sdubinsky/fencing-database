@@ -34,6 +34,17 @@
         </form>
     </div>
     <div class="touches-display">
+        <% if params['page'] %>
+            <div class="touches-pagination">
+                <% if params['page'].to_i > 1 %>
+                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i - 1%>"><button class="btn btn-lg paginate-btn paginate-prev">Prev</button></a>
+                <% end %>
+                <% if @gfycats.length >= 10 %>
+                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i + 1%>"><button class="btn btn-lg paginate-btn paginate-next">Next</button></a>
+                <% end %>
+            </div>
+        <% end %>
+
         <% @gfycats.each do |gfy| %>
             <video class="video media" id="video-capitalclumsycoati" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= gfy %>-mobile.jpg" tabindex="-1">
                 <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= gfy %>.webm" type="video/webm">
@@ -45,10 +56,10 @@
         <% if params['page'] %>
             <div class="touches-pagination">
                 <% if params['page'].to_i > 1 %>
-                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i - 1%>">Prev</a>
+                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i - 1%>"><button class="btn btn-lg paginate-btn paginate-prev">Prev</button></a>
                 <% end %>
-                <% unless @gfycats.empty? %>
-                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i + 1%>">Next</a>
+                <% if @gfycats.length >= 10 %>
+                    <a href="/touches?<%=@get_string%>&page=<%=params['page'].to_i + 1%>"><button class="btn btn-lg paginate-btn paginate-next">Next</button></a>
                 <% end %>
             </div>
         <% end %>
