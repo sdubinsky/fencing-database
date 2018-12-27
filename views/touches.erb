@@ -12,12 +12,14 @@
             <div class=touches-score">
                 <label for="score-fencer" class="form-question h4">Fencer's Score: </label>
                 <select id="score-fencer" name="score-fencer">
-                    <option id="score-fencer" value="any">Any</option>
+                    <option id="score-fencer" value="any" selected>Any</option>
+                    <%=params['score-fencer']%>
+                    <% selected = "highest" == params['score-fencer'] ? 'selected="selected"' : ""%>
+                    <option id="score-fencer" value="highest" <%=selected%>>Highest</option>
                     <% 1.upto 15 do |score| %>
                         <% selected = score == params['score-fencer'].to_i ? 'selected="selected"' : ""%>
                         <option id="score-fencer" value="<%=score%>" <%= selected%>><%=score%></option>
                     <% end %>
-                    <option id="score-fencer" value="highest">Highest</option>
                 </select>
             </div>
             <div class="touches-tournament">
