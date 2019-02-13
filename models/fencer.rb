@@ -28,7 +28,15 @@ class Fencer < Sequel::Model
 
   #In case of duplicate names, list all possibilities
   def self.find_name_possibilities name
-    Fencer.where(Sequel.join([:last_name, :first_name], ' ').ilike(name + "%")).or(Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%"))
+    query = Fencer.where(
+      Sequel.join([:last_name, :first_name], ' ').ilike(name + "%")).
+    or(Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%")).
+    or(Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%"))
+    if query.count == 0
+      query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[0...-1].gsub(" ", "") + "%"))
+      query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[1..-1].gsub(" ", "") + "%"))
+    end
+    query
   end
 
   def as_dict
