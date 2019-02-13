@@ -57,6 +57,7 @@ namespace :db do
     require 'sequel'
     Sequel.connect db_address do |db|
       require './models/init'
+      puts "starting with #{Bout.count} bouts"
       #Update gfys with any bouts that already exist
       db[:gfycats]
         .where(bout_id: nil)
@@ -97,6 +98,8 @@ namespace :db do
         .update(bout_id: Sequel[:g2][:bout_id],
                 left_fencer_id: Sequel[:g2][:left_fencer_id],
                 right_fencer_id: Sequel[:g2][:right_fencer_id])
+
+      puts "ending with #{Bout.count} bouts"
     end
   end
 end

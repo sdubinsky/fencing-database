@@ -8,10 +8,10 @@ DB Improvements [2/6]
   - [X] each bout has many touches
   - [X] columns: id, tournament_id, round, left_fencer_id, right_fencer_id
 Pages To Add [2/6]
-- [ ] filter touches [0/5]
-  - [ ] touches by fencer
-  - [ ] touches on fencer
-  - [ ] touches by location on body
-  - [ ] touches by location on strip
-  - [ ] all of the above
+- [X] filter touches [4/4]
+  - [X] touches by fencer
+  - [X] touches by location on body
+  - [X] touches by location on strip
+  - [X] all of the above
 - [ ] Fantasy Fencing
+Add filter by year to touches page
