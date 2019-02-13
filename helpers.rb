@@ -107,9 +107,11 @@ module Helpers
     right_query = right_query.distinct.select(:gfycat_gfy_id)
 
     final_query = left_query.union(right_query)
-    page = (params["page"] || 1).to_i
-    final_query = final_query.paginate(page, 10)
+    unless params["page"] and params["page"].to_i == -1
+      page = (params["page"] || 1).to_i
+      final_query = final_query.paginate(page, 10)
+    end
     logger.info final_query.sql
-    final_query.map{|gfy| gfy[:gfycat_gfy_id]}
+    final_query
   end
 end

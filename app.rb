@@ -83,7 +83,7 @@ end
 get '/touches/?' do
   unless params.empty?
     params['page'] = 1 unless params['page']
-    @gfycats = Helpers.get_touches_query_gfycats DB, params
+    @gfycats = Helpers.get_touches_query_gfycats(DB, params).map{|gfy| gfy[:gfycat_gfy_id]}
     @get_string = params.map do |k, v|
       if k == 'page'
         next
@@ -98,6 +98,67 @@ get '/touches/?' do
   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
   @tournaments = Tournament.order_by(:tournament_name)
   erb :touches
+end
+
+get '/reels/?' do
+  @reels = HighlightReel.all
+  erb :reels
+end
+
+get '/reels/new/?' do
+  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
+  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
+  @tournaments = Tournament.order_by(:tournament_name)
+  erb :new_reel
+end
+
+post '/reels/create' do
+  reel = HighlightReel.create(
+    author: params['author'],
+    title: params['title'],
+    last_name: params['last_name'],
+    first_name: params['first_name'],
+    tournament: params['tournament']
+  )
+  reel.save
+  params['page'] = -1
+  gfycats = Helpers.get_touches_query_gfycats DB, params
+  DB.transaction do
+    gfycats.each do |gfy|
+      ReelClip.create(
+        gfycat_gfy_id: gfy[:gfycat_gfy_id],
+        highlight_reel: reel,
+      )
+    end
+  end
+  redirect "/reels/#{reel.id}"
+end
+
+get '/reels/:id/?' do
+  @reel = HighlightReel[params['id']]
+  @clip_count = ReelClip.where(selected: true, highlight_reel_id: @reel.id).count
+  @seconds = @clip_count * 10
+  @hours = @seconds / 3600
+  @seconds = @seconds % 3600
+  @minutes = @seconds / 60
+  @seconds = @seconds % 60
+  @unsorted_clip_count = ReelClip.where(selected: nil, highlight_reel_id: @reel.id).count
+  erb :reel
+end
+
+get '/reels/:id/judge/?' do
+  @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
+  erb :reel_clip
+end
+
+post '/reels/:id/submit_clip' do
+  @clip = ReelClip.first(gfycat_gfy_id: params['clip_id'])
+  case params['result']
+  when 'accept'
+    @clip.selected = true
+  when 'reject'
+    @clip.selected = false
+  end
 end
 
 get '/update_gfycat_list/?' do
