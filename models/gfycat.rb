@@ -49,6 +49,10 @@ class Gfycat < Sequel::Model
       left_score = tags['leftscore'] || -1
       right_score = tags['rightscore'] || -1
       tournament = Tournament.first(tournament_id: tags['tournament'])
+      if tournament.nil? and not tags['tournament'].nil?
+        logger.error "#{tags['tournament']} doesn't exist"
+        exit(1)
+      end
       tournament_id = tournament ? tournament.tournament_id : nil 
       begin
         Gfycat.new(
