@@ -151,14 +151,17 @@ get '/reels/:id/judge/?' do
   erb :reel_clip
 end
 
-post '/reels/:id/submit_clip' do
-  @clip = ReelClip.first(gfycat_gfy_id: params['clip_id'])
-  case params['result']
+post '/reels/submit/?' do
+  body = JSON.parse(@request.body.read)
+  @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
+
+  case body['result']
   when 'accept'
     @clip.selected = true
   when 'reject'
     @clip.selected = false
   end
+  @clip.save
 end
 
 get '/update_gfycat_list/?' do

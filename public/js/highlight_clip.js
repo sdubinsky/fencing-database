@@ -1,24 +1,43 @@
+/*
+  plan: JS to call out to an endpoint that will
+*/
+
+function submitResult(result){
+    var reelId = document.getElementById("reel-id-div").className;
+    var clipId = document.getElementById("clip-id-div").className;
+    var body = JSON.stringify({
+        "reelId": reelId,
+        "clipId": clipId,
+        "result": result
+    });
+    var request = new XMLHttpRequest();
+    request.open('POST', '/reels/submit');
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(body);
+}
+
 function rejectClip(e) {
-    if (e.code === "ArrowLeft" || "KeyJ"){
-        button = document.getElementById("submitButton");
-        button.click();
+    if (e.code === "ArrowLeft" || e.code == "KeyN"){
+        submitResult("reject");
+        location.reload(true);
     }
 }
 
 function acceptClip(e) {
-    if (e.code === "ArrowRight"){
-        button = document.getElementById("submitButton");
-        button.click();
+    if (e.code === "ArrowRight" || e.code == "KeyY"){
+        submitResult("accept");
+        location.reload(true);
     }
 }
 
 function skipClip(e) {
     if (e.code === "ArrowDown") {
-        button = document.getElementById("submitButton");
-        button.click();
+        location.reload(true);
     }
 }
 
+
+
 document.addEventListener("keydown", rejectClip);
-document.addEventlistener("keydown", acceptClip);
+document.addEventListener("keydown", acceptClip);
 document.addEventListener("keydown", skipClip);
