@@ -148,6 +148,7 @@ end
 
 get '/reels/:id/judge/?' do
   @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
+  @clip_count = ReelClip.where(selected: true, highlight_reel_id: params['id']).count
   erb :reel_clip
 end
 
