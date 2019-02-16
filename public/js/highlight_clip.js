@@ -1,7 +1,3 @@
-/*
-  plan: JS to call out to an endpoint that will
-*/
-
 function submitResult(result){
     var reelId = document.getElementById("reel-id-div").className;
     var clipId = document.getElementById("clip-id-div").className;
@@ -17,14 +13,14 @@ function submitResult(result){
 }
 
 function rejectClip(e) {
-    if (e.code === "ArrowLeft" || e.code == "KeyN"){
+    if (e.code === "ArrowLeft" || e.code === "KeyN"){
         submitResult("reject");
         location.reload(true);
     }
 }
 
 function acceptClip(e) {
-    if (e.code === "ArrowRight" || e.code == "KeyY"){
+    if (e.code === "ArrowRight" || e.code === "KeyY"){
         submitResult("accept");
         location.reload(true);
     }
