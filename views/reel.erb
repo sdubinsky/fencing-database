@@ -2,4 +2,5 @@
 <b>Author:</b> <%= @reel.author %><p/>
 <b>Clips:</b> <%=  @clip_count %><p/>
 <b>Length:</b> <%= @hours.to_s + ":" + @minutes.to_s + ":" + @seconds.to_s %><p/>
-<b>Unreviewed clips:</b> <%= @unsorted_clip_count %>
+<b>Unreviewed clips:</b> <%= @unsorted_clip_count %><p/>
+<a href="/reels/<%=@reel.id%>/judge" >Select Clips</a>
