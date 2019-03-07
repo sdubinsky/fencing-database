@@ -1,4 +1,7 @@
 class ReelClip < Sequel::Model
   many_to_one :highlight_reel
-  one_to_one :gfycat
+
+  def url
+    "https://giant.gfycat.com/#{gfycat_gfy_id}.webm"
+  end
 end

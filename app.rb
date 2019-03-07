@@ -149,9 +149,16 @@ end
 get '/reels/:id/judge/?' do
   @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
   @clip_count = ReelClip.where(selected: true, highlight_reel_id: params['id']).count
+  unless @clip
+    redirect to("/reels/#{params['id']}")
+  end
   erb :reel_clip
 end
 
+get '/reels/:id/export' do
+  @reel = HighlightReel[params['id']]
+  @reel.export_reel
+end
 post '/reels/submit/?' do
   body = JSON.parse(@request.body.read)
   @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
