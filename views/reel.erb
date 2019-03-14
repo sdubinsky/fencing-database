@@ -3,5 +3,6 @@
 <b>Clips:</b> <%=  @clip_count %><p/>
 <b>Length:</b> <%= @hours.to_s + ":" + @minutes.to_s + ":" + @seconds.to_s %><p/>
 <b>Unreviewed clips:</b> <%= @unsorted_clip_count %><p/>
-<a href="/reels/<%=@reel.id%>/judge" >Select Clips</a>
-<a href="/reels/<%=@reel.id%>/export" >Export Reel</a>
+<a href="/reels/<%=@reel.id%>/judge" >Select Clips</a><br/>
+<a href="/reels/<%=@reel.id%>/newround">Start a new round</a> (mark all unreviewed clips as not selected, then unmark all selected clips)<br/>
+<a href="/reels/<%=@reel.id%>/export" >Export Reel</a><br/>

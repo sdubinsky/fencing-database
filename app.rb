@@ -159,6 +159,24 @@ get '/reels/:id/export' do
   @reel = HighlightReel[params['id']]
   @reel.export_reel
 end
+
+get '/reels/:id/newround' do
+  @reel = HighlightReel[params['id']]
+  DB.transaction do
+    ReelClip.where(selected: nil, highlight_reel_id: params['id']).each do |clip|
+      clip.selected = false
+      clip.save
+    end
+  end
+  DB.transaction do
+    ReelClip.where(selected: true, highlight_reel_id: params['id']).each do |clip|
+      clip.selected = nil
+      clip.save
+    end
+  end
+  redirect to("/reels/#{params['id']}/")
+end
+
 post '/reels/submit/?' do
   body = JSON.parse(@request.body.read)
   @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
