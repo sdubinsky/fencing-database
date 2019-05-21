@@ -43,15 +43,6 @@ namespace :db do
     end
   end
 
-  desc "fix name errors"
-  task :fix_name_errors do |t|
-    require 'sequel'
-    require './fix_name_errors.rb'
-    Sequel.connect db_address do |db|
-      
-    end
-  end
-  
   desc "Add new bouts"
   task :add_bouts do |t|
     require 'sequel'
