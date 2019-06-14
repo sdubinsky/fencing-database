@@ -170,9 +170,12 @@ get '/reels/:id/newround' do
   end
   DB.transaction do
     ReelClip.where(selected: true, highlight_reel_id: params['id']).each do |clip|
+      clip.round = @reel.round
       clip.selected = nil
       clip.save
     end
+    @reel.round += 1
+    @reel.save
   end
   redirect to("/reels/#{params['id']}/")
 end
