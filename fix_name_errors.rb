@@ -5,6 +5,14 @@ db_address = ENV["DATABASE_URL"] || "postgres://localhost/fencingstats"
 def ask_for_canonical_name name, gfy
   puts "What's the correct name for #{name}(gfycat.com/#{gfy.gfycat_gfy_id})?"
   answer = gets.chomp
+  if answer == 'skip'
+    return
+  end
+  if answer == 'invalid'
+    gfy.valid = false
+    gfy.save
+    return
+  end
   CanonicalName.create(gfy_name: name, canonical_name: answer)
   get_correct_fencer answer, gfy
 end

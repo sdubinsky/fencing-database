@@ -31,6 +31,7 @@ class Fencer < Sequel::Model
     query = Fencer.where(
       Sequel.join([:last_name, :first_name], ' ').ilike(name + "%")).
     or(Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%")).
+    or(Sequel.join([:first_name, :last_name], ' ').ilike(name)).
     or(Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%"))
     if query.count == 0
       query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[0...-1].gsub(" ", "") + "%"))
