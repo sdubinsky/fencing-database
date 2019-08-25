@@ -30,6 +30,7 @@ configure :development do
   set :show_exceptions, true
   logger.level = Logger::DEBUG
 end
+enable :sessions
 
 set :root, File.dirname(__FILE__)
 '''
@@ -62,6 +63,10 @@ get '/submit/?' do
   response.save
   logger.info("new submission: #{response.to_s}")
   redirect '/'
+end
+
+get '/login/?' do
+  
 end
 
 get '/stats/?' do

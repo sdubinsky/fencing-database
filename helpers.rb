@@ -3,7 +3,7 @@ require 'json'
 require 'excon'
 require 'logger'
 require 'sequel'
-#not a real helpers file - just some method from app.rb that didn't fit there.
+#real helpers at the bottom - the rest are just some methods from app.rb that didn't fit there.
 module Helpers
   def self.fix_gfycat_tags db, params
     logger = Logger.new($stdout)
@@ -113,5 +113,22 @@ module Helpers
     end
     logger.info final_query.sql
     final_query
+  end
+end
+
+
+helpers do
+  def logged_in?
+    !!session[:user_id]
+  end
+
+  def login_check
+    if not logged_in?
+      redirect "/login"
+    end
+  end
+
+  def current_user
+    @current_user ||= User.first(id: session[:user_id])
   end
 end
