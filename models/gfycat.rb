@@ -63,8 +63,8 @@ class Gfycat < Sequel::Model
           created_date: Time.now.to_i,
           fotl_name: tags['leftname'],
           fotr_name: tags['rightname'],
-          left_score: tags['leftscore'],
-          right_score: tags['rightscore'],
+          left_score: left_score,
+          right_score: right_score,
           touch: tags['touch']
         ).save
         logger.info "added new gfycat ID #{gfy['gfyName']}"
