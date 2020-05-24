@@ -40,7 +40,11 @@ TODO:
 3. Make sure that the fencer filter accounts for who scores the touch
 '''
 
-get '/' do 
+get '/' do
+  redirect '/reels'
+end
+
+get '/clip_form' do 
   @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
