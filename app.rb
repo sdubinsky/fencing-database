@@ -19,8 +19,8 @@ else
 end
 
 DB = Sequel.connect(connstr)
+DB.extension(:pagination)
 require './models/init'
-Sequel::Model.db.extension(:pagination)
 
 require './helpers'
 include Helpers
