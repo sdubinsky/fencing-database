@@ -1,0 +1,13 @@
+.footer{
+    clear: both;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    text-align: center;
+}
+
+.footer-links{
+    padding-top: 15px;
+}
