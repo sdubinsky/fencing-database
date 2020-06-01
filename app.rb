@@ -41,7 +41,7 @@ TODO:
 '''
 
 get '/' do
-  redirect '/reels'
+erb :index
 end
 
 get '/clip_form' do 
