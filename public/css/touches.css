@@ -1,31 +1,54 @@
-.touches {
+.touches-filter {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-.touches-filter {
-    display: inline;
-    max-width: 40%;
+.touches-form {
+    display: flex;
+    justify-content: center;
+}
+
+.touches-data {
+    margin-left: 2em;
+}
+
+.touches-submit {
+    display: flex;
+    justify-content: center;
 }
 
 .touches-display {
     display: flex;
     flex-direction: column;
-    max-width: 40%;
+}
+.videos {
+    display: flex;
+    flex-flow: row wrap;
 }
 
 .video {
-    max-width: 100%;
+    max-width: 40%;
+    margin-left: 2em;
+    margin-top: 0;
+    margin-bottom: 2em;
 }
 
-.paginate-prev {
-    float: left;
-}
-
-.paginate-next {
-    float: right;
+.touches-pagination {
+    width: 100%;
+    clear: both;
 }
 
 .paginate-btn {
     margin: 0.5em;
 }
+
+.paginate-prev {
+    float: left;
+    margin-left: 10%;
+}
+
+.paginate-next {
+    float: right;
+    margin-right: 10%;
+}
+
