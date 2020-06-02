@@ -27,10 +27,14 @@
 }
 
 .video {
-    max-width: 40%;
     margin-left: 2em;
     margin-top: 0;
+    max-width: 40%;
     margin-bottom: 2em;
+}
+
+.media {
+    max-width: 100%;
 }
 
 .touches-pagination {

@@ -56,12 +56,16 @@
         <% end %>
         <div class="videos">
             <% @gfycats.each do |gfy| %>
-                <video class="video media" id="video-<%= gfy %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= gfy %>-mobile.jpg" tabindex="-1">
-                    <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= gfy %>.webm" type="video/webm">
-                    <source src="https://giant.gfycat.com/<%= gfy %>.mp4" type="video/mp4">
-                    <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4">
-                    <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= gfy %>.mp4">
-                </video>
+                <div class="video">
+                <a href="/clip_form?gfycat_gfy_id=<%= gfy %>">
+                    <video class="media" id="video-<%= gfy %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= gfy %>-mobile.jpg" tabindex="-1">
+                        <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= gfy %>.webm" type="video/webm">
+                        <source src="https://giant.gfycat.com/<%= gfy %>.mp4" type="video/mp4">
+                        <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4">
+                        <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= gfy %>.mp4">
+                    </video>
+                </a>
+                </div>
             <% end %>
         </div>
         <% if params['page'] %>
