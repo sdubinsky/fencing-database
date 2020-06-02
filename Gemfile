@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.5.3'
 group :development do
   gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler', '~> 1.2'
