@@ -1,0 +1,52 @@
+<div class="gfycat-display">
+    <video class="media" id="video-<%= @gfycat.gfycat_gfy_id %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= @gfycat.gfycat_gfy_id %>-mobile.jpg" tabindex="-1">
+        <source src="https://thumbs.gfycat.com/<%= @gfycat.gfycat_gfy_id %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= @gfycat.gfycat_gfy_id %>.webm" type="video/webm">
+        <source src="https://giant.gfycat.com/<%= @gfycat.gfycat_gfy_id %>.mp4" type="video/mp4">
+        <source src="https://thumbs.gfycat.com/<%= @gfycat.gfycat_gfy_id %>-mobile.mp4" type="video/mp4">
+        <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= @gfycat.gfycat_gfy_id %>.mp4">
+    </video>
+    <div class="clip-form-div">
+        <div class="clip-form-intro">
+            Please help us improve the quality of our data by answering a few questions about this touch.
+        </div>
+        <form class="clip-form form-inline" id="clip-form" action="submit">
+            <div class="form-group">
+                <div class="form-group col-md-2">
+                    <label for="strip-location" class="form-question h4">Where was the hit fencer standing?</label><br />
+                    <select class="form-control" name="strip-location">
+                        <% @score_strip_locations.each do |strip_location| %>
+                            <option name="strip-location" id="<% strip_location.to_s %>" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
+                        <% end %>
+                    </select><label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.  If you've alread done this, there's no need to do it again.</label>
+                </div>
+
+                <div class="form-group radio col-md-3">
+                    <label for="initiated-action" class="h4">Who initiated the action?</label><br/>
+                    <label class="h5 radio-inline"> FOTL:
+                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-left" value="fotl" class="form-control radio">
+                    </label>
+                    <label class="h5 radio-inline"> FOTR: 
+                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-right" value="fotr" class="form-control radio"><br/>
+                    </label>
+                    <label class="h5 radio-inline"> Neither: 
+                        <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-neither" value="neither" class="form-control radio">
+                    </label>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="body_location" class="form-question h4">Where was the hit?</label><br/>
+                    <select class="form-control" name="score-body-select" id="score-body-select">
+                        <% @score_body_locations.each do |body_location| %>
+                            <option id="<%= body_location.to_s%>" class="col-md-16" value="<%= body_location.to_s%>"><%= body_location.to_s.gsub("_", " ")%></option>
+                        <% end %>
+                    </select>
+                </div>
+
+                <input id="gfycat-id" name="gfycat-id" value="<%= @gfycat.gfycat_gfy_id%>" hidden="true">
+                <div class="form-group submit-button">
+                    <input type="submit" value="Submit" class="btn btn-default btn-lg pull-right"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
