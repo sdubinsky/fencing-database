@@ -60,7 +60,7 @@ get '/' do
   erb :touches
 end
 
-get '/clip_form/?' do 
+get '/clip/?' do 
   @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
@@ -73,7 +73,7 @@ get '/clip_form/?' do
   rescue RuntimeError
     return "Please seed the DB by sending a GET request to /update_gfycat_list"
   end
-  erb :clip_form
+  erb :clip
 end
 
 get '/submit/?' do
@@ -86,7 +86,7 @@ get '/submit/?' do
   )
   response.save
   logger.info("new submission: #{response.to_s}")
-  redirect "/clip_form?gfycat_gfy_id=#{params['gfycat-id']}"
+  redirect "/clip?gfycat_gfy_id=#{params['gfycat-id']}"
 end
 
 get '/stats/?' do

@@ -57,7 +57,7 @@
         <div class="videos">
             <% @gfycats.each do |gfy| %>
                 <div class="video">
-                <a href="/clip_form?gfycat_gfy_id=<%= gfy %>">
+                <a href="/clip?gfycat_gfy_id=<%= gfy %>">
                     <video class="media" id="video-<%= gfy %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= gfy %>-mobile.jpg" tabindex="-1">
                         <source src="https://thumbs.gfycat.com/<%= gfy %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= gfy %>.webm" type="video/webm">
                         <source src="https://giant.gfycat.com/<%= gfy %>.mp4" type="video/mp4">
