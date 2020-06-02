@@ -60,11 +60,15 @@ get '/' do
   erb :touches
 end
 
-get '/clip_form' do 
+get '/clip_form/?' do 
   @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
-    @gfycat = Gfycat.random_gfycat_id
+    if params['gfycat_gfy_id']
+      @gfycat = Gfycat.first(gfycat_gfy_id: params['gfycat_gfy_id'])
+    else
+      @gfycat = Gfycat.random_gfycat_id
+    end
     logger.info "Showing #{@gfycat.gfycat_gfy_id}"
   rescue RuntimeError
     return "Please seed the DB by sending a GET request to /update_gfycat_list"
@@ -82,11 +86,7 @@ get '/submit/?' do
   )
   response.save
   logger.info("new submission: #{response.to_s}")
-  redirect '/'
-end
-
-get '/login/?' do
-  
+  redirect "/clip_form?gfycat_gfy_id=#{params['gfycat-id']}"
 end
 
 get '/stats/?' do
@@ -105,111 +105,111 @@ get '/stats/?' do
   erb :stats
 end
 
-get '/reels/?' do
-  @reels = HighlightReel.all
-  erb :reels
-end
+# get '/reels/?' do
+#   @reels = HighlightReel.all
+#   erb :reels
+# end
 
-get '/reels/new/?' do
-  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
-  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
-  @tournaments = Tournament.order_by(:tournament_name)
-  erb :new_reel
-end
+# get '/reels/new/?' do
+#   @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
+#   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
+#   @tournaments = Tournament.order_by(:tournament_name)
+#   erb :new_reel
+# end
 
-post '/reels/create' do
-  reel = HighlightReel.create(
-    author: params['author'],
-    title: params['title'],
-    last_name: params['last_name'],
-    first_name: params['first_name'],
-    tournament: params['tournament']
-  )
-  reel.save
-  params['page'] = -1
-  gfycats = Helpers.get_touches_query_gfycats DB, params
-  DB.transaction do
-    gfycats.each do |gfy|
-      unless params['double'] or Gfycat.first(gfycat_gfy_id: gfy[:gfycat_gfy_id]).touch != 'double'
-        next
-      end
-      ReelClip.create(
-        gfycat_gfy_id: gfy[:gfycat_gfy_id],
-        highlight_reel: reel,
-      )
-    end
-  end
-  redirect "/reels/#{reel.id}"
-end
+# post '/reels/create' do
+#   reel = HighlightReel.create(
+#     author: params['author'],
+#     title: params['title'],
+#     last_name: params['last_name'],
+#     first_name: params['first_name'],
+#     tournament: params['tournament']
+#   )
+#   reel.save
+#   params['page'] = -1
+#   gfycats = Helpers.get_touches_query_gfycats DB, params
+#   DB.transaction do
+#     gfycats.each do |gfy|
+#       unless params['double'] or Gfycat.first(gfycat_gfy_id: gfy[:gfycat_gfy_id]).touch != 'double'
+#         next
+#       end
+#       ReelClip.create(
+#         gfycat_gfy_id: gfy[:gfycat_gfy_id],
+#         highlight_reel: reel,
+#       )
+#     end
+#   end
+#   redirect "/reels/#{reel.id}"
+# end
 
-get '/reels/:id/?' do
-  @reel = HighlightReel[params['id']]
-  @clip_count = ReelClip.where(selected: true, highlight_reel_id: @reel.id).count
-  @seconds = @clip_count * 10
-  @hours = @seconds / 3600
-  @seconds = @seconds % 3600
-  @minutes = @seconds / 60
-  @seconds = @seconds % 60
-  @unsorted_clip_count = ReelClip.where(selected: nil, highlight_reel_id: @reel.id).count
-  erb :reel
-end
+# get '/reels/:id/?' do
+#   @reel = HighlightReel[params['id']]
+#   @clip_count = ReelClip.where(selected: true, highlight_reel_id: @reel.id).count
+#   @seconds = @clip_count * 10
+#   @hours = @seconds / 3600
+#   @seconds = @seconds % 3600
+#   @minutes = @seconds / 60
+#   @seconds = @seconds % 60
+#   @unsorted_clip_count = ReelClip.where(selected: nil, highlight_reel_id: @reel.id).count
+#   erb :reel
+# end
 
-get '/reels/:id/judge/?' do
-  @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
-  @clip_count = ReelClip.where(selected: true, highlight_reel_id: params['id']).count
-  unless @clip
-    redirect to("/reels/#{params['id']}")
-  end
-  erb :reel_clip
-end
+# get '/reels/:id/judge/?' do
+#   @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
+#   @clip_count = ReelClip.where(selected: true, highlight_reel_id: params['id']).count
+#   unless @clip
+#     redirect to("/reels/#{params['id']}")
+#   end
+#   erb :reel_clip
+# end
 
-get '/reels/:id/export' do
-  @reel = HighlightReel[params['id']]
-  @reel.export_reel
-end
+# get '/reels/:id/export' do
+#   @reel = HighlightReel[params['id']]
+#   @reel.export_reel
+# end
 
-get '/reels/:id/newround' do
-  @reel = HighlightReel[params['id']]
-  DB.transaction do
-    ReelClip.where(selected: nil, highlight_reel_id: params['id']).each do |clip|
-      clip.selected = false
-      clip.save
-    end
-  end
-  DB.transaction do
-    ReelClip.where(selected: true, highlight_reel_id: params['id']).each do |clip|
-      clip.round = @reel.round
-      clip.selected = nil
-      clip.save
-    end
-    @reel.round += 1
-    @reel.save
-  end
-  redirect to("/reels/#{params['id']}/")
-end
+# get '/reels/:id/newround' do
+#   @reel = HighlightReel[params['id']]
+#   DB.transaction do
+#     ReelClip.where(selected: nil, highlight_reel_id: params['id']).each do |clip|
+#       clip.selected = false
+#       clip.save
+#     end
+#   end
+#   DB.transaction do
+#     ReelClip.where(selected: true, highlight_reel_id: params['id']).each do |clip|
+#       clip.round = @reel.round
+#       clip.selected = nil
+#       clip.save
+#     end
+#     @reel.round += 1
+#     @reel.save
+#   end
+#   redirect to("/reels/#{params['id']}/")
+# end
 
-post '/reels/submit/?' do
-  body = JSON.parse(@request.body.read)
-  @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
+# post '/reels/submit/?' do
+#   body = JSON.parse(@request.body.read)
+#   @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
 
-  case body['result']
-  when 'accept'
-    @clip.selected = true
-  when 'reject'
-    @clip.selected = false
-  end
-  @clip.save
-end
+#   case body['result']
+#   when 'accept'
+#     @clip.selected = true
+#   when 'reject'
+#     @clip.selected = false
+#   end
+#   @clip.save
+# end
 
-get '/update_gfycat_list/?' do
-  Gfycat.update_gfycat_list
-  logger.debug 'done with gfycats'
-  status 200
-end
+# get '/update_gfycat_list/?' do
+#   Gfycat.update_gfycat_list
+#   logger.debug 'done with gfycats'
+#   status 200
+# end
 
-get '/fix_gfycat_tags/?' do
-  Helpers.fix_gfycat_tags DB, params
-end
+# get '/fix_gfycat_tags/?' do
+#   Helpers.fix_gfycat_tags DB, params
+# end
 
 get '/api/bouts/?:id_number?' do
   if params["id_number"]
