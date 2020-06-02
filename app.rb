@@ -41,7 +41,23 @@ TODO:
 '''
 
 get '/' do
-erb :index
+  unless params.empty?
+    params['page'] = 1 unless params['page']
+    @gfycats = Helpers.get_touches_query_gfycats(DB, params).map{|gfy| gfy[:gfycat_gfy_id]}
+    @get_string = params.map do |k, v|
+      if k == 'page'
+        next
+      end
+      "#{k}=#{v}"
+    end.compact.join "&"
+  else
+    @gfycats = []
+  end
+
+  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
+  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
+  @tournaments = Tournament.order_by(:tournament_name)
+  erb :touches
 end
 
 get '/clip_form' do 
@@ -87,26 +103,6 @@ get '/stats/?' do
   @color_map = FormResponse.heatmap_colors tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
   @fencer_names = ['all'] + Gfycat.fencer_names
   erb :stats
-end
-
-get '/touches/?' do
-  unless params.empty?
-    params['page'] = 1 unless params['page']
-    @gfycats = Helpers.get_touches_query_gfycats(DB, params).map{|gfy| gfy[:gfycat_gfy_id]}
-    @get_string = params.map do |k, v|
-      if k == 'page'
-        next
-      end
-      "#{k}=#{v}"
-    end.compact.join "&"
-  else
-    @gfycats = []
-  end
-
-  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
-  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
-  @tournaments = Tournament.order_by(:tournament_name)
-  erb :touches
 end
 
 get '/reels/?' do
