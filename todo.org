@@ -1,17 +1,26 @@
-DB Improvements [2/6]
+* DB Improvements [2/6]
 - [ ] retest each clip for fencer names and scores
 - [ ] sanitize db for duplicate names
 - [ ] sanitize db for names that should be separated
+- [ ] reupload fencers db from 
 - [X] add tournaments table
 - [X] add bouts table
   - [X] each tournament has many bouts
   - [X] each bout has many touches
   - [X] columns: id, tournament_id, round, left_fencer_id, right_fencer_id
-Pages To Add [2/6]
+* Pages To Add [1/1]
 - [X] filter touches [4/4]
   - [X] touches by fencer
   - [X] touches by location on body
   - [X] touches by location on strip
   - [X] all of the above
-- [ ] Fantasy Fencing
-Add filter by year to touches page
+* touches page improvement [0/2]
+- [ ] search by opponent's score
+- [ ] search by two fencers, get all touches between them
+* gfy upload improvements [/]
+- [ ] get updated list of fencers
+- [ ] get list of fencers in a tournament
+- [ ] deduplicate fencers in gfycats based on the list of fencers in the tournament, not in the whole list
+* gfy page improvements [/]
+- [ ] add "report this touch" for errors
+- [ ] show derived data, like fencer names and touch scored
