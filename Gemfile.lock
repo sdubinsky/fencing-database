@@ -76,10 +76,14 @@ DEPENDENCIES
   pg (~> 0.20)
   pry
   pry-byebug
+  rake (~> 13.0)
   rerun
   sequel (~> 4.47)
   sinatra (~> 2.0)
   thin (~> 1.7)
+
+RUBY VERSION
+   ruby 2.5.3p105
 
 BUNDLED WITH
    1.17.1
