@@ -73,8 +73,9 @@ def parse_page page
   }.map{|l| {last_name: l[1], first_name: l[2], nationality: l[3], gender: l[4], fie_id: l[5]}}
 end
 
-#fencers = download_fencer_names
-fencers = File.readlines("fencers.txt")
-fencers = fencers.map{|line| eval(line)}
+fencers = download_fencer_names
+puts(fencers.length)
+# fencers = File.readlines("fencers.txt")
+# fencers = fencers.map{|line| eval(line)}
 
-upsert_fencers fencers
+#upsert_fencers fencers

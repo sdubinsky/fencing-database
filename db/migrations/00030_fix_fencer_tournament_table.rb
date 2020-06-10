@@ -1,5 +1,7 @@
 Sequel.migration do
   change do
-    rename_column :fencer_fie_id, :fencer_id
+    alter_table :fencers_tournaments do
+      rename_column :fencers_fie_id, :fencers_id
+    end
   end
 end
