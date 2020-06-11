@@ -57,11 +57,8 @@ def process_name gfy, side
   if CanonicalName.where(gfy_name: name).count == 1
     name = CanonicalName.first(gfy_name: name).canonical_name
   end
-  begin
-    options = Fencer.find_name_possibilities(name, gfy.tournament.id)
-  rescue
-    return
-  end
+  options = Fencer.find_name_possibilities(name, gfy.tournament.id)
+  
   options = options.where(gender: gfy.gender) if gfy.gender
 
   #If there are no matches, it's a typo of some kind.  This will set the canonical name
@@ -83,7 +80,7 @@ Sequel.connect db_address do |db|
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, right_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
     begin
       result = process_name gfy, :left
-    rescue
+    rescue NoMethodError
       next
     end
     if result
@@ -99,7 +96,11 @@ Sequel.connect db_address do |db|
   end
   
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
-    result = process_name gfy, :left
+    begin
+      result = process_name gfy, :left
+    rescue NoMethodError
+      next
+    end
     if result
       updated += 1
       gfy.update(left_fencer_id: result.id)
@@ -107,7 +108,11 @@ Sequel.connect db_address do |db|
   end
 
   Gfycat.where(bout_id: nil).where(right_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
-    result = process_name gfy, :right
+    begin
+      result = process_name gfy, :right
+    rescue NoMethodError
+      next
+    end
     if result
       updated += 1
       gfy.update(right_fencer_id: result.id)      
