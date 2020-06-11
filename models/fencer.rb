@@ -27,12 +27,13 @@ class Fencer < Sequel::Model
   end
 
   #In case of duplicate names, list all possibilities
-  def self.find_name_possibilities name
-    query = Fencer.where(
-      Sequel.join([:last_name, :first_name], ' ').ilike(name + "%")).
-    or(Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%")).
-    or(Sequel.join([:first_name, :last_name], ' ').ilike(name)).
-    or(Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%"))
+  def self.find_name_possibilities name, tournament_id
+    query = Fencer.where(id: db[:fencers_tournaments].select(:fencers_id).where(tournaments_id: tournament_id)).where(
+                           Sequel.join([:last_name, :first_name], ' ').ilike(name + "%") |
+                           Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%") |
+                           Sequel.join([:first_name, :last_name], ' ').ilike(name) |
+                           Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%")
+                        )
     if query.count == 0
       query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[0...-1].gsub(" ", "") + "%"))
       query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[1..-1].gsub(" ", "") + "%"))

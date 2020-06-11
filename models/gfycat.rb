@@ -83,7 +83,7 @@ class Gfycat < Sequel::Model
       else
         name = fotr_name
       end
-      right_name = Fencer.find_name_possibilities(name)
+      right_name = Fencer.find_name_possibilities(name, tournament.id)
       right_name = right_name.where(gender: gender) if gender
       if right_name.count == 1
         update(
@@ -96,7 +96,7 @@ class Gfycat < Sequel::Model
       else
         name = fotl_name
       end
-      left_name = Fencer.find_name_possibilities(name)
+      left_name = Fencer.find_name_possibilities(name, tournament.id)
       left_name = left_name.where(gender: gender) if gender
       if left_name.count == 1
         update(

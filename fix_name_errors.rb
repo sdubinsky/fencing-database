@@ -19,7 +19,7 @@ end
 
 def get_correct_fencer name, gfy
   puts "Name: #{name} (gfycat.com/#{gfy.gfycat_gfy_id})"
-  options = Fencer.find_name_possibilities(name).order_by(:first_name)
+  options = Fencer.find_name_possibilities(name, gfy.tournament.id).order_by(:first_name)
   options = options.where(gender: gfy.gender) if gfy.gender
 
   if options.count == 0
