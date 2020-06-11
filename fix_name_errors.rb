@@ -29,6 +29,8 @@ def get_correct_fencer name, gfy
   if options.count == 1
     return options.first
   end
+  return
+
   options.each_with_index do |option, i|
     puts "#{i}. #{option.name} (#{option.gender}, #{option.nationality})"
   end
@@ -55,40 +57,61 @@ def process_name gfy, side
   if CanonicalName.where(gfy_name: name).count == 1
     name = CanonicalName.first(gfy_name: name).canonical_name
   end
-  options = Fencer.find_name_possibilities(name)
-
+  begin
+    options = Fencer.find_name_possibilities(name, gfy.tournament.id)
+  rescue
+    return
+  end
   options = options.where(gender: gfy.gender) if gfy.gender
 
   #If there are no matches, it's a typo of some kind.  This will set the canonical name
   if options.count == 0
-    real_fencer = ask_for_canonical_name name, gfy
+    puts "no name found for #{name}"
+    return
   elsif options.count == 1
     real_fencer = options.first
   else
-    real_fencer = get_correct_fencer name, gfy
+    puts "too many names found for #{name}"
+    return
   end
   return real_fencer
 end
 
 Sequel.connect db_address do |db|
   require './models/init'
-
+  updated = 0
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, right_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
-    result = process_name gfy, :left
-    gfy.update(left_fencer_id: result.id) if result
+    begin
+      result = process_name gfy, :left
+    rescue
+      next
+    end
+    if result
+      updated += 1
+      gfy.update(left_fencer_id: result.id)
+    end
 
-    
     result = process_name gfy, :right
-    gfy.update(right_fencer_id: result.id) if result
+    if result
+      updated += 1
+      gfy.update(right_fencer_id: result.id)
+    end
   end
   
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
     result = process_name gfy, :left
-    gfy.update(left_fencer_id: result.id) if result
+    if result
+      updated += 1
+      gfy.update(left_fencer_id: result.id)
+    end
   end
 
   Gfycat.where(bout_id: nil).where(right_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
     result = process_name gfy, :right
-    gfy.update(right_fencer_id: result.id) if result
+    if result
+      updated += 1
+      gfy.update(right_fencer_id: result.id)      
+    end
   end
+  puts "#{updated} updates made"
 end
