@@ -33,7 +33,10 @@ class Fencer < Sequel::Model
                            Sequel.join([:last_name, :first_name], ' ').ilike(name + "%") |
                            Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%") |
                            Sequel.join([:first_name, :last_name], ' ').ilike(name) |
-                           Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%")
+                           Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%") |
+                           (Sequel.function(:levenshtein, name.gsub(" ", ""), Sequel.join([:first_name, :last_name])) < 3) |
+                           (Sequel.function(:levenshtein, name.gsub(" ", ""), Sequel.join([:last_name, :first_name])) < 3) |
+                           (Sequel.function(:levenshtein, name, :last_name) < 3)
                         )
     if query.count == 0
       query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[0...-1].gsub(" ", "") + "%"))
