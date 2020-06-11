@@ -1,6 +1,7 @@
 require 'pry'
 require 'json'
 class Fencer < Sequel::Model
+  many_to_many :tournaments
   def bouts
     Bout.where(left_fencer_id: id).or(right_fencer_id: id)
   end
