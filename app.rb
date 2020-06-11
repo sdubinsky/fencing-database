@@ -201,16 +201,6 @@ end
 #   @clip.save
 # end
 
-get '/update_gfycat_list/?' do
-  Gfycat.update_gfycat_list
-  logger.debug 'done with gfycats'
-  status 200
-end
-
-# get '/fix_gfycat_tags/?' do
-#   Helpers.fix_gfycat_tags DB, params
-# end
-
 get '/api/bouts/?:id_number?' do
   if params["id_number"]
     bout = Bout[params["id_number"].to_i]
