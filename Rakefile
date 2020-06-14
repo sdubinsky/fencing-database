@@ -43,6 +43,7 @@ namespace :db do
         gfys.each{|gfy| gfy.normalize_names}
       end
       Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'epee').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'epee').select(:right_fencer_id)).update(weapon: 'epee')
+      Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'sabre').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'sabre').select(:right_fencer_id)).update(weapon: 'sabre')
     end
   end
 
