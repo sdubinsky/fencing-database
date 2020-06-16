@@ -107,4 +107,10 @@ class Gfycat < Sequel::Model
   rescue
     "problem with gfy: #{gfycat_gfy_id}"
   end
+
+  def to_s
+    left_fencer = Fencer[left_fencer_id]
+    right_fencer = Fencer[right_fencer_id]
+    "#{left_fencer.name} vs. #{right_fencer.name}"
+  end
 end
