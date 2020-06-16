@@ -7,23 +7,24 @@ header a {
     border: none;
 }
 
-.search-header {
-    font-size: 4em;
-}
- 
 .navbar {
     height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 }
 
 .navbar > * {
     height: 100%;
     text-transform: uppercase;
+    font-size: 2em;
 }
 
+.header-title {
+    font-size: 3em;
+}
+ 
 .footer{
     clear: both;
     width: 100%;
