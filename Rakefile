@@ -1,5 +1,4 @@
 require 'psych'
-require './update_gfycat_list'
 require 'rake/testtask'
 namespace :db do
   
@@ -22,15 +21,6 @@ namespace :db do
     version = args[:version].to_i if args[:version]
     Sequel.connect(db_address) do |db|
       Sequel::Migrator.run(db, "db/migrations", target: version)
-    end
-  end
-
-  desc "Update gfycat list"
-  task :update_gfycat_list do |t|
-    require 'sequel'
-    Sequel.connect db_address do |db|
-      require './models/init'
-      UpdateGfycatList.update_gfycat_list db
     end
   end
 
