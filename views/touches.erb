@@ -30,7 +30,7 @@
                         <label for="tournament" class="form-question form-label h4">Tournament: </label>
                         <select class="form-control touches-form-question" id="tournament" name="tournament" selected="<%=params['tournament']%>">
                             <option id="tournament" value="all">All</option>
-                            <% @tournaments.each do |tournament| %>
+                            <% @tournaments.sort{|a,b| a.tournament_name + a.tournament_year <=> b.tournament_name + b.tournament_year}.each do |tournament| %>
                                 <% selected = tournament.tournament_id == params['tournament'] ? 'selected="selected"' : "" %>
                                 <option class="touches-form-question" id="tournament" value="<%=tournament.tournament_id%>" <%= selected %>><%=tournament.tournament_name + ", " + tournament.tournament_year%></option>
                             <% end %>
