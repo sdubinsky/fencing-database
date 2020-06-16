@@ -17,10 +17,10 @@
 * touches page improvement [0/2]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
-* gfy upload improvements [/]
+* gfy upload improvements [2/3]
 - [ ] get updated list of fencers
-- [ ] get list of fencers in a tournament
-- [ ] deduplicate fencers in gfycats based on the list of fencers in the tournament, not in the whole list
+- [X] get list of fencers in a tournament
+- [X] deduplicate fencers in gfycats based on the list of fencers in the tournament, not in the whole list
 * gfy page improvements [/]
 - [ ] add "report this touch" for errors
 - [ ] show derived data, like fencer names and touch scored
