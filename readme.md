@@ -9,7 +9,7 @@
 
 ## To update the heroku db
 
-1. dump the db by running `pg_dump --no-owner fencingstats > dump.dump`
+1. dump the db by running `pg_dump --inserts --no-owner fencingstats > dump.dump`
 2. upload it to heroku by running `heroku pg:psql < dump.dump`
 
 ## To add a new list of entries for a tournament:
