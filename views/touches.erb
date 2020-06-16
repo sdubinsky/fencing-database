@@ -32,7 +32,7 @@
                             <option id="tournament" value="all">All</option>
                             <% @tournaments.sort{|a,b| a.tournament_name + a.tournament_year <=> b.tournament_name + b.tournament_year}.each do |tournament| %>
                                 <% selected = tournament.tournament_id == params['tournament'] ? 'selected="selected"' : "" %>
-                                <option class="touches-form-question" id="tournament" value="<%=tournament.tournament_id%>" <%= selected %>><%=tournament.tournament_name + ", " + tournament.tournament_year%></option>
+                                <option class="touches-form-question" id="tournament" value="<%=tournament.tournament_id%>" <%= selected %>><%=tournament.tournament_name + ", " + tournament.tournament_year + " (#{tournament.weapon})"%></option>
                             <% end %>
                         </select>
                     </div>
