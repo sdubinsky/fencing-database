@@ -3,7 +3,7 @@
 ## Adding new GFYs
 
 1. Add the new tournament to the database.
-2. Run `rake db:update_gfycat_list`
+2. Run `ruby ./update_gfycat_list.rb` and pipe it to the right psql.
 3. run the rake tasks `db:normalize_names` and `db:add_bouts`.
 4. Run the `fix_name_errors` script, alternating with the rake task `db:add_bouts` until it stabilizes.
 

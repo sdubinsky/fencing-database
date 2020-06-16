@@ -1,6 +1,19 @@
 require 'sequel'
+require 'psych'
 require 'pry'
-db_address = ENV["DATABASE_URL"] || "postgres://localhost/fencingstats"
+
+if ENV['DATABASE_URL']
+  connstr = ENV['DATABASE_URL']
+else
+  config = Psych.load_file("./config.yml")
+  db_config = config['database']
+  if db_config['db_username'] or db_config['db_password']
+    login = "#{db_config['db_username']}:#{db_config['db_password']}@"
+  else
+    login = ''
+  end
+  connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
+end
 
 def ask_for_canonical_name name, gfy
   puts "What's the correct name for #{name}(gfycat.com/#{gfy.gfycat_gfy_id})?"
@@ -63,18 +76,16 @@ def process_name gfy, side
 
   #If there are no matches, it's a typo of some kind.  This will set the canonical name
   if options.count == 0
-    puts "no name found for #{name}"
     return
   elsif options.count == 1
     real_fencer = options.first
   else
-    puts "too many names found for #{name}"
     return
   end
   return real_fencer
 end
 
-Sequel.connect db_address do |db|
+Sequel.connect connstr do |db|
   require './models/init'
   updated = 0
   Gfycat.where(bout_id: nil).where(left_fencer_id: nil, right_fencer_id: nil, valid: true).distinct(:fotl_name, :fotr_name, :tournament_id).each do |gfy|
