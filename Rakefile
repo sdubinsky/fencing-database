@@ -1,4 +1,5 @@
 require 'psych'
+require './update_gfycat_list'
 require 'rake/testtask'
 namespace :db do
   
@@ -29,7 +30,7 @@ namespace :db do
     require 'sequel'
     Sequel.connect db_address do |db|
       require './models/init'
-      Gfycat.update_gfycat_list
+      UpdateGfycatList.update_gfycat_list db
     end
   end
 

@@ -54,27 +54,29 @@ class Gfycat < Sequel::Model
         logger.error "#{tags['tournament']} doesn't exist"
         exit(1)
       end
-      tournament_id = tournament ? tournament.tournament_id : nil 
-      begin
-        Gfycat.new(
-          gfycat_gfy_id: gfy['gfyName'],
-          tournament_id: tournament_id,
-          weapon: tags['weapon'],
-          gender: tags['gender'],
-          created_date: Time.now.to_i,
-          fotl_name: tags['leftname'],
-          fotr_name: tags['rightname'],
-          left_score: left_score,
-          right_score: right_score,
-          touch: tags['touch']
-        ).save
-        logger.info "added new gfycat ID #{gfy['gfyName']}"
-      rescue Sequel::UniqueConstraintViolation
-        logger.error "duplicate gfy id: #{gfy['gfyName']}"
-      rescue => e
-        logger.info e.to_s
+      tournament_id = tournament ? tournament.tournament_id : nil
+      DB.transaction do
+        begin
+          Gfycat.new(
+            gfycat_gfy_id: gfy['gfyName'],
+            tournament_id: tournament_id,
+            weapon: tags['weapon'],
+            gender: tags['gender'],
+            created_date: Time.now.to_i,
+            fotl_name: tags['leftname'],
+            fotr_name: tags['rightname'],
+            left_score: left_score,
+            right_score: right_score,
+            touch: tags['touch']
+          ).save
+          logger.info "added new gfycat ID #{gfy['gfyName']}"
+        rescue Sequel::UniqueConstraintViolation
+          logger.error "duplicate gfy id: #{gfy['gfyName']}"
+        rescue => e
+          logger.info e.to_s
+        end
       end
-    end
+    end      
   end
 
   def to_s
@@ -110,8 +112,8 @@ class Gfycat < Sequel::Model
           left_fencer_id: left_name.first.id
         )
       end
-  rescue
-    "problem with gfy: #{gfycat_gfy_id}"
+    rescue
+      "problem with gfy: #{gfycat_gfy_id}"
     end
   end
 end
