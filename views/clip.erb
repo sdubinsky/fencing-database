@@ -11,7 +11,7 @@
     </video>
     <div class="clip-form-div">
         <div class="clip-form-intro">
-            Please help us improve the quality of our data by answering a few questions about this touch.
+            Please help us improve the quality of our data by answering a few questions:
         </div>
         <form class="clip-form form-inline" id="clip-form" action="submit">
             <div class="form-group">
@@ -21,7 +21,7 @@
                         <% @score_strip_locations.each do |strip_location| %>
                             <option name="strip-location" id="<% strip_location.to_s %>" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
                         <% end %>
-                    </select><label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.  If you've already done this, there's no need to do it again.</label>
+                    </select><label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label>
                 </div>
 
                 <div class="form-group radio col-md-3">
@@ -48,7 +48,8 @@
 
                 <input id="gfycat-id" name="gfycat-id" value="<%= @gfycat.gfycat_gfy_id%>" hidden="true">
                 <div class="form-group submit-button">
-                    <input type="submit" value="Submit" class="btn btn-default btn-lg pull-right"/>
+                    <input type="submit" value="Submit" class="btn btn-default btn-lg pull-right"/><br />
+                    <label for=Submit">Just once.</label>
                 </div>
             </div>
         </form>
