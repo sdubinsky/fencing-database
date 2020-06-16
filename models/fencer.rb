@@ -11,7 +11,11 @@ class Fencer < Sequel::Model
   end
 
   def name
-    self.last_name.split.map{|a| a.capitalize}.join(" ") + ", " + self.first_name.split.map{|a| a.capitalize}.join(" ")
+    if ['CHN', 'JPN', 'KOR'].include? nationality
+      self.last_name.split.map{|a| a.capitalize}.join(" ") + " " + self.first_name.split.map{|a| a.capitalize}.join(" ")
+    else
+      self.first_name.split.map{|a| a.capitalize}.join(" ") + " " + self.last_name.split.map{|a| a.capitalize}.join(" ")
+    end
   end
 
   #Get right_fencer_id from all bouts where self is the left fencer.
