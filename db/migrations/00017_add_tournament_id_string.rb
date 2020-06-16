@@ -1,7 +1,7 @@
 Sequel.migration do
   change do
     alter_table :tournaments do
-      add_column :tournament_id, String
+      add_column :tournament_id, String, unique: true
     end
     
     alter_table :gfycats do
