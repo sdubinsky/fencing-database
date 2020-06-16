@@ -1,3 +1,29 @@
+body {
+    font-family: Raleway;
+}
+header a {
+    text-decoration: none !important;
+    color: inherit !important;
+    border: none;
+}
+
+.search-header {
+    font-size: 4em;
+}
+ 
+.navbar {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar > * {
+    height: 100%;
+    text-transform: uppercase;
+}
+
 .footer{
     clear: both;
     width: 100%;
