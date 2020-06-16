@@ -1,20 +1,22 @@
 
 <div name="stats">
+    <div class="wip-banner">
+        *WIP* Want to help improve this page?  <a href="/clip">Review a clip!</a>
+    </div>
     <form class="stats-filter form-inline" id="stats-filter-form" action="stats">
         <label for="tournament-filter" class="form-question h4">Tournament: </label>
         <select class="form-control" name="tournament-filter">
             <option name="tournament-filter" id="all" value="all">All</option>
             <%  @tournaments.each do |tournament| %>
-                <option name="tournament-filter" id="<%= tournament.id %>" value="<%= tournament.tournament_id %>"><%= tournament.tournament_name %></option>
+                <% if tournament.tournament_id == params['tournament-filter'] %>
+                    <option name="tournament-filter" id="<%= tournament.id %>" value="<%= tournament.tournament_id %>" selected><%= tournament.tournament_name + ", " + tournament.tournament_year%></option>
+                <% else %>
+                    <option name="tournament-filter" id="<%= tournament.id %>" value="<%= tournament.tournament_id %>"><%= tournament.tournament_name + ", " + tournament.tournament_year%></option>
+                    <% end %>
             <% end %>
         </select>
         <br/>
-        <label for="fencer-filter" class="form-question h4">Fencer name: </label>
-        <select class="form-control" name="fencer-filter">
-            <%  @fencer_names.each do |fencer_name| %>
-                <option name="fencer-filter" id="<%= fencer_name %>" value="<%= fencer_name%>"><%= fencer_name.to_s.capitalize %></option>
-            <% end %>
-            <input type="submit" value="Submit" class="btn btn-default "/>
+        <input type="submit" value="Submit" class="btn btn-default "/>
     </form>
     <div name="total-responses" class="stats">
         Total responses: <%= @total %><br/>

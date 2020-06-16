@@ -6,7 +6,7 @@ class Gfycat < Sequel::Model
   many_to_one :bout
   many_to_one :tournament, key: :tournament_id, primary_key: :tournament_id
   def self.random_gfycat_id
-    gfycat = Gfycat.all.sample
+    gfycat = Gfycat.where(Sequel.~(Sequel.or(left_fencer_id: nil, right_fencer_id: nil))).all.sample
     raise RuntimeError.new("no gfycats found") if not gfycat
     gfycat
   end
