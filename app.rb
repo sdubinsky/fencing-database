@@ -105,6 +105,15 @@ get '/stats/?' do
   erb :stats
 end
 
+post '/error_report' do
+  body = JSON.parse(@request.body.read)
+  gfy_id = body['gfy_id']
+  ErrorReport.create(
+    gfycat_gfy_id: gfy_id,
+    created_date: Time.now.to_i
+  )
+end
+
 # get '/reels/?' do
 #   @reels = HighlightReel.all
 #   erb :reels
