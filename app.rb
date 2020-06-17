@@ -68,6 +68,7 @@ get '/clip/?' do
       @gfycat = Gfycat.first(gfycat_gfy_id: params['gfycat_gfy_id'])
     else
       @gfycat = Gfycat.random_gfycat_id
+      redirect "/clip?gfycat_gfy_id=#{@gfycat.gfycat_gfy_id}"
     end
     logger.info "Showing #{@gfycat.gfycat_gfy_id}"
   rescue RuntimeError
