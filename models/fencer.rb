@@ -12,9 +12,9 @@ class Fencer < Sequel::Model
 
   def name
     if ['CHN', 'JPN', 'KOR'].include? nationality
-      self.last_name.split.map{|a| a.capitalize}.join(" ") + " " + self.first_name.split.map{|a| a.capitalize}.join(" ")
+      self.last_name.split(/(-|'|\s)/).map{|a| a.capitalize}.join(" ") + " " + self.first_name.split.map{|a| a.capitalize}.join(" ")
     else
-      self.first_name.split.map{|a| a.capitalize}.join(" ") + " " + self.last_name.split.map{|a| a.capitalize}.join(" ")
+      self.first_name.split.map{|a| a.capitalize}.join(" ") + " " + self.last_name.split(/('|-|\s)/).map{|a| a.capitalize}.join(" ")
     end
   end
 
