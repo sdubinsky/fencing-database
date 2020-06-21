@@ -25,3 +25,5 @@
 - [ ] add "report this touch" for errors
 - [X] show derived data, like fencer names and touch scored
 - [ ] add iframe for video controls
+* stats page improvements [1/1]
+- [X] filter stats by weapon

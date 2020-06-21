@@ -8,6 +8,10 @@
     margin-left: 0.5em;
 }
 
+form * {
+    margin: 0.5em;
+}
+
 .heatmap {
     height: 100px;
     width: 100%;

@@ -40,7 +40,12 @@ class FormResponse < Sequel::Model
     if filters[:fencer_name] and filters[:fencer_name] != "all"
       query = query.where{Sequel.|({fotl_name: filters[:fencer_name]}, {fotr_name: filters[:fencer_name]})}
     end
-    puts query.sql
+    if filters[:weapon] and filters[:weapon] != 'all'
+      query = query.where(weapon: filters[:weapon])
+    end
+    if filters[:gender] and filters[:gender] != 'all'
+      query = query.where(Sequel.|({gender: filters[:gender]}, {gender: nil}))
+    end
     query
   end
 end

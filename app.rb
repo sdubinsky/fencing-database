@@ -91,10 +91,10 @@ get '/submit/?' do
 end
 
 get '/stats/?' do
-  @tournaments = Tournament.all
+  @tournaments = Tournament.order_by(:tournament_year).all
   
   @genders = ['male', 'female']
-  @total = FormResponse.total tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
+  @total = FormResponse.total tournament: params['tournament-filter'], fencer_name: params['fencer-filter'], gender: params['gender-filter'], weapon: params['weapon-filter']
   @location = FormResponse.most_popular_location tournament: params['tournament-filter']
   @most_popular_location = @location[:strip_location]
   @most_popular_location = @most_popular_location.gsub("fotr", "FOTR").gsub("fotl", "FOTL").gsub("_", " ") 
