@@ -8,7 +8,7 @@ class FormResponse < Sequel::Model
 
   def self.most_popular_location filters = {} 
     query = build_query filters
-    ret = query.select(:strip_location).group_and_count(:strip_location).limit(1).first
+    ret = query.select(:strip_location).group_and_count(:strip_location).reverse(:count).limit(1).first
     ret ||= {strip_location: "unknown part", count: 0}
     ret[:strip_location] ||= "unknown part"
     ret
