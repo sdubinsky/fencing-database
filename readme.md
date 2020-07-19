@@ -19,7 +19,7 @@
 3. load the data in the the local database: `pg_restore --verbose --clean --no-acl --no-owner -d fencingstats latest.dump`
 
 ## To add a new list of entries for a tournament:
-1. Make sure the `download_tournament_entries.rb` file is set up to take arguments in stead of processing the list
+1. Make sure the `download_tournament_entries.rb` file is set up to take arguments instead of processing the list
 2. Run the command and pipe it to psql locally, to make sure it's accurate.
 3. Pipe it to heroku psql
 

@@ -10,15 +10,18 @@
         <source src="https://thumbs.gfycat.com/<%= @gfycat.gfycat_gfy_id %>-mobile.mp4" type="video/mp4">
         <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= @gfycat.gfycat_gfy_id %>.mp4">
     </video>
-    <% if params['reported'] %>
-        <div class="report-error">
-            Thank you!
-        </div>
-    <% else %>
-        <div id="report-error" class="report-error" onclick="reportError('<%= @gfycat.gfycat_gfy_id %>');"">
-            <a href="#">Report Error</a>
-        </div>
-    <% end %>
+    <div class="clip-subtext">
+        <% if params['reported'] %>
+            <div class="report-error">
+                Thank you!
+            </div>
+        <% else %>
+            <div id="report-error" class="report-error" onclick="reportError('<%= @gfycat.gfycat_gfy_id %>');"">
+                <a href="#">Report Error</a>
+            </div>
+        <% end %>
+        <div class="random-clip"><a href="/clip">Random clip</a></div>
+    </div>
     <div class="clip-form-div">
         <div class="clip-form-intro">
             Please help us improve the quality of our data by answering a few questions:

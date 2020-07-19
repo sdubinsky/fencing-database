@@ -71,8 +71,10 @@ url_ids = [
   # ['https://fie.org/competition/2019/449/entry/pdf?lang=en', 'budapest2019'],
   # ['https://fie.org/competition/2020/152/entry/pdf?lang=en', 'montrealsabre2020'],
   # ['https://fie.org/competition/2020/158/entry/pdf?lang=en', 'montrealsabre2020'],
-  ['https://fie.org/competition/2019/152/entry/pdf?lang=en', 'cairosabre2019'],
-  ['https://fie.org/competition/2019/158/entry/pdf?lang=en', 'cairosabre2019']
+  # ['https://fie.org/competition/2019/152/entry/pdf?lang=en', 'cairosabre2019'],
+  # ['https://fie.org/competition/2019/158/entry/pdf?lang=en', 'cairosabre2019'],
+  ['https://fie.org/competition/2019/165/entry/pdf?lang=en', 'seoulsabre2019'],
+  ['https://fie.org/competition/2019/468/entry/pdf?lang=en', 'seoulsabre2019']
 ]
 
 url_ids.each do |url, tournament_key|
@@ -80,7 +82,7 @@ url_ids.each do |url, tournament_key|
 
   tournament_id = Tournament.select(:id).first(tournament_id: tournament_key)
   raise "Error: No tournament found" unless tournament_id
-  select = Fencer.select(:id, tournament_id).where(fie_id: licenses)
+  select = Fencer.select(:id, tournament_id.id).where(fie_id: licenses)
 
   puts DB[:fencers_tournaments].insert_sql([:fencers_id, :tournaments_id], select) + ';'
 end

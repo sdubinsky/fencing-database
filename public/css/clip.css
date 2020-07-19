@@ -12,3 +12,12 @@
     margin-top: 2em;
     width: 80%;
 }
+
+.clip-subtext {
+    display: flex;
+    align-items: center;
+}
+
+.random-clip {
+    margin-left: 1em;
+}
