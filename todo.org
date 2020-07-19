@@ -8,12 +8,15 @@
   - [X] each tournament has many bouts
   - [X] each bout has many touches
   - [X] columns: id, tournament_id, round, left_fencer_id, right_fencer_id
-* Pages To Add [1/1]
+* Pages To Add [1/2]
 - [X] filter touches [4/4]
   - [X] touches by fencer
   - [X] touches by location on body
   - [X] touches by location on strip
   - [X] all of the above
+- [ ] fencer-specific page
+  - [ ] touches scored
+  - [ ] touches scored per year
 * touches page improvement [0/2]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
@@ -27,3 +30,4 @@
 - [ ] add "which fencer" question for double touches
 * stats page improvements [1/1]
 - [X] filter stats by weapon
+- [ ] heatmap doesn't filter by weapon
