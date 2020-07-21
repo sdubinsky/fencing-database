@@ -29,15 +29,14 @@ def get_access_token
   }
   response = Excon.post(
     "https://api.gfycat.com/v1/oauth/token",
-      headers: {"Content-Type" => "application/json"},
-      body: body.to_json
+    headers: {"Content-Type" => "application/json"},
+    body: body.to_json
   )
   response = JSON.parse response.body
   response['access_token']
 end
 
 access_token = get_access_token
-
 
 #the list is just gfys that keep getting included for some reason
 old_gfycats = Gfycat.map(:gfycat_gfy_id) + ["EnchantedTatteredBasilisk", 'UltimateThoughtfulArizonaalligatorlizard', 'FormalWideIberianbarbel', 'CluelessFatCockatoo']
@@ -53,37 +52,42 @@ until (not cursor) or cursor.empty? do
   cursor = next_round['cursor']
   all_gfycats = all_gfycats + next_round['gfycats'] if next_round['gfycats']
 end
-
-new_gfycats = all_gfycats.reject{|a| old_gfycats.include? a['gfyName']}
+old_gfycats.sort!
+new_gfycats = all_gfycats.reject{|a| old_gfycats.bsearch{|b| a['gfyName'] <=> b }}
 $stderr.puts "new gfycats count: #{new_gfycats.length}"
-new_gfycats.each do |gfy|
-  if gfy['tags'] and gfy['tags'].join.include? 'tournament'
-    tags = Hash[gfy['tags'].map{|x| x.split ": "}]
-  else
-    next
-  end
+DB = Sequel.connect connstr
+require './models/init'
+DB.transaction do
+  new_gfycats.each do |gfy|
+    if gfy['tags'] and gfy['tags'].join.include? 'tournament'
+      tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+    else
+      next
+    end
 
-  left_score = tags['leftscore'] || -1
-  right_score = tags['rightscore'] || -1
-  if tournaments.include? tags['tournament'] and not tags['tournament'].nil?
-    $stderr.puts "#{tags['tournament']} doesn't exist"
-    exit(1)
-  end
-  tournament_id = tags['tournament']
-  begin
-    puts DB[:gfycats].insert_sql(
-           gfycat_gfy_id: gfy['gfyName'],
-           tournament_id: tournament_id,
-           weapon: tags['weapon'],
-           gender: tags['gender'],
-           created_date: Time.now.to_i,
-           fotl_name: tags['leftname'],
-           fotr_name: tags['rightname'],
-           left_score: left_score,
-           right_score: right_score,
-           touch: tags['touch']
-         ) + ';'
-  rescue => e
-    $stderr.puts e.to_s
+    left_score = tags['leftscore'] || -1
+    right_score = tags['rightscore'] || -1
+    if tournaments.include? tags['tournament'] and not tags['tournament'].nil?
+      $stderr.puts "#{tags['tournament']} doesn't exist"
+      exit(1)
+    end
+    tournament_id = tags['tournament']
+    begin
+      DB[:gfycats].insert(
+        gfycat_gfy_id: gfy['gfyName'],
+        tournament_id: tournament_id,
+        weapon: tags['weapon'],
+        gender: tags['gender'],
+        created_date: Time.now.to_i,
+        fotl_name: tags['leftname'],
+        fotr_name: tags['rightname'],
+        left_score: left_score,
+        right_score: right_score,
+        touch: tags['touch']
+      )
+    rescue => e
+      $stderr.puts e.to_s
+      exit 1
+    end
   end
 end
