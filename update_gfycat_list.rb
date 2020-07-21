@@ -54,6 +54,7 @@ until (not cursor) or cursor.empty? do
 end
 old_gfycats.sort!
 new_gfycats = all_gfycats.reject{|a| old_gfycats.bsearch{|b| a['gfyName'] <=> b }}
+
 $stderr.puts "new gfycats count: #{new_gfycats.length}"
 DB = Sequel.connect connstr
 require './models/init'
