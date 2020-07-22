@@ -73,8 +73,10 @@ url_ids = [
   # ['https://fie.org/competition/2020/158/entry/pdf?lang=en', 'montrealsabre2020'],
   # ['https://fie.org/competition/2019/152/entry/pdf?lang=en', 'cairosabre2019'],
   # ['https://fie.org/competition/2019/158/entry/pdf?lang=en', 'cairosabre2019'],
-  ['https://fie.org/competition/2019/165/entry/pdf?lang=en', 'seoulsabre2019'],
-  ['https://fie.org/competition/2019/468/entry/pdf?lang=en', 'seoulsabre2019']
+  # ['https://fie.org/competition/2019/165/entry/pdf?lang=en', 'seoulsabre2019'],
+  # ['https://fie.org/competition/2019/468/entry/pdf?lang=en', 'seoulsabre2019'],
+  ['https://fie.org/competition/2018/152/entry/pdf?lang=en', 'cancunsabre2017'],
+  ['https://fie.org/competition/2018/158/entry/pdf?lang=en', 'cancunsabre2017']
 ]
 
 url_ids.each do |url, tournament_key|

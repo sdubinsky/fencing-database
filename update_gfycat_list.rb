@@ -60,8 +60,8 @@ DB = Sequel.connect connstr
 require './models/init'
 DB.transaction do
   new_gfycats.each do |gfy|
-    if gfy['tags'] and gfy['tags'].join.include? 'tournament'
-      tags = Hash[gfy['tags'].map{|x| x.split ": "}]
+    if gfy['tags'] and gfy['tags'].join.lower.include? 'tournament'
+      tags = Hash[gfy['tags'].map{|x| x.lower.split ": "}]
     else
       next
     end
