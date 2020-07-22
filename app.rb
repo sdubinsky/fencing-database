@@ -106,6 +106,12 @@ get '/stats/?' do
   erb :stats
 end
 
+get '/fencers/?' do
+  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
+  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
+  erb :fencers
+end
+
 post '/error_report' do
   body = JSON.parse(@request.body.read)
   gfy_id = body['gfy_id']

@@ -1,0 +1,36 @@
+<link rel="stylesheet" type="text/css" href="<%=url("css/fencers.css") %>" />
+<div name="fencers" class="fencers">
+    <div class="fencers-filter">
+        <form class="fencers-form" id="fencers-filter-form" action="/fencers" >
+            <div class="fencers-firstname">
+                <label for="firstname" class="form-label h4">First Name: </label>
+                <input class="form-control form-control-lg fencers-form-question" type="text" id="firstname" name="firstname" value="<%=params['firstname']%>"/>
+            </div>
+            <div class="fencers-lastname">
+                <label for="lastname" class="form-question form-label h4">Last Name: </label>
+                <input class="form-control form-control-lg fencers-form-question" "type="text" id="lastname" name="lastname" value="<%=params['lastname']%>"/><br />
+            </div>
+            <div class="fencers-weapon">
+                <label for="weapon" class="form-question form-label h4">Weapon: </label>
+                <select class="form-control form-question" id="fencers-weapon" name="weapon" >
+                    <% ['Any', 'Epee', 'Sabre', 'Foil'].each do |weapon| %>
+                        <% selected = weapon.downcase == params['weapon'] ? 'selected="selected"' : '' %>
+                        <option id="fencers-weapon" <%= selected %> value="<%= weapon.downcase %>"><%= weapon %></option>
+                        <% end %>
+                </select>
+            </div>
+            <div class="fencers-country" >
+                <label for="country" class="form-question form-label h4" >Country Code: </label>
+                <select class="form-control form-question" id="fencers-country" name="country" >
+                    <% @nationalities.each do |country| %>
+                        <% selected = country.upcase == params['country'] ? 'selected="selected"' : '' %>
+                        <option id="fencers-country" <%= selected %> value="<%= country %>"><%=country.upcase %></option>
+                    <% end %>
+                </select>
+            </div>
+            <div class="fencers-submit">
+                <input type="submit" value="Search" class="btn btn-default btn-lg" />
+            </div>
+        </form>
+    </div>
+</div>
