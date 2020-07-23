@@ -5,15 +5,17 @@
     <form class="stats-filter form-inline" id="stats-filter-form" action="stats">
         <label for="weapon-filter" class="form-question h4">Weapon: </label>
         <select class="form-control" name="weapon-filter">
-            <option name="all" id="all" value="all">All</option>
-            <option name="epee" id="epee" value="epee">Epee</option>
-            <option name="sabre" id="sabre" value="sabre">Sabre</option>
+            <% ["all", "epee", "sabre"].each do |weapon| %>
+                <% selected = weapon == params["weapon-filter"]? "selected" : '' %>
+                <option name="<%= weapon %>" <%= selected %> value="<%= weapon %>"><%= weapon.capitalize %></option>
+            <% end %>
         </select>
         <label for="gender-filter" class="form-question h4">Gender: </label>
         <select class="form-control" name="gender-filter">
-            <option name="all" id="all" value="all">All</option>
-            <option name="male" id="male" value="male">Male</option>
-            <option name="female" id="female" value="female">Female</option>
+            <% ["all", "male", "female"].each do |gender| %>
+                <% selected = gender == params["gender-filter"]? "selected" : '' %>
+                <option name="<%= gender %>" <%= selected %> value="<%= gender %>"><%= gender.capitalize %></option>
+            <% end %>
         </select>
         <br />
         <label for="tournament-filter" class="form-question h4">Tournament: </label>

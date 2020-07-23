@@ -101,7 +101,8 @@ get '/stats/?' do
   @most_hit_location = FormResponse.most_popular_hit tournament: params['tournament-filter']
   @most_popular_hit = @most_hit_location[:body_location]
   @most_popular_hit = @most_popular_hit.gsub("_", " ") or ""
-  @color_map = FormResponse.heatmap_colors tournament: params['tournament-filter'], fencer_name: params['fencer-filter']
+  query = FormResponse.build_query tournament: params['tournament-filter'], fencer_name: params['fencer-filter'], weapon: params['weapon-filter']
+  @color_map = FormResponse.heatmap_colors query
   @fencer_names = ['all'] + Gfycat.fencer_names
   erb :stats
 end

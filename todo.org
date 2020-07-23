@@ -24,8 +24,8 @@
 - [ ] get updated list of fencers
 - [X] get list of fencers in a tournament
 - [X] deduplicate fencers in gfycats based on the list of fencers in the tournament, not in the whole list
-* gfy page improvements [1/3]
-- [ ] add "report this touch" for errors
+* gfy page improvements [2/3]
+- [X] add "report this touch" for errors
 - [X] show derived data, like fencer names and touch scored
 - [ ] add "which fencer" question for double touches
 * stats page improvements [1/1]

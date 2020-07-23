@@ -60,7 +60,7 @@ class Fencer < Sequel::Model
       query = query.where(first_name: params["firstname"].capitalize)
     end
 
-    if params["weapon"] and params['weapon'] != "all"
+    if params["weapon"] and params['weapon'] != "any"
       query = query.where(weapon: params["weapon"])
     end
 

@@ -19,10 +19,10 @@ class FormResponse < Sequel::Model
     DB["select body_location, count(body_location) as total from form_responses group by body_location order by total desc limit 1;"].first
   end
   
-  def self.heatmap_colors filters = {}
+  def self.heatmap_colors query
+    #query must include form_responses
     colors = {}
     heatmap_colors = ['#FFFFFF', '#FFE9E9', '#FFCCCC', '#FF9999', '#FF6666', '#FF3333', '#FF0000', '#CC0000', '#990000', '#660000', '#330000']
-    query = build_query filters
     query = query.select(:strip_location).group_and_count(:strip_location)
     total = query.reduce(0){|t, c| t + c[:count]}
     query.each do |location|
@@ -36,9 +36,6 @@ class FormResponse < Sequel::Model
     query = query.join(:form_responses, stats_id: :gfycat_gfy_id)
     if filters[:tournament] and filters[:tournament] != "all"
       query = query.where(tournament_id: filters[:tournament])
-    end
-    if filters[:fencer_name] and filters[:fencer_name] != "all"
-      query = query.where{Sequel.|({fotl_name: filters[:fencer_name]}, {fotr_name: filters[:fencer_name]})}
     end
     if filters[:weapon] and filters[:weapon] != 'all'
       query = query.where(weapon: filters[:weapon])
