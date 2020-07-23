@@ -1,5 +1,16 @@
 <link rel="stylesheet" type="text/css" href="<%=url("css/fencers.css") %>" />
 <div name="fencers" class="fencers">
+    <% unless @found_fencers.empty? %>
+        <div class="fencer-list" >
+            <div class="fencer-list-subheader">results</div>
+            <div class="fencer-detail grid-header" >Name</div><div class="fencer-detail grid-header" >Country Code</div><div class="fencer-detail grid-header" >gender</div><div class="fencer-detail grid-header">FIE ID</div><div class="fencer-detail grid-header">details</div>
+            <% @found_fencers.each_with_index do |fencer, i| %>
+                <% even = i % 2 == 0 ? "even-row" : "" %>
+                <div class="fencer-detail fencer-name <%=even %>" ><%= fencer.name %></div><div class="fencer-detail fencer-country <%= even %>" ><%= fencer.nationality %></div><div class="fencer-detail fencer-gender <%= even %>"><%=fencer.gender %></div><div class="fencer-detail fencer-fie-id <%=even %>" ><%=fencer.fie_id %></div><div class="fencer-detail fencer-link <%=even %>" ><a href="<%=url("/fencers/#{fencer.fie_id}") %>" >Details </a></div>
+            <% end %>
+        </div>
+    <% end %>
+
     <div class="fencers-filter">
         <form class="fencers-form" id="fencers-filter-form" action="/fencers" >
             <div class="fencers-firstname">
@@ -16,7 +27,7 @@
                     <% ['Any', 'Epee', 'Sabre', 'Foil'].each do |weapon| %>
                         <% selected = weapon.downcase == params['weapon'] ? 'selected="selected"' : '' %>
                         <option id="fencers-weapon" <%= selected %> value="<%= weapon.downcase %>"><%= weapon %></option>
-                        <% end %>
+                    <% end %>
                 </select>
             </div>
             <div class="fencers-country" >
@@ -35,13 +46,4 @@
             </div>
         </form>
     </div>
-    <% unless @found_fencers.empty? %>
-        <div class="fencer-list" >
-            <div class="fencer-detail grid-header" >Name</div><div class="fencer-detail grid-header" >Country Code</div><div class="fencer-detail grid-header" >gender</div><div class="fencer-detail grid-header">FIE ID</div><div class="fencer-detail grid-header">details</div>
-        <% @found_fencers.each_with_index do |fencer, i| %>
-            <% even = i % 2 == 0 ? "even-row" : "" %>
-            <div class="fencer-detail fencer-name <%=even %>" ><%= fencer.name %></div><div class="fencer-detail fencer-country <%= even %>" ><%= fencer.nationality %></div><div class="fencer-detail fencer-gender <%= even %>"><%=fencer.gender %></div><div class="fencer-detail fencer-fie-id <%=even %>" ><%=fencer.fie_id %></div><div class="fencer-detail fencer-link <%=even %>" ><a href="<%=url("/fencers/#{fencer.fie_id}") %>" >Details </a></div>
-        <% end %>
-        </div>
-    <% end %>
 </div>

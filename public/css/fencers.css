@@ -13,9 +13,17 @@
 .fencer-list {
     display: grid;
     grid-template-columns: repeat(5, 8%);
-    row-gap: 1em;
     justify-content: center;
     align-items: center;
+}
+
+.fencer-list-subheader {
+    grid-column: 1 / 6;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    text-decoration: underline;
+    font-size: 1.5em;
 }
 
 .grid-header {
@@ -27,4 +35,6 @@
 .fencer-detail {
     display: flex;
     justify-content: center;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
 }
