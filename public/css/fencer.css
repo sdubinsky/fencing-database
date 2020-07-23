@@ -1,4 +1,49 @@
+.fencer-info {
+    display: flex;
+    justify-content: center;
+}
+.fencer-bio{
+    display: flex;
+    flex-direction: column;
+    margin-right: 2em;
+    border-right solid 1px;
+}
+
 .fencer-detail {
     margin-top: 1em;
     font-size: 1.5em;
 }
+
+.header {
+    font-size: 1.7em;
+    text-transform: uppercase;
+    text-decoration: underline;
+}
+
+.fencer-opponents {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    row-gap: 0.3em;
+    margin-bottom: 2em;
+}
+
+.opponents-header {
+    grid-column: 1 / 6;
+    display: flex;
+    justify-content: center;
+}
+
+.opponents-subheader {
+    text-transform: uppercase;
+    text-decoration: underline;
+}
+
+.opponents-detail {
+
+}
+
+.even-row {
+    background-color: lightgray;
+}
+
+

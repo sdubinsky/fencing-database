@@ -35,7 +35,7 @@
             </div>
         </form>
     </div>
-    <% if @found_fencers %>
+    <% unless @found_fencers.empty? %>
         <div class="fencer-list" >
             <div class="fencer-detail grid-header" >Name</div><div class="fencer-detail grid-header" >Country Code</div><div class="fencer-detail grid-header">FIE ID</div><div></div>
         <% @found_fencers.each do |fencer| %>

@@ -17,3 +17,7 @@
     row-gap: 1em;
     justify-content: center;
 }
+
+.opponent-detail {
+    border-bottom: solid 1px;
+}

@@ -123,18 +123,21 @@ get '/fencers/?:fie_id' do
   query = Gfycat.join(:form_responses, stats_id: :gfycat_gfy_id).where(Sequel.|(left_fencer_id: @fencer.id, right_fencer_id: @fencer.id))
   @left_touches = Gfycat.where(left_fencer_id: @fencer.id, touch: 'left').exclude(right_fencer_id: nil)
   @right_touches = Gfycat.where(right_fencer_id: @fencer.id, touch: 'right').exclude(left_fencer_id: nil)
+
+  left_received = Gfycat.where(left_fencer_id: @fencer.id, touch: 'right').exclude(right_fencer_id: nil)
+  right_received = Gfycat.where(right_fencer_id: @fencer.id, touch: 'left').exclude(left_fencer_id: nil)
+  
+  received_by_opponent = left_received.select(:right_fencer_id).union(right_received.select(:left_fencer_id), all: true).group_and_count(:right_fencer_id)
   form_responses = FormResponse.where(stats_id: @left_touches.select(:gfycat_gfy_id)).or(stats_id: @right_touches.select(:gfycat_gfy_id))
 
-  left_opponents = @left_touches.group_and_count(:right_fencer_id)
-  right_opponents = @right_touches.group_and_count(:left_fencer_id)
   @touches_by_opponent = @left_touches.select(:right_fencer_id).union(@right_touches.select(:left_fencer_id), all: true).group_and_count(:right_fencer_id)
 
   @opponents = Bout.select(:left_fencer_id).where(right_fencer_id: @fencer.id).union(Bout.select(:right_fencer_id).where(left_fencer_id: @fencer.id), all: true).group_and_count(:left_fencer_id).reverse.from_self(alias: :opponents)
 
-  @opponents = @opponents.select(Sequel[:touches][:count].as(:touches_count), :left_fencer_id, Sequel[:opponents][:count].as(:bouts)).join(@touches_by_opponent.as(:touches), right_fencer_id: :left_fencer_id).from_self
+  @opponents = @opponents.select(Sequel[:received][:count].as(:touches_received), Sequel[:touches][:count].as(:touches_scored), :left_fencer_id, Sequel[:opponents][:count].as(:bouts)).join(@touches_by_opponent.as(:touches), right_fencer_id: :left_fencer_id).join(received_by_opponent.as(:received), Sequel[:received][:right_fencer_id] => Sequel[:touches][:right_fencer_id]).from_self
 
-  @opponents = @opponents.select(:last_name, :first_name, :fie_id, :touches_count, :bouts, :nationality).join(DB[:fencers], id: :left_fencer_id).order(:bouts)
-  
+  @opponents = @opponents.select(:last_name, :first_name, :fie_id, :touches_scored, :touches_received, :bouts, :nationality).join(DB[:fencers], id: :left_fencer_id).order(:bouts)
+  puts @opponents.sql
   @location = form_responses.group_and_count(:body_location).reverse(:count).first
   @location = @location ? @location.body_location : 'unknown'
   @color_map = FormResponse.heatmap_colors query
