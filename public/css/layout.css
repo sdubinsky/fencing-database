@@ -40,3 +40,8 @@ header a {
 .footer-links{
     padding-top: 15px;
 }
+
+.even-row {
+    background-color: lightgray;
+}
+
