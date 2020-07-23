@@ -37,9 +37,10 @@
     </div>
     <% unless @found_fencers.empty? %>
         <div class="fencer-list" >
-            <div class="fencer-detail grid-header" >Name</div><div class="fencer-detail grid-header" >Country Code</div><div class="fencer-detail grid-header">FIE ID</div><div></div>
-        <% @found_fencers.each do |fencer| %>
-            <div class="fencer-detail fencer-name" ><%= fencer.name %></div><div class="fencer-detail fencer-country" ><%= fencer.nationality %></div> <div class="fencer-detail fencer-fie-id" ><%=fencer.fie_id %></div><div class="fencer-detail fencer-link" ><a href="<%=url("/fencers/#{fencer.fie_id}") %>" >Details </a></div>
+            <div class="fencer-detail grid-header" >Name</div><div class="fencer-detail grid-header" >Country Code</div><div class="fencer-detail grid-header" >gender</div><div class="fencer-detail grid-header">FIE ID</div><div class="fencer-detail grid-header">details</div>
+        <% @found_fencers.each_with_index do |fencer, i| %>
+            <% even = i % 2 == 0 ? "even-row" : "" %>
+            <div class="fencer-detail fencer-name <%=even %>" ><%= fencer.name %></div><div class="fencer-detail fencer-country <%= even %>" ><%= fencer.nationality %></div><div class="fencer-detail fencer-gender <%= even %>"><%=fencer.gender %></div><div class="fencer-detail fencer-fie-id <%=even %>" ><%=fencer.fie_id %></div><div class="fencer-detail fencer-link <%=even %>" ><a href="<%=url("/fencers/#{fencer.fie_id}") %>" >Details </a></div>
         <% end %>
         </div>
     <% end %>

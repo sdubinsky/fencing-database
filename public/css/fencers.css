@@ -12,12 +12,19 @@
 
 .fencer-list {
     display: grid;
-    grid-template-columns: repeat(4, max-content);
-    column-gap: 1.5em;
+    grid-template-columns: repeat(5, 8%);
     row-gap: 1em;
     justify-content: center;
+    align-items: center;
 }
 
-.opponent-detail {
-    border-bottom: solid 1px;
+.grid-header {
+    text-transform: uppercase;
+    text-decoration: underline;
+    font-size: 1.1em;
+}
+
+.fencer-detail {
+    display: flex;
+    justify-content: center;
 }
