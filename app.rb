@@ -107,6 +107,11 @@ get '/stats/?' do
 end
 
 get '/fencers/?' do
+  unless params.empty?
+    @found_fencers = Fencer.search_with_params params
+  else
+    @found_fencers = []
+  end
   @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
   erb :fencers

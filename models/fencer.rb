@@ -49,6 +49,28 @@ class Fencer < Sequel::Model
     query
   end
 
+  def self.search_with_params params
+    query = Fencer
+
+    if params["lastname"] and not params["lastname"].empty?
+      query = query.where(last_name: params["lastname"].upcase)
+    end
+
+    if params["firstname"] and not params["firstname"].empty?
+      query = query.where(first_name: params["firstname"].capitalize)
+    end
+
+    if params["weapon"] and params['weapon'] != "all"
+      query = query.where(weapon: params["weapon"])
+    end
+
+    if params['country'] and params['country'] != 'any'
+      query = query.where(nationality: params['country'])  
+    end
+
+    query
+  end
+
   def as_dict
     {
       id: id,

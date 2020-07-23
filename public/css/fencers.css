@@ -9,3 +9,17 @@
     display: flex;
     justify-content: center;
 }
+
+.fencer-list {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    column-gap: 1.5em;
+    row-gap: 1em;
+    justify-content: center;
+}
+
+.fencer-list-fencer {
+    display: flex;
+    flex-direction: row;
+}
+

@@ -22,6 +22,8 @@
             <div class="fencers-country" >
                 <label for="country" class="form-question form-label h4" >Country Code: </label>
                 <select class="form-control form-question" id="fencers-country" name="country" >
+                    <% selected = 'any' == params['country'] ? 'selected="selected"' : '' %>
+                    <option id="fencers-country" <%= selected %> value="any" >Any</option>
                     <% @nationalities.each do |country| %>
                         <% selected = country.upcase == params['country'] ? 'selected="selected"' : '' %>
                         <option id="fencers-country" <%= selected %> value="<%= country %>"><%=country.upcase %></option>
@@ -33,4 +35,12 @@
             </div>
         </form>
     </div>
+    <% if @found_fencers %>
+        <div class="fencer-list" >
+        <div class="fencer-detail grid-header" >Name</div><div class="fencer-detail grid-header" >Country Code</div><div class="fencer-detail grid-header">FIE ID</div>
+        <% @found_fencers.each do |fencer| %>
+                <div class="fencer-detail fencer-name" ><%= fencer.name %></div><div class="fencer-detail fencer-country" ><%= fencer.nationality %></div> <div class="fencer-detail fencer-fie-id" ><%=fencer.fie_id %></div>
+        <% end %>
+        </div>
+    <% end %>
 </div>
