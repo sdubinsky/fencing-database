@@ -1,3 +1,3 @@
-class User < Sinatra::Model
+class User < Sequel::Model
   
 end

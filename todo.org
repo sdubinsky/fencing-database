@@ -14,8 +14,8 @@
   - [X] touches by location on body
   - [X] touches by location on strip
   - [X] all of the above
-- [ ] fencer-specific page
-  - [ ] touches scored
+- [-] fencer-specific page
+  - [X] touches scored
   - [ ] touches scored per year
 * touches page improvement [0/2]
 - [ ] search by opponent's score
@@ -31,3 +31,8 @@
 * stats page improvements [1/1]
 - [X] filter stats by weapon
 - [ ] heatmap doesn't filter by weapon
+* add accounts [0/4]
+- [ ] accounts table/model
+- [ ] create new account
+- [ ] login page
+- [ ] associate reels with accounts

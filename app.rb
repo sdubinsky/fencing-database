@@ -4,6 +4,9 @@ require 'psych'
 require 'json'
 require 'excon'
 require 'logger'
+require 'bcrypt'
+
+enable :sessions
 
 if ENV['DATABASE_URL']
   connstr = ENV['DATABASE_URL']
@@ -37,7 +40,6 @@ set :root, File.dirname(__FILE__)
 TODO:
 1. Download all gfys, update their names.
 2. Save that code along with the heidenheim code
-3. Make sure that the fencer filter accounts for who scores the touch
 '''
 
 get '/' do
@@ -151,6 +153,41 @@ post '/error_report' do
     gfycat_gfy_id: gfy_id,
     created_date: Time.now.to_i
   )
+end
+
+get '/signup/?' do
+  erb :signup
+end
+
+post '/signup/?' do
+  if not params['signup-username'] and params['signup-password']
+    
+  end
+  User.create(
+    username: params['signup-username'],
+    password_hash: BCrypt::Password.create(params['signup-password']),
+    email: params['signup-email']
+  )
+  session[:user] = params['signup-username']
+  redirect '/'
+end
+
+get '/login/?' do
+  erb :login
+end
+
+post '/check_login/?' do
+  username = params['login-username']
+  user = User.first(username: username)
+  if not user
+    redirect '/'
+  end
+  password = BCrypt::Password.new(user.password_hash)
+  puts password
+  if password == params['login-password']
+    sessions[:user] = username
+  end
+  redirect '/'
 end
 
 # get '/reels/?' do

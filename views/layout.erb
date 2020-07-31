@@ -35,8 +35,12 @@
                         <div class="header-stats">
                             <a href="/stats">stats</a>
                         </div>
-                        <div class="header-random">
-                            <a href="/clip">Random Touch</a>
+                        <div class="header-user">
+                        <% if session[:user] %>
+                            <a href="/reels">Highlight Reels</a>
+                        <% else %>
+                            <a href="/login">Log In</a>
+                        <% end %>
                         </div>
                     </div>
                 </div>
