@@ -184,12 +184,11 @@ post '/check_login/?' do
     redirect '/'
   end
   password = BCrypt::Password.new(user.password_hash)
-  puts password
-  puts params['login-password']
   if password == params['login-password']
-    puts "got here"
     session[:user_id] = user.id
   end
+  binding.pry
+  redirect params['url']  if params['url']
   redirect '/'
 end
 

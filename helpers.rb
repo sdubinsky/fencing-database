@@ -124,7 +124,7 @@ helpers do
 
   def login_check
     if not logged_in?
-      redirect "/login"
+      redirect "/login?url=#{request.path_info}"
     end
   end
 
