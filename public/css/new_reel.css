@@ -1,0 +1,24 @@
+.reel-filter-form {
+    display: grid;
+    grid-template-columns: 30% 30%;
+    justify-content: center;
+}
+.reel-question {
+    display: flex;
+    flex-direction: column;
+    width: min-width;
+}
+
+.reel-doubles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 1 / 3;    
+}
+
+.reel-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 1 / 3;
+}

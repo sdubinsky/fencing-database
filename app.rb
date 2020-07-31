@@ -187,7 +187,7 @@ post '/check_login/?' do
   if password == params['login-password']
     session[:user_id] = user.id
   end
-  binding.pry
+
   redirect params['url']  if params['url']
   redirect '/'
 end
