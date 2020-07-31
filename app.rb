@@ -163,12 +163,13 @@ post '/signup/?' do
   if not params['signup-username'] and params['signup-password']
     
   end
-  User.create(
+  user = User.create(
     username: params['signup-username'],
     password_hash: BCrypt::Password.create(params['signup-password']),
-    email: params['signup-email']
+    email: params['signup-email'],
+    created_date: Time.now.to_i
   )
-  session[:user] = params['signup-username']
+  session[:user_id] = user.id
   redirect '/'
 end
 
@@ -184,107 +185,118 @@ post '/check_login/?' do
   end
   password = BCrypt::Password.new(user.password_hash)
   puts password
+  puts params['login-password']
   if password == params['login-password']
-    sessions[:user] = username
+    puts "got here"
+    session[:user_id] = user.id
   end
   redirect '/'
 end
 
-# get '/reels/?' do
-#   @reels = HighlightReel.all
-#   erb :reels
-# end
+get '/reels/?' do
+  login_check
+  @reels = current_user.highlight_reels
+  erb :reels
+end
 
-# get '/reels/new/?' do
-#   @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
-#   @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
-#   @tournaments = Tournament.order_by(:tournament_name)
-#   erb :new_reel
-# end
+get '/reels/new/?' do
+  login_check
+  @fencers = Fencer.select(:id, Sequel.lit("(last_name || ' ' || first_name) as full_name")).order_by(:full_name)
+  @nationalities = Fencer.select(:nationality).distinct.order_by(:nationality).all.map{|a| a.nationality}
+  @tournaments = Tournament.order_by(:tournament_name)
+  erb :new_reel
+end
 
-# post '/reels/create' do
-#   reel = HighlightReel.create(
-#     author: params['author'],
-#     title: params['title'],
-#     last_name: params['last_name'],
-#     first_name: params['first_name'],
-#     tournament: params['tournament']
-#   )
-#   reel.save
-#   params['page'] = -1
-#   gfycats = Helpers.get_touches_query_gfycats DB, params
-#   DB.transaction do
-#     gfycats.each do |gfy|
-#       unless params['double'] or Gfycat.first(gfycat_gfy_id: gfy[:gfycat_gfy_id]).touch != 'double'
-#         next
-#       end
-#       ReelClip.create(
-#         gfycat_gfy_id: gfy[:gfycat_gfy_id],
-#         highlight_reel: reel,
-#       )
-#     end
-#   end
-#   redirect "/reels/#{reel.id}"
-# end
+post '/reels/create' do
+  login_check
+  reel = HighlightReel.create(
+    author: params['author'],
+    title: params['title'],
+    last_name: params['last_name'],
+    first_name: params['first_name'],
+    tournament: params['tournament'],
+    user_id: current_user.id
+  )
+  reel.save
+  params['page'] = -1
+  gfycats = Helpers.get_touches_query_gfycats DB, params
+  DB.transaction do
+    gfycats.each do |gfy|
+      unless params['double'] or Gfycat.first(gfycat_gfy_id: gfy[:gfycat_gfy_id]).touch != 'double'
+        next
+      end
+      ReelClip.create(
+        gfycat_gfy_id: gfy[:gfycat_gfy_id],
+        highlight_reel: reel,
+      )
+    end
+  end
+  redirect "/reels/#{reel.id}"
+end
 
-# get '/reels/:id/?' do
-#   @reel = HighlightReel[params['id']]
-#   @clip_count = ReelClip.where(selected: true, highlight_reel_id: @reel.id).count
-#   @seconds = @clip_count * 10
-#   @hours = @seconds / 3600
-#   @seconds = @seconds % 3600
-#   @minutes = @seconds / 60
-#   @seconds = @seconds % 60
-#   @unsorted_clip_count = ReelClip.where(selected: nil, highlight_reel_id: @reel.id).count
-#   erb :reel
-# end
+get '/reels/:id/?' do
+  reel_owner_check params['id']
+  @reel = HighlightReel[params['id']]
+  @clip_count = ReelClip.where(selected: true, highlight_reel_id: @reel.id).count
+  @seconds = @clip_count * 10
+  @hours = @seconds / 3600
+  @seconds = @seconds % 3600
+  @minutes = @seconds / 60
+  @seconds = @seconds % 60
+  @unsorted_clip_count = ReelClip.where(selected: nil, highlight_reel_id: @reel.id).count
+  erb :reel
+end
 
-# get '/reels/:id/judge/?' do
-#   @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
-#   @clip_count = ReelClip.where(selected: true, highlight_reel_id: params['id']).count
-#   unless @clip
-#     redirect to("/reels/#{params['id']}")
-#   end
-#   erb :reel_clip
-# end
+get '/reels/:id/judge/?' do
+  reel_owner_check params['id']
+  @clip = ReelClip.where(selected: nil, highlight_reel_id: params['id']).order_by(Sequel.lit('random()')).first
+  @clip_count = ReelClip.where(selected: true, highlight_reel_id: params['id']).count
+  unless @clip
+    redirect to("/reels/#{params['id']}")
+  end
+  erb :reel_clip
+end
 
-# get '/reels/:id/export' do
-#   @reel = HighlightReel[params['id']]
-#   @reel.export_reel
-# end
+get '/reels/:id/export' do
+  reel_owner_check params['id']
+  @reel = HighlightReel[params['id']]
+  @reel.export_reel
+end
 
-# get '/reels/:id/newround' do
-#   @reel = HighlightReel[params['id']]
-#   DB.transaction do
-#     ReelClip.where(selected: nil, highlight_reel_id: params['id']).each do |clip|
-#       clip.selected = false
-#       clip.save
-#     end
-#   end
-#   DB.transaction do
-#     ReelClip.where(selected: true, highlight_reel_id: params['id']).each do |clip|
-#       clip.round = @reel.round
-#       clip.selected = nil
-#       clip.save
-#     end
-#     @reel.round += 1
-#     @reel.save
-#   end
-#   redirect to("/reels/#{params['id']}/")
-# end
+get '/reels/:id/newround' do
+  reel_owner_check params['id']
+  @reel = HighlightReel[params['id']]
+  DB.transaction do
+    ReelClip.where(selected: nil, highlight_reel_id: params['id']).each do |clip|
+      clip.selected = false
+      clip.save
+    end
+  end
+  DB.transaction do
+    ReelClip.where(selected: true, highlight_reel_id: params['id']).each do |clip|
+      clip.round = @reel.round
+      clip.selected = nil
+      clip.save
+    end
+    @reel.round += 1
+    @reel.save
+  end
+  redirect to("/reels/#{params['id']}/")
+end
 
-# post '/reels/submit/?' do
-#   body = JSON.parse(@request.body.read)
-#   @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
+post '/reels/submit/?' do
+  reel_owner_check params['id']
+  body = JSON.parse(@request.body.read)
+  @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
 
-#   case body['result']
-#   when 'accept'
-#     @clip.selected = true
-#   when 'reject'
-#     @clip.selected = false
-#   end
-#   @clip.save
-# end
+  case body['result']
+  when 'accept'
+    @clip.selected = true
+  when 'reject'
+    @clip.selected = false
+  end
+  @clip.save
+end
 
 get '/api/bouts/?:id_number?' do
   if params["id_number"]

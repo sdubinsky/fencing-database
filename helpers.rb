@@ -131,4 +131,11 @@ helpers do
   def current_user
     @current_user ||= User.first(id: session[:user_id])
   end
+
+  def reel_owner_check reel_id
+    login_check
+    unless current_user.highlight_reels.map{|reel| reel[:id]}.include? reel_id.to_i
+      redirect "/"
+    end
+  end
 end
