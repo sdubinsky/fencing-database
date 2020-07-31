@@ -63,6 +63,17 @@ module Helpers
       left_query = left_query.where(tournament_id: params["tournament"])
       right_query = right_query.where(tournament_id: params["tournament"])
     end
+    
+    if params['year'] and params['year'] != 'all'
+      tournaments = Tournament.select(:tournament_id).where(tournament_year: params['year'])
+      left_query = left_query.where(tournament_id: tournaments)
+      right_query = right_query.where(tournament_id: tournaments)
+    end
+
+    if params['weapon'] and params['weapon'] != 'all'
+      left_query = left_query.where(weapon: params["weapon"])
+      right_query = right_query.where(weapon: params["weapon"])      
+    end
 
     #use min because the gfy with the lowest opponent's score is the one they scored on.
     if params['score-fencer'] == 'highest'
@@ -93,7 +104,7 @@ module Helpers
           .group_by(:bout_id, :right_score).qualify,
         bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
                      .qualify.where(valid: true, touch: ['right', 'double'])
-    elsif params["score-fencer"] and params['score-fencer'] != 'any'
+    elsif params["score-fencer"] and params['score-fencer'] != 'all'
       left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score-fencer'].to_i, touch: ['left', 'double'], valid: true)
 
       right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score-fencer'].to_i, touch: ['right', 'double'], valid: true)

@@ -187,7 +187,6 @@ post '/check_login/?' do
   if password == params['login-password']
     session[:user_id] = user.id
   end
-
   redirect params['url']  if params['url']
   redirect '/'
 end
@@ -208,17 +207,18 @@ end
 
 post '/reels/create' do
   login_check
+  gfycats = Helpers.get_touches_query_gfycats DB, params
   reel = HighlightReel.create(
     author: params['author'],
     title: params['title'],
     last_name: params['last_name'],
     first_name: params['first_name'],
+    filter_params: params.to_json,
     tournament: params['tournament'],
     user_id: current_user.id
   )
   reel.save
   params['page'] = -1
-  gfycats = Helpers.get_touches_query_gfycats DB, params
   DB.transaction do
     gfycats.each do |gfy|
       unless params['double'] or Gfycat.first(gfycat_gfy_id: gfy[:gfycat_gfy_id]).touch != 'double'
