@@ -21,7 +21,7 @@
 
 .fencer-opponents {
     display: grid;
-    grid-template-columns: repeat(6, max-content);
+    grid-template-columns: repeat(6, minmax(max-content, 1fr));
     row-gap: 0.3em;
     margin-bottom: 2em;
 }
