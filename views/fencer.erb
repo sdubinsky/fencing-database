@@ -6,7 +6,7 @@
         <div class="fencer-country fencer-detail">Country Code: <%= @fencer.nationality %></div>
         <div class="total-touches fencer-detail">Total touches: <%= @left_touches.count + @right_touches.count %></div>
         <div class="fencer-hit-location fencer-detail">
-            Favorite place to score: <%= @location %>
+            Favorite place to score: <%= @location.gsub("_", " ") %>
         </div>
     </div>
     
@@ -15,8 +15,9 @@
         <div class="opponents-subheader">last name</div>
         <div class="opponents-subheader">first name</div>
         <div class="opponents-subheader">bouts</div>
-        <div class="opponents-subheader">touches scored</div>
-        <div class="opponents-subheader">touches received</div>
+        <div class="opponents-subheader">scored</div>
+        <div class="opponents-subheader">received</div>
+        <div class="opponents-subheader"></div>
         <% @opponents.each_with_index do |opponent, i| %>
             <% even = i % 2 == 0 ? "even-row" : "" %>
             <div class="opponents-detail <%= even %>"><%= opponent[:last_name].capitalize %></div>
@@ -24,6 +25,7 @@
             <div class="opponents-detail <%= even %>"><%= opponent[:bouts] %></div>
             <div class="opponents-detail <%= even %>"><%= opponent[:touches_scored] %></div>
             <div class="opponents-detail <%= even %>"><%= opponent[:touches_received] %></div>
+            <div class="opponents-detail <%= even %>"><a href=" <%= opponent[:fie_id] %>">View Profile</a></div>
         <% end %>
     </div>
 </div>

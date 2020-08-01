@@ -85,6 +85,12 @@ class Gfycat < Sequel::Model
     "#{left_fencer.name} vs. #{right_fencer.name}"
   end
 
+  def to_s_links
+    left_fencer = Fencer[left_fencer_id]
+    right_fencer = Fencer[right_fencer_id]
+    "<a href=\"/fencers/#{left_fencer.fie_id}\" >#{left_fencer.name}</a> vs. <a href=\"/fencers/#{right_fencer.fie_id}\" >#{right_fencer.name}</a>"
+  end
+
   def normalize_names
     begin
       if CanonicalName.where(gfy_name: fotr_name).count == 1

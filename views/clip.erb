@@ -2,7 +2,7 @@
 <div class="gfycat-display">
     <div class="gfycat-info">
         <h4><%= @gfycat.tournament.tournament_name %></h4>
-        <h4><%= @gfycat.to_s %></h4>
+        <h4><%= @gfycat.to_s_links %></h4>
     </div>
     <video class="media" id="video-<%= @gfycat.gfycat_gfy_id %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= @gfycat.gfycat_gfy_id %>-mobile.jpg" tabindex="-1">
         <source src="https://thumbs.gfycat.com/<%= @gfycat.gfycat_gfy_id %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= @gfycat.gfycat_gfy_id %>.webm" type="video/webm">
@@ -36,7 +36,6 @@
                         <% end %>
                     </select><label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label>
                 </div>
-
                 <div class="form-group radio col-md-3">
                     <label for="initiated-action" class="h4">Who initiated the action?</label><br/>
                     <label class="h5 radio-inline"> FOTL:
