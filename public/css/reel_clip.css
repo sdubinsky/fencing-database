@@ -1,0 +1,6 @@
+.reel-clip-info {
+    display: grid;
+    grid-template-columns: max-content;
+    justify-content: center;
+    justify-items: center;
+}
