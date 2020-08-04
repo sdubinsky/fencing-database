@@ -166,16 +166,24 @@ end
 
 post '/signup/?' do
   if not params['signup-username'] and params['signup-password']
-    
+    @error_message = "Please add a username and password"
+    erb :signup
+  else
+    begin
+      user = User.create(
+        username: params['signup-username'],
+        password_hash: BCrypt::Password.create(params['signup-password']),
+        email: params['signup-email'],
+        created_date: Time.now.to_i
+      )
+    rescue Sequel::UniqueConstraintViolation
+      @error_message = "username already taken."
+    erb :signup
+    else
+      session[:user_id] = user.id
+      redirect '/'
+    end
   end
-  user = User.create(
-    username: params['signup-username'],
-    password_hash: BCrypt::Password.create(params['signup-password']),
-    email: params['signup-email'],
-    created_date: Time.now.to_i
-  )
-  session[:user_id] = user.id
-  redirect '/'
 end
 
 get '/login/?' do
