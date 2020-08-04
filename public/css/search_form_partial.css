@@ -1,0 +1,5 @@
+.search-question {
+    display: flex;
+    flex-direction: column;
+    width: min-width;
+}

@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="<%=url("css/fencer_list_partial.css")%>" >
+<div class="fencer-partial">
+    <div class="fencer-partial-header header" id="fencer-partial-header"><%= @partial_title %></div>
+    <div class="fencer-partial-subheader">last name</div>
+    <div class="fencer-partial-subheader">first name</div>
+    <% if @fencers[0] and @fencers[0].keys.include? :bouts %>
+        <div class="fencer-partial-subheader">bouts</div>
+        <div class="fencer-partial-subheader">scored</div>
+        <div class="fencer-partial-subheader">received</div>
+    <% end %>
+    <div class="fencer-partial-subheader"></div>
+    <% @fencers.each_with_index do |fencer, i| %>
+        <% even = i % 2 == 0 ? "even-row" : "" %>
+        <div class="fencer-partial-detail <%= even %>"><%= fencer[:last_name].capitalize %></div>
+        <div class="fencer-partial-detail <%= even %>"><%= fencer[:first_name] %></div>
+        <% if @fencers[0] and @fencers[0].keys.include? :bouts %>
+            <div class="fencer-partial-detail <%= even %>"><%= fencer[:bouts] %></div>
+            <div class="fencer-partial-detail <%= even %>"><%= fencer[:touches_scored] %></div>
+            <div class="fencer-partial-detail <%= even %>"><%= fencer[:touches_received] %></div>
+        <% end %>
+        <div class="fencer-partial-detail <%= even %>"><a href=" <%= fencer[:fie_id] %>">View Profile</a></div>
+    <% end %>
+</div>
