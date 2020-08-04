@@ -211,7 +211,8 @@ end
 
 get '/reels/?' do
   login_check
-  @reels = current_user.highlight_reels
+  @in_progress_reels = current_user.highlight_reels.select{|a| !a.completed}
+  @completed_reels = current_user.highlight_reels.select{|a| a.completed}
   erb :reels
 end
 

@@ -1,5 +1,20 @@
-<% @reels.each do |reel| %>
-    <a href="/reels/<%= reel.id %>"><%= reel.title%></a><p/>
-<% end %>
-<p/>
-<a href="/reels/new">Make a new reel</a>
+<link rel="stylesheet" type="text/css" href="<%=url("css/reels.css")%>" >
+<div class="reels">
+    <div class="reel-list-header">in-progress reels</div>
+    <div class="reel-list in-progress-reel-list">
+        <% @in_progress_reels.each do |reel| %>
+            <div class="in-progress-reel reel">
+                <a href="/reels/<%= reel.id %>"><%= reel.title%></a>
+            </div>
+        <% end %>
+    </div>
+    <a href="/reels/new"><button value="new reel" class="reel-list-button">new reel</button></a>
+    <div class="reel-list-header">completed reels</div>
+    <div class="reel-list completed-reel-list">
+        <% @completed_reels.each do |reel| %>
+            <div class="completed-reel reel">
+                <a href="/reels/<%= reel.id %>"><%= reel.title%></a>
+            </div>
+        <% end %>
+    </div>
+</div>
