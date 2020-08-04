@@ -100,9 +100,10 @@ get '/submit/?' do
     strip_location: params['strip-location'],
     body_location: params['score-body-select'],
     stats_id: params['gfycat-id'],
-    created_date: Time.now.to_i
+    created_date: Time.now.to_i,
+    user_id: session[:user_id]
   )
-  response.save
+
   logger.info("new submission: #{response.to_s}")
   redirect "/clip?gfycat_gfy_id=#{params['gfycat-id']}"
 end

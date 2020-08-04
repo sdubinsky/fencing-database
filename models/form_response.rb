@@ -1,6 +1,7 @@
 require 'pry'
 class FormResponse < Sequel::Model
   many_to_one :gfycat
+  many_to_one :user
   def self.total filters = {}
     query = build_query filters
     query.count 
