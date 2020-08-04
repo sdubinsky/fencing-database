@@ -269,6 +269,7 @@ end
 get '/reels/:id/export' do
   reel_owner_check params['id']
   @reel = HighlightReel[params['id']]
+  @reel.update(completed: true)
   @reel.export_reel
 end
 
