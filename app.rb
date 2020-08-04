@@ -42,12 +42,20 @@ TODO:
 2. Save that code along with the heidenheim code
 '''
 
-get ['/', '/search/?'] do
+get '/' do
+  if session[:user_id]
+    redirect("/reels")
+  else
+    redirect("/search")
+  end
+end
+
+get '/search/?' do 
   @tournaments = Tournament.order_by(:tournament_name)
   @gfycats = []
   @fencers = []
   @partial_title = "fencers"
-  erb :search
+  erb :search  
 end
 
 post '/search' do

@@ -25,18 +25,25 @@
                         <div class="header-fencers">
                             <a href="/search">search</a>
                         </div>
-                        <div class="header-title">
-                            The Fencing Database
-                        </div>
                         <div class="header-stats">
                             <a href="/stats">stats</a>
                         </div>
+                        <div class="header-title">
+                            The Fencing Database
+                        </div>
                         <div class="header-user">
-                        <% if session[:user_id] %>
+                        <% if logged_in? %>
                             <a href="/reels">Highlight Reels</a>
                         <% else %>
                             <a href="/login">Log In</a>
                         <% end %>
+                        </div>
+                        <div class="header-random">
+                            <% if logged_in?%>
+                                <a href="/clip">random clip</a>
+                            <% else %>
+                                <a href="/signup">sign up</a>
+                            <% end %>
                         </div>
                     </div>
                 </div>
