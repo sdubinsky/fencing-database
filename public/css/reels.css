@@ -1,0 +1,22 @@
+.reel-list-header {
+    text-transform: uppercase;
+    text-decoration: underline;
+    font-size: 1.5em;
+}
+
+.reel-list-button {
+    text-transform: uppercase;
+    color: black;
+}
+
+.reel-list {
+    display: grid;
+    grid-template-columns: max-content;
+    row-gap: 0.5em;
+    margin: 1em;
+}
+
+.reel {
+    text-transform: capitalize;
+    font-size: 1.3em;
+}
