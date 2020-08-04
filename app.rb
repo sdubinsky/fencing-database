@@ -304,8 +304,8 @@ get '/reels/:id/newround' do
 end
 
 post '/reels/submit/?' do
-  reel_owner_check params['id']
   body = JSON.parse(@request.body.read)
+  reel_owner_check body['reelId']
   @clip = ReelClip.first(selected: nil, highlight_reel_id: body['reelId'], gfycat_gfy_id: body['clipId'])
 
   case body['result']

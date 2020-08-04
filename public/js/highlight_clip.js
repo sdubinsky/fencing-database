@@ -7,7 +7,8 @@ function submitResult(result){
         "result": result
     });
     var request = new XMLHttpRequest();
-    request.open('POST', '/reels/submit');
+    //This is a sync request because otherwise the page reloads too quickly
+    request.open('POST', '/reels/submit', false);
     request.setRequestHeader("Content-Type", "application/json");
     request.send(body);
 }
@@ -15,7 +16,7 @@ function submitResult(result){
 function rejectClip(e) {
     if (e.code === "ArrowLeft" || e.code === "KeyN"){
         submitResult("reject");
-        location.reload(true);
+        location.reload(true);  
     }
 }
 
