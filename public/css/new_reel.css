@@ -22,3 +22,11 @@
     align-items: center;
     grid-column: 1 / 3;
 }
+
+.search-filter-form {
+    display: grid;
+    grid-template-columns: 30% 30%;
+    justify-content: center;
+}
+
+.search-submi

@@ -17,9 +17,10 @@
 - [-] fencer-specific page
   - [X] touches scored
   - [ ] touches scored per year
-* touches page improvement [0/2]
+* touches page improvement [0/3]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
+- [ ] add second search option "search fencers" and "search touches"
 * gfy upload improvements [2/3]
 - [ ] get updated list of fencers
 - [X] get list of fencers in a tournament

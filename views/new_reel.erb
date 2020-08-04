@@ -10,55 +10,7 @@
                 <label for="author" class="form-label h4">Author</label>
                 <input class="form-control reel-form-question" type="text" id="author" name="author" />
             </div>
-            <div class="reel-question reel-firstname">
-                <label for="firstname" class="form-label h4">Fencer's First Name: </label>
-                <input class="form-control form-control-lg reel-form-question" type="text" id="firstname" name="firstname" value="<%=params['firstname']%>"/>
-            </div>
-            <div class="reel-question reel-lastname">
-                <label for="lastname" class="form-question form-label h4">Fencer's Last Name: </label>
-                <input class="form-control form-control-lg reel-form-question" "type="text" id="lastname" name="lastname" value="<%=params['lastname']%>"/><br />
-            </div>
-            <div class="reel-question reel-weapon" >
-                <label for="weapon" class="form-label h4" >Weapon: </label>
-                <select class="form-control reel-form-question" id="weapon" name="weapon">
-                    <option id="weapon" value="all">All</option>
-                    <option id="weapon" value="epee">Epee</option>
-                    <option id="weapon" value="sabre">Sabre</option>
-                    <option id="weapon" value="foil">Foil</option>
-                </select>
-            </div>
-            <div class="reel-question reel-score">
-                <label for="score-fencer" class="form-question form-label h4">Fencer's Score: </label>
-                <select class="form-control reel-form-question" id="score-fencer" name="score-fencer">
-                    <option id="score-fencer" value="all" selected>All</option>
-                    <%=params['score-fencer']%>
-                    <% selected = "highest" == params['score-fencer'] ? 'selected="selected"' : ""%>
-                    <option id="score-fencer" value="highest" <%=selected%>>Highest</option>
-                    <% 1.upto 15 do |score| %>
-                        <% selected = score == params['score-fencer'].to_i ? 'selected="selected"' : ""%>
-                        <option id="score-fencer" value="<%=score%>" <%= selected%>><%=score%></option>
-                    <% end %>
-                </select>
-            </div>
-            <div class="reel-question reel-tournament">
-                <label for="tournament" class="form-question form-label h4">Tournament: </label>
-                <select class="form-control reel-form-question" id="tournament" name="tournament" selected="<%=params['tournament']%>" >
-                    <option id="tournament" value="all">All</option>
-                    <% @tournaments.each do |tournament| %>
-                        <% selected = tournament.tournament_id == params['tournament'] ? 'selected="selected"' : "" %>
-                        <option class="reel-form-question" id="tournament" value="<%=tournament.tournament_id%>" <%= selected %>><%=tournament.tournament_name + ", " + tournament.tournament_year + " (#{tournament.weapon})" %></option>
-                    <% end %>
-                </select>
-            </div>
-            <div class="reel-question reel-year">
-                <label for="year" class="form-question form-label h4">Year: </label>
-                <select class="form-control reel-form-question" id="year" name="year" >
-                    <option id="year" value="all">All</option>
-                    <% @tournaments.distinct.select(:tournament_year).order_by(:tournament_year).reverse.each do |year| %>
-                        <option class="reel-form-question" id="year" value="<%= year.tournament_year %>"><%= year.tournament_year %></option>
-                    <% end %>
-                </select>
-            </div>
+            <%= erb :search_form_partial %>
             <div class="reel-doubles">
                 <label for="double">Include double touches?</label><input type="checkbox" id="double" name="double" checked />
             </div>

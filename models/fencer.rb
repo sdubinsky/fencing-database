@@ -51,7 +51,6 @@ class Fencer < Sequel::Model
 
   def self.search_with_params params
     query = Fencer
-
     if params["lastname"] and not params["lastname"].empty?
       query = query.where(last_name: params["lastname"].upcase)
     end
@@ -60,11 +59,11 @@ class Fencer < Sequel::Model
       query = query.where(first_name: params["firstname"].capitalize)
     end
 
-    if params["weapon"] and params['weapon'] != "any"
+    if params["weapon"] and params['weapon'] != "all"
       query = query.where(weapon: params["weapon"])
     end
 
-    if params['country'] and params['country'] != 'any'
+    if params['country'] and params['country'] != 'all'
       query = query.where(nationality: params['country'])  
     end
 

@@ -19,26 +19,16 @@
     text-decoration: underline;
 }
 
-.fencer-opponents {
+.fencer-partial {
     display: grid;
     grid-template-columns: repeat(6, minmax(max-content, 1fr));
     row-gap: 0.3em;
     margin-bottom: 2em;
 }
 
-.opponents-header {
+.fencer-partial-header {
     grid-column: 1 / 7;
     display: flex;
     justify-content: center;
-}
-
-.opponents-subheader {
-    text-transform: uppercase;
-    text-decoration: underline;
-    padding-right: 3em;
-}
-
-.opponents-detail {
-
 }
 

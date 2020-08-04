@@ -9,25 +9,7 @@
             Favorite place to score: <%= @location.gsub("_", " ") %>
         </div>
     </div>
-    
-    <div class="fencer-opponents">
-        <div class="opponents-header header" id="opponents-header">Opponents</div>
-        <div class="opponents-subheader">last name</div>
-        <div class="opponents-subheader">first name</div>
-        <div class="opponents-subheader">bouts</div>
-        <div class="opponents-subheader">scored</div>
-        <div class="opponents-subheader">received</div>
-        <div class="opponents-subheader"></div>
-        <% @opponents.each_with_index do |opponent, i| %>
-            <% even = i % 2 == 0 ? "even-row" : "" %>
-            <div class="opponents-detail <%= even %>"><%= opponent[:last_name].capitalize %></div>
-            <div class="opponents-detail <%= even %>"><%= opponent[:first_name] %></div>
-            <div class="opponents-detail <%= even %>"><%= opponent[:bouts] %></div>
-            <div class="opponents-detail <%= even %>"><%= opponent[:touches_scored] %></div>
-            <div class="opponents-detail <%= even %>"><%= opponent[:touches_received] %></div>
-            <div class="opponents-detail <%= even %>"><a href=" <%= opponent[:fie_id] %>">View Profile</a></div>
-        <% end %>
-    </div>
+    <%= erb :fencer_list_partial %>
 </div>
 
 <div class="heatmap">
