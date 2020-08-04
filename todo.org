@@ -2,7 +2,6 @@
 - [ ] retest each clip for fencer names and scores
 - [ ] sanitize db for duplicate names
 - [ ] sanitize db for names that should be separated
-- [ ] reupload fencers db from 
 - [X] add tournaments table
 - [X] add bouts table
   - [X] each tournament has many bouts
@@ -17,10 +16,10 @@
 - [-] fencer-specific page
   - [X] touches scored
   - [ ] touches scored per year
-* touches page improvement [0/3]
+* search page improvement [1/3]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
-- [ ] add second search option "search fencers" and "search touches"
+- [X] add second search option "search fencers" and "search touches"
 * gfy upload improvements [2/3]
 - [ ] get updated list of fencers
 - [X] get list of fencers in a tournament
@@ -32,8 +31,9 @@
 * stats page improvements [1/1]
 - [X] filter stats by weapon
 - [ ] heatmap doesn't filter by weapon
-* add accounts [0/4]
-- [ ] accounts table/model
-- [ ] create new account
-- [ ] login page
-- [ ] associate reels with accounts
+* add accounts [5/5]
+- [X] accounts table/model
+- [X] create new account
+- [X] login page
+- [X] associate reels with accounts
+- [X] associate form responses with accounts
