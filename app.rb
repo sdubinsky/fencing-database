@@ -182,6 +182,11 @@ get '/login/?' do
   erb :login
 end
 
+get '/logout/?' do
+  session.delete :user_id
+  redirect '/'
+end
+
 post '/check_login/?' do
   username = params['login-username']
   user = User.first(username: username)
