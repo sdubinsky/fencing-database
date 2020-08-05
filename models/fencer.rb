@@ -66,6 +66,10 @@ class Fencer < Sequel::Model
     if params['country'] and params['country'] != 'all'
       query = query.where(nationality: params['country'])  
     end
+    
+    if params['gender'] and params['gender'] != 'all'
+      query = query.where(gender: params['gender'])  
+    end
 
     query
   end

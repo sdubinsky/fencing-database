@@ -75,6 +75,11 @@ module Helpers
       right_query = right_query.where(weapon: params["weapon"])      
     end
 
+    if params['gender'] and params['gender'] != 'all' 
+      left_query = left_query.where(gender: params["gender"])
+      right_query = right_query.where(gender: params["gender"])
+    end
+
     #use min because the gfy with the lowest opponent's score is the one they scored on.
     if params['score-fencer'] == 'highest'
       left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).qualify.join(

@@ -1,10 +1,10 @@
 <link rel="stylesheet" type="text/css" href="<%=url("css/search_form_partial.css")%>" >
 <div class="search-question search-firstname">
-    <label for="firstname" class="form-label h4">Fencer's First Name: </label>
+    <label for="firstname" class="form-label h4">First Name: </label>
     <input class="form-control form-control-lg search-form-question" type="text" id="firstname" name="firstname" value="<%=params['firstname']%>"/>
 </div>
 <div class="search-question search-lastname">
-    <label for="lastname" class="form-question form-label h4">Fencer's Last Name: </label>
+    <label for="lastname" class="form-question form-label h4">Last Name: </label>
     <input class="form-control form-control-lg search-form-question" "type="text" id="lastname" name="lastname" value="<%=params['lastname']%>"/><br />
 </div>
 <div class="search-question search-weapon" >
@@ -16,17 +16,12 @@
         <option id="weapon" value="foil">Foil</option>
     </select>
 </div>
-<div class="search-question search-score">
-    <label for="score-fencer" class="form-question form-label h4">Fencer's Score: </label>
-    <select class="form-control search-form-question" id="score-fencer" name="score-fencer">
-        <option id="score-fencer" value="all" selected>All</option>
-        <%=params['score-fencer']%>
-        <% selected = "highest" == params['score-fencer'] ? 'selected="selected"' : ""%>
-        <option id="score-fencer" value="highest" <%=selected%>>Highest</option>
-        <% 1.upto 15 do |score| %>
-            <% selected = score == params['score-fencer'].to_i ? 'selected="selected"' : ""%>
-            <option id="score-fencer" value="<%=score%>" <%= selected%>><%=score%></option>
-        <% end %>
+<div class="search-question search-gender" >
+    <label for="gender" class="form-question form-label h4">Gender</label>
+    <select class="form-control search-form-question" id="gender" name="gender" >
+        <option id="gender" value="all" selected>All</option>
+        <option id="gender" value="female" >Female</option>
+        <option id="gender" value="male" >Male</option>
     </select>
 </div>
 <div class="search-question search-tournament">
