@@ -2,6 +2,7 @@
 <div name="reel" class="reel">
     <div class="reel-filter">
         <form class="reel-filter-form" id="reel-filter-form" action="/reels/create" method="post" >
+            <div class="search-header">reel information</div>
             <div class="reel-question">
                 <label for="title" class="form-label h4">Reel Title</label>
                 <input required class="form-control reel-form-question" type="text" id="title" name="title" />
@@ -10,6 +11,7 @@
                 <label for="author" class="form-label h4">Author</label>
                 <input class="form-control reel-form-question" type="text" id="author" name="author" />
             </div>
+            <div class="search-header">search filters</div>
             <%= erb :search_form_partial %>
             <div class="reel-doubles">
                 <label for="double">Include double touches?</label><input type="checkbox" id="double" name="double" checked />
