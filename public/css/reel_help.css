@@ -1,0 +1,10 @@
+.content {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.help-step {
+    text-transform: uppercase;
+    text-decoration: underline;
+    font-size: 1.3em;
+}

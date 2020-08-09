@@ -252,6 +252,10 @@ post '/reels/create' do
   redirect "/reels/#{reel.id}"
 end
 
+get '/reels/help' do
+  erb :reel_help
+end
+
 get '/reels/:id/?' do
   reel_owner_check params['id']
   @reel = HighlightReel[params['id']]

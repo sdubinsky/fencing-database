@@ -1,8 +1,13 @@
-<b>Reel Name:</b> <%= @reel.title %><p/>
-<b>Author:</b> <%= @reel.author %><p/>
-<b>Clips:</b> <%=  @clip_count %><p/>
-<b>Length:</b> <%= @hours.to_s + ":" + @minutes.to_s + ":" + @seconds.to_s %><p/>
-<b>Unreviewed clips:</b> <%= @unsorted_clip_count %><p/>
-<a href="/reels/<%=@reel.id%>/judge" >Select Clips</a><br/>
-<a href="/reels/<%=@reel.id%>/newround">Start a new round</a> (reject all unreviewed clips, then unmark all selected clips)<br/>
-<a href="/reels/<%=@reel.id%>/export" >Export Reel</a><br/>
+<link rel="stylesheet" type="text/css" href="<%=url("css/reel.css")%>" >
+<div class="reel-info reel-title"><%= @reel.title %><p/></div>
+<div class="reel-info reel-author"><div class="reel-info-subheader">Author:</div> <%= @reel.author %><p/></div>
+<div class="reel-info reel-count"><div class="reel-info-subheader">Selected Clips:</div> <%=  @clip_count %><p/></div>
+<div class="reel-info reel-length"><div class="reel-info-subheader">Length:</div> <%= @hours.to_s + ":" + @minutes.to_s + ":" + @seconds.to_s %><p/></div>
+<div class="reel-info reel-unreviewed"><div class="reel-info-subheader">Unreviewed clips:</div> <%= @unsorted_clip_count %><p/></div>
+<div class="button-list">
+    <div class="reel-nav-button"><a href="/reels/<%=@reel.id%>/judge" ><button type="button">Select Clips</button></a></div>
+    <div class="reel-nav-button"><a href="/reels/<%=@reel.id%>/export" ><button type="button">Export Reel</button></a></div>
+    <div class="reel-nav-button"><a href="/reels/<%=@reel.id%>/newround"><button type="button">Start a new round</button></a></div>
+    <div class="reel-nav-button"><a href="/reels/help"><button type="button">Help</button></a> </div>
+    <div class="new-round-info">(reject all unreviewed clips,<br/>then unmark all selected clips)</div>
+</div>

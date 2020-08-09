@@ -1,0 +1,40 @@
+.reel-title {
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    margin-left: 2em;
+}
+
+.reel-info-subheader {
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+
+.reel-nav-button {
+
+}
+
+.new-round-info {
+
+}
+
+.button-list {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.5em;
+    row-gap: 0.8em;
+    justify-content: left;
+}
+
+.new-round-info {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    border: 1px solid;
+    border-radius: 5px;
+}
