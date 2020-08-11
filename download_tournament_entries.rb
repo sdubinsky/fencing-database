@@ -22,8 +22,6 @@ else
   end
   connstr = "postgres://#{login}#{db_config['db_address']}/#{db_config['db_name']}"
 end
-DB = Sequel.connect connstr
-require './models/init'
 
 
 def download_entries url
@@ -32,9 +30,8 @@ def download_entries url
   page = page.body
   lines = page.gsub("\n", "")
   lines = lines.split("<tr>")
-  lines = lines.select{|l| l.include? "<td"}.map{|row|
-    row.split("</td>")[4].gsub(/<.?td.*?>/, "").strip
-  }
+  lines = lines.select{|l| l.include? "<td"}
+  lines = lines.map{|row| row.split("</td>").map{|entry| entry.gsub(/<.?td.*?>/, "").strip}}
 end
 
 url_ids = [
@@ -75,16 +72,33 @@ url_ids = [
   # ['https://fie.org/competition/2019/158/entry/pdf?lang=en', 'cairosabre2019'],
   # ['https://fie.org/competition/2019/165/entry/pdf?lang=en', 'seoulsabre2019'],
   # ['https://fie.org/competition/2019/468/entry/pdf?lang=en', 'seoulsabre2019'],
-  ['https://fie.org/competition/2018/152/entry/pdf?lang=en', 'cancunsabre2017'],
-  ['https://fie.org/competition/2018/158/entry/pdf?lang=en', 'cancunsabre2017']
+  # ['https://fie.org/competition/2018/152/entry/pdf?lang=en', 'cancunsabre2017'],
+  # ['https://fie.org/competition/2018/158/entry/pdf?lang=en', 'cancunsabre2017'],
+  ['https://fie.org/competition/2020/134/entry/pdf?lang=en', 'turinfoil2020'],
+  ['https://fie.org/competition/2020/458/entry/pdf?lang=en', 'turinfoil2020']
 ]
 
+
 url_ids.each do |url, tournament_key|
-  licenses = download_entries url
-
-  tournament_id = Tournament.select(:id).first(tournament_id: tournament_key)
-  raise "Error: No tournament found" unless tournament_id
-  select = Fencer.select(:id, tournament_id.id).where(fie_id: licenses)
-
-  puts DB[:fencers_tournaments].insert_sql([:fencers_id, :tournaments_id], select) + ';'
+  entries = download_entries url
+  licenses = entries.map{|entry| entry[4]}
+  Sequel.connect connstr do |db|
+    require './models/init'
+    tournament = Tournament.select(:id, :weapon).first(tournament_id: tournament_key)
+    raise "Error: No tournament found" unless tournament
+    entries.each do |entry|
+      if Fencer.where(fie_id: entry[4]).count == 0
+        Fencer.create(
+          last_name: entry[0].split[0],
+          first_name: entry[0].split[1],
+          nationality: entry[1][0..2],
+          birthday: entry[6],
+          weapon: tournament.weapon,
+          fie_id: entry[4]
+        )
+      end
+    end
+    select = Fencer.select(:id, tournament.id).where(fie_id: licenses)
+    puts db[:fencers_tournaments].insert([:fencers_id, :tournaments_id], select)
+  end
 end
