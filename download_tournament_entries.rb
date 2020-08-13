@@ -34,71 +34,85 @@ def download_entries url
   lines = lines.map{|row| row.split("</td>").map{|entry| entry.gsub(/<.?td.*?>/, "").strip}}
 end
 
-url_ids = [
-  # ['https://fie.org/competition/2020/112/entry/pdf?lang=en', 'budapest2020'],
-  # ['https://fie.org/competition/2020/449/entry/pdf?lang=en', 'budapest2020'],
-  # ['https://fie.org/competition/2020/85/entry/pdf?lang=en', 'barcelona2020'],
-  # ['https://fie.org/competition/2020/387/entry/pdf?lang=en', 'qatar2020'],
-  # ['https://fie.org/competition/2020/79/entry/pdf?lang=en', 'qatar2020'],
-  # ['https://fie.org/competition/2020/80/entry/pdf?lang=en', 'tallinn2019'],
-  # ['https://fie.org/competition/2020/385/entry/pdf?lang=en', 'berne2019'],
-  # ['https://fie.org/competition/2019/242/entry/pdf?lang=en', 'budapestwch2019'],
-  # ['https://fie.org/competition/2019/241/entry/pdf?lang=en', 'budapestwch2019'],
-  # ['https://fie.org/competition/2019/451/entry/pdf?lang=en', 'dubai2019'],
-  # ['https://fie.org/competition/2019/95/entry/pdf?lang=en', 'cali2019'],
-  # ['https://fie.org/competition/2019/113/entry/pdf?lang=en', 'cali2019'] ,
-  # ['https://fie.org/competition/2019/85/entry/pdf?lang=en', 'barcelona2019'],
-  # ['https://fie.org/competition/2019/385/entry/pdf?lang=en', 'bern2018'],
-  # ['https://fie.org/competition/2018/98/entry/pdf?lang=en', 'heidenheim2018'],
-  # ['https://fie.org/competition/2018/451/entry/pdf?lang=en', 'dubai2018'],
-  # ['https://fie.org/competition/2018/242/entry/pdf?lang=en', 'wuxi2018'],
-  # ['https://fie.org/competition/2018/241/entry/pdf?lang=en', 'wuxi2018'],
-  # ['https://fie.org/competition/2018/92/entry/pdf?lang=en', 'barcelona2018'],
-  # ['https://fie.org/competition/2018/95/entry/pdf?lang=en', 'cali2018'],
-  # ['https://fie.org/competition/2018/113/entry/pdf?lang=en', 'cali2018'],
-  # ['https://fie.org/competition/2018/385/entry/pdf?lang=en', 'berne2017'],
-  # ['https://fie.org/competition/2018/79/entry/pdf?lang=en', 'doha2017'],
-  # ['https://fie.org/competition/2018/387/entry/pdf?lang=en', 'doha2017'],
-  # ['https://fie.org/competition/2017/98/entry/pdf?lang=en', 'heidenheim2017'],
-  # ['https://fie.org/competition/2017/85/entry/pdf?lang=en', 'barcelona2016'],
-  # ['https://fie.org/competition/2019/108/entry/pdf?lang=en', 'heidenheim2019'],
-  # ['https://fie.org/competition/2019/387/entry/pdf?lang=en', 'doha2019'],
-  # ['https://fie.org/competition/2019/79/entry/pdf?lang=en', 'doha2019'],
-  # ['https://fie.org/competition/2019/112/entry/pdf?lang=en', 'budapest2019'],
-  # ['https://fie.org/competition/2019/449/entry/pdf?lang=en', 'budapest2019'],
-  # ['https://fie.org/competition/2020/152/entry/pdf?lang=en', 'montrealsabre2020'],
-  # ['https://fie.org/competition/2020/158/entry/pdf?lang=en', 'montrealsabre2020'],
-  # ['https://fie.org/competition/2019/152/entry/pdf?lang=en', 'cairosabre2019'],
-  # ['https://fie.org/competition/2019/158/entry/pdf?lang=en', 'cairosabre2019'],
-  # ['https://fie.org/competition/2019/165/entry/pdf?lang=en', 'seoulsabre2019'],
-  # ['https://fie.org/competition/2019/468/entry/pdf?lang=en', 'seoulsabre2019'],
-  # ['https://fie.org/competition/2018/152/entry/pdf?lang=en', 'cancunsabre2017'],
-  # ['https://fie.org/competition/2018/158/entry/pdf?lang=en', 'cancunsabre2017'],
-  ['https://fie.org/competition/2020/134/entry/pdf?lang=en', 'turinfoil2020'],
-  ['https://fie.org/competition/2020/458/entry/pdf?lang=en', 'turinfoil2020']
-]
+url_ids = {'budapest2020': ['https://fie.org/competition/2020/112/entry/pdf?lang=en',
+                            'https://fie.org/competition/2020/449/entry/pdf?lang=en'],
+           'barcelona2020': ['https://fie.org/competition/2020/85/entry/pdf?lang=en'],
+           'qatar2020': ['https://fie.org/competition/2020/387/entry/pdf?lang=en',
+                         'https://fie.org/competition/2020/79/entry/pdf?lang=en'],
+           'tallinn2019': ['https://fie.org/competition/2020/80/entry/pdf?lang=en'],
+           'berne2019': ['https://fie.org/competition/2020/385/entry/pdf?lang=en'],
+           'budapestwch2019': ['https://fie.org/competition/2019/242/entry/pdf?lang=en',
+                               'https://fie.org/competition/2019/241/entry/pdf?lang=en'],
+           'dubai2019': ['https://fie.org/competition/2019/451/entry/pdf?lang=en'],
+           'cali2019': ['https://fie.org/competition/2019/95/entry/pdf?lang=en',
+                        'https://fie.org/competition/2019/113/entry/pdf?lang=en'] ,
+           'barcelona2019': ['https://fie.org/competition/2019/85/entry/pdf?lang=en'],
+           'bern2018': ['https://fie.org/competition/2019/385/entry/pdf?lang=en'],
+           'heidenheim2018': ['https://fie.org/competition/2018/98/entry/pdf?lang=en'],
+           'dubai2018': ['https://fie.org/competition/2018/451/entry/pdf?lang=en'],
+           'wuxi2018': ['https://fie.org/competition/2018/242/entry/pdf?lang=en',
+                        'https://fie.org/competition/2018/241/entry/pdf?lang=en'],
+           'barcelona2018': ['https://fie.org/competition/2018/92/entry/pdf?lang=en'],
+           'cali2018': ['https://fie.org/competition/2018/95/entry/pdf?lang=en',
+                        'https://fie.org/competition/2018/113/entry/pdf?lang=en'],
+           'berne2017': ['https://fie.org/competition/2018/385/entry/pdf?lang=en'],
+           'doha2017': ['https://fie.org/competition/2018/79/entry/pdf?lang=en',
+                        'https://fie.org/competition/2018/387/entry/pdf?lang=en'],
+           'heidenheim2017': ['https://fie.org/competition/2017/98/entry/pdf?lang=en'],
+           'barcelona2016': ['https://fie.org/competition/2017/85/entry/pdf?lang=en'],
+           'heidenheim2019': ['https://fie.org/competition/2019/108/entry/pdf?lang=en'],
+           'doha2019': ['https://fie.org/competition/2019/387/entry/pdf?lang=en',
+                        'https://fie.org/competition/2019/79/entry/pdf?lang=en'],
+           'budapest2019': ['https://fie.org/competition/2019/112/entry/pdf?lang=en',
+                            'https://fie.org/competition/2019/449/entry/pdf?lang=en'],
+           'montrealsabre2020': ['https://fie.org/competition/2020/152/entry/pdf?lang=en',
+                                 'https://fie.org/competition/2020/158/entry/pdf?lang=en'],
+           'cairosabre2019': ['https://fie.org/competition/2019/152/entry/pdf?lang=en',
+                              'https://fie.org/competition/2019/158/entry/pdf?lang=en'],
+           'seoulsabre2019': ['https://fie.org/competition/2019/165/entry/pdf?lang=en',
+                              'https://fie.org/competition/2019/468/entry/pdf?lang=en'],
+           'cancunsabre2017': ['https://fie.org/competition/2018/152/entry/pdf?lang=en',
+                               'https://fie.org/competition/2018/158/entry/pdf?lang=en'],
+           'turinfoil2020': ['https://fie.org/competition/2020/134/entry/pdf?lang=en',
+                             'https://fie.org/competition/2020/458/entry/pdf?lang=en'],
+           'moscowsabre2012': ['https://fie.org/competition/2012/156/entry/pdf?lang=en',
+                               'https://fie.org/competition/2012/468/entry/pdf?lang=en']
+}
 
-
-url_ids.each do |url, tournament_key|
-  entries = download_entries url
-  licenses = entries.map{|entry| entry[4]}
-  Sequel.connect connstr do |db|
-    require './models/init'
-    tournament = Tournament.select(:id, :weapon).first(tournament_id: tournament_key)
-    raise "Error: No tournament found" unless tournament
-    entries.each do |entry|
-      if Fencer.where(fie_id: entry[4]).count == 0
-        Fencer.create(
-          last_name: entry[0].split[0],
-          first_name: entry[0].split[1],
-          nationality: entry[1][0..2],
-          birthday: entry[6],
-          weapon: tournament.weapon,
-          fie_id: entry[4]
-        )
-      end
-    end
-    select = Fencer.select(:id, tournament.id).where(fie_id: licenses)
-    puts db[:fencers_tournaments].insert([:fencers_id, :tournaments_id], select)
+Sequel.connect connstr do |db|
+  require './models/init'
+  url_ids.reject! do |tournament_key, urls|
+    tournament = Tournament.select(:id, :weapon).first(tournament_id: tournament_key.to_s)
+    raise "Error: No tournament found for id #{tournament_key}" unless tournament
+    old_entries = db[:fencers_tournaments].where(tournaments_id: tournament.id).count
+    old_entries > 0
   end
 end
+url_ids.each do |tournament_key, urls|
+  puts "adding bouts from #{tournament_key}"
+  urls.each do |url|
+    entries = download_entries url
+    licenses = entries.map{|entry| entry[4]}
+    Sequel.connect connstr do |db|
+      require './models/init'
+      tournament = Tournament.select(:id, :weapon).first(tournament_id: tournament_key.to_s)
+      db.transaction do
+        entries.each do |entry|
+          if Fencer.where(fie_id: entry[4]).count == 0
+            Fencer.create(
+              last_name: entry[0].split[0],
+              first_name: entry[0].split[1],
+              nationality: entry[1][0..2],
+              birthday: entry[6],
+              weapon: tournament.weapon,
+              fie_id: entry[4]
+            )
+          end
+        end
+        select = Fencer.select(:id, tournament.id).where(fie_id: licenses)
+        puts db[:fencers_tournaments].insert([:fencers_id, :tournaments_id], select)
+      end
+    end
+  end
+end
+
