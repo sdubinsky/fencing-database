@@ -31,6 +31,12 @@
 * stats page improvements [1/1]
 - [X] filter stats by weapon
 - [ ] heatmap doesn't filter by weapon
+* export reel update [0/3]
+- [ ] add "can have us upload it for you" to /reels/help
+- [ ] add "upload reel for me" button
+- [ ] add endpoint for `/reels/upload`
+* reel creation improvements [/]
+- [ ] sort clips by tournament, then bout
 * add accounts [5/5]
 - [X] accounts table/model
 - [X] create new account
