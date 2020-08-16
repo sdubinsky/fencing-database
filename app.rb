@@ -107,7 +107,7 @@ get '/clip/?' do
   erb :clip
 end
 
-get '/submit/?' do
+post '/clip/submit/?' do
   response = FormResponse.create(
     initiated: params['initiated-action'],
     strip_location: params['strip-location'],
