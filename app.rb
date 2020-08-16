@@ -344,9 +344,9 @@ get '/api/tournaments/?:name?' do
   end
 end
 
-get '/api/fencers/?:id?' do
-  if params["id"]
-    fencer = Fencer[params["id"].to_i]
+get '/api/fencers/?:fie_id?' do
+  if params["fie_id"]
+    fencer = Fencer.first(fie_id: params['fie_id'])
     return fencer.to_json if fencer
     status 404
     return "fencer not found"
