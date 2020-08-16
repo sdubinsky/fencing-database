@@ -91,6 +91,26 @@ class Gfycat < Sequel::Model
     "<a href=\"/fencers/#{left_fencer.fie_id}\" >#{left_fencer.name}</a> vs. <a href=\"/fencers/#{right_fencer.fie_id}\" >#{right_fencer.name}</a>"
   end
 
+  def to_dict
+    left_fencer = Fencer[left_fencer_id]
+    right_fencer = Fencer[right_fencer_id]
+    {
+      gfycat_gfy_id: gfycat_gfy_id,
+      tournament_id: tournament_id,
+      weapon: weapon,
+      gender: gender,
+      fotl_name: left_fencer.name,
+      fotr_name: right_fencer.name,
+      left_score: left_score,
+      right_score: right_score,
+      touch: touch
+    }
+  end
+
+  def to_json
+    to_dict.to_json
+  end
+
   def normalize_names
     begin
       if CanonicalName.where(gfy_name: fotr_name).count == 1
