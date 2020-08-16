@@ -89,7 +89,7 @@ Sequel.connect connstr do |db|
   end
 end
 url_ids.each do |tournament_key, urls|
-  puts "adding bouts from #{tournament_key}"
+  puts "adding entries from #{tournament_key}"
   urls.each do |url|
     entries = download_entries url
     licenses = entries.map{|entry| entry[4]}
