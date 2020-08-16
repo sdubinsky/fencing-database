@@ -50,12 +50,25 @@ get '/' do
   end
 end
 
-get '/search/?' do 
+get '/search/?' do
   @tournaments = Tournament.order_by(:tournament_name)
-  @gfycats = []
-  @fencers = []
-  @partial_title = "fencers"
-  erb :search  
+  if params
+    @fencers = []
+    params['page'] = 1 unless params['page']
+    @gfycats = Helpers.get_touches_query_gfycats(DB, params).map{|gfy| gfy[:gfycat_gfy_id]}
+    @get_string = params.map do |k, v|
+      if k == 'page'
+        next
+      end
+      "#{k}=#{v}"
+    end.compact.join "&"
+    erb :search
+  else 
+    @gfycats = []
+    @fencers = []
+    @partial_title = "fencers"
+    erb :search
+  end
 end
 
 post '/search' do

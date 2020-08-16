@@ -13,10 +13,10 @@
         <% if params['page'] %>
             <div class="touches-pagination">
                 <% if params['page'].to_i > 1 %>
-                    <a href="/?<%=@get_string%>&page=<%=params['page'].to_i - 1%>"><button class="btn btn-lg paginate-btn paginate-prev">Prev</button></a>
+                    <a href="/search?<%=@get_string%>&page=<%=params['page'].to_i - 1%>"><button class="btn btn-lg paginate-btn paginate-prev">Prev</button></a>
                 <% end %>
                 <% if @gfycats.length >= 10 %>
-                    <a href="/?<%=@get_string%>&page=<%=params['page'].to_i + 1%>"><button class="btn btn-lg paginate-btn paginate-next">Next</button></a>
+                    <a href="/search?<%=@get_string%>&page=<%=params['page'].to_i + 1%>"><button class="btn btn-lg paginate-btn paginate-next">Next</button></a>
                 <% end %>
             </div>
         <% end %>
