@@ -371,7 +371,7 @@ end
 get '/api/gfycats/?:gfycat_gfy_id?' do
   if params["gfycat_gfy_id"]
     gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
-    return gfy.to_json if gfy
+    return gfy.to_json if gfy and gfy.valid
     status 404
     return "gfycat not found"
   end
