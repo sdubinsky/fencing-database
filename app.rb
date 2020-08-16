@@ -226,6 +226,7 @@ end
 
 post '/reels/create' do
   login_check
+  params['page'] = -1
   gfycats = Helpers.get_touches_query_gfycats DB, params
   reel = HighlightReel.create(
     author: params['author'],
