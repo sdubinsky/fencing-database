@@ -358,15 +358,11 @@ get '/api/tournaments/?:name?' do
   end
 end
 
-get '/api/fencers/?:fie_id?' do
-  if params["fie_id"]
-    fencer = Fencer.first(fie_id: params['fie_id'])
-    return fencer.to_json if fencer
-    status 404
-    return "fencer not found"
-  else
-    Fencer.json
-  end
+get '/api/fencers/?:fie_id' do
+  fencer = Fencer.first(fie_id: params['fie_id'])
+  return fencer.to_json if fencer
+  status 404
+  return "fencer not found"
 end
 
 get '/api/gfycats/?:gfycat_gfy_id?/?' do
