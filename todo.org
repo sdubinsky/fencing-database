@@ -47,3 +47,6 @@
 - [X] login page
 - [X] associate reels with accounts
 - [X] associate form responses with accounts
+* help additions [0/2]
+- [ ] API documentation
+- [ ] "upload it for me" explanation

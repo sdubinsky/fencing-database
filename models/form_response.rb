@@ -2,6 +2,68 @@ require 'pry'
 class FormResponse < Sequel::Model
   many_to_one :gfycat
   many_to_one :user
+
+  def self.questions weapon
+    questions = [
+      {
+        type: "select",
+        question: "Where was the hit fencer standing?",
+        note: "Use their rear foot to judge. One foot off the back line is still in the warning strip.",
+        options: [
+          {
+            value: "fotl_warning_box",
+            display: "FOTL warning box"
+          },
+          {
+            value: "fotl_half",
+            display: "FOTL half"
+          },
+          {
+            value: "middle",
+            display: "middle"
+          },
+          {
+            value: "fotr_half",
+            display: "FOTR half"
+          },
+          {
+            value: "fotr_warning_box",
+            display: "FOTR warning box"
+          }
+        ]
+      },
+      {
+        type: "select",
+        question: "Who initiated the action?",
+        options: [
+          {value: "FOTL", display: "FOTL"},
+          {value: "FOTR", display: "FOTR"},
+          {value: "neither", display: "Neither"}
+        ]
+      }
+    ]
+    if weapon == 'epee' or weapon == 'sabre'
+      questions += [
+        {
+          type: "select",
+          question: "Where was the hit?",
+          note: "If both are hit, respond for the fencer who didn't initiate the action.",
+          options: [
+            {value: "hand", display: "Hand"},
+            {value: "front_arm", display: "Front arm"},
+            {value: "torso", display: "Torso"},
+            {value: "head", display: "Head"},
+            {value: "front_leg", display: "Front leg"},
+            {value: "foot", display: "Foot"},
+            {value: "back_arm", display: "Back arm"},
+            {value: "back_leg", display: "Back leg"}
+          ]
+        }
+      ]
+    end
+    questions
+  end
+  
   def self.total filters = {}
     query = build_query filters
     query.count 

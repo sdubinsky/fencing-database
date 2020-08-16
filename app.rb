@@ -5,6 +5,7 @@ require 'json'
 require 'excon'
 require 'logger'
 require 'bcrypt'
+require 'securerandom'
 
 enable :sessions
 
@@ -368,11 +369,40 @@ get '/api/fencers/?:fie_id?' do
   end
 end
 
-get '/api/gfycats/?:gfycat_gfy_id?' do
+get '/api/gfycats/?:gfycat_gfy_id?/?' do
   if params["gfycat_gfy_id"]
     gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
     return gfy.to_json if gfy and gfy.valid
     status 404
     return "gfycat not found"
   end
+end
+
+get '/api/clip/questions/:weapon?/?' do
+  unless params['weapon']
+    status 400
+    {error_message: "Error: Please specify a weapon"}.to_json
+  else
+    FormResponse.questions(params['weapon']).to_json
+  end
+end
+
+post '/api/clip/submit/?' do
+  #To generate an API key:
+  # key = SecureRandom.base64(16) # send this to the user
+  # key_hash = BCrypt::Password.new(user.password_hash)
+  api_key = env['HTTP_X_AUTHENTICATION_HEADER']
+  body = JSON.parse request.body.read
+  
+  user = api_key.user
+  response = FormResponse.create(
+    initiated: body['initiated-action'],
+    strip_location: body['strip-location'],
+    body_location: body['score-body-select'],
+    stats_id: body['gfycat-id'],
+    created_date: Time.now.to_i,
+    user_id: user.id
+  )
+
+  logger.info("new submission: #{response.to_s}")
 end
