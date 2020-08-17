@@ -68,10 +68,6 @@ get '/search/?' do
   end
 end
 
-get '/help' do
-  erb :help
-end
-
 post '/search' do
   @tournaments = Tournament.order_by(:tournament_name)
   if params['submit-search'] == 'Search Fencers'
@@ -332,6 +328,14 @@ post '/reels/submit/?' do
   @clip.save
 end
 
+get '/reels/help/?' do
+  erb :reel_help
+end
+
+get '/docs/?' do
+  erb :docs
+end
+
 get '/api/bouts/?:id_number?' do
   if params["id_number"]
     bout = Bout[params["id_number"].to_i]
@@ -361,7 +365,7 @@ get '/api/fencers/?:fie_id' do
   return "fencer not found"
 end
 
-get '/api/gfycats/?:gfycat_gfy_id?/?' do
+get '/api/clips/?:gfycat_gfy_id?/?' do
   if params["gfycat_gfy_id"]
     gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
     return gfy.to_json if gfy and gfy.valid
@@ -370,7 +374,7 @@ get '/api/gfycats/?:gfycat_gfy_id?/?' do
   end
 end
 
-get '/api/clip/questions/:weapon?/?' do
+get '/api/clips/questions/:weapon?/?' do
   unless params['weapon']
     status 400
     {error_message: "Error: Please specify a weapon"}.to_json
@@ -379,21 +383,25 @@ get '/api/clip/questions/:weapon?/?' do
   end
 end
 
-post '/api/clip/submit/?' do
+post '/api/clips/submit/?' do
   #To generate an API key:
   # key = SecureRandom.base64(16) # send this to the user
   # key_hash = BCrypt::Password.new(user.password_hash)
   api_key = env['HTTP_X_AUTHENTICATION_HEADER']
   body = JSON.parse request.body.read
   
-  user = api_key.user
+#  user = api_key.user
+  keys = ['initiated-action', 'strip-location', 'score-body-select', 'gfycat-id']
+  keys.each do |key|
+    
+  end
   response = FormResponse.create(
     initiated: body['initiated-action'],
     strip_location: body['strip-location'],
     body_location: body['score-body-select'],
     stats_id: body['gfycat-id'],
     created_date: Time.now.to_i,
-    user_id: user.id
+ #   user_id: user.id
   )
 
   logger.info("new submission: #{response.to_s}")

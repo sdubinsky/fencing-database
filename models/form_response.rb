@@ -7,6 +7,7 @@ class FormResponse < Sequel::Model
     questions = [
       {
         type: "select",
+        id: 'strip-location',
         question: "Where was the hit fencer standing?",
         note: "Use their rear foot to judge. One foot off the back line is still in the warning strip.",
         options: [
@@ -34,6 +35,7 @@ class FormResponse < Sequel::Model
       },
       {
         type: "select",
+        id: 'initiated-action',
         question: "Who initiated the action?",
         options: [
           {value: "FOTL", display: "FOTL"},
@@ -46,6 +48,7 @@ class FormResponse < Sequel::Model
       questions += [
         {
           type: "select",
+          id: 'score-body-select',
           question: "Where was the hit?",
           note: "If both are hit, respond for the fencer who didn't initiate the action.",
           options: [

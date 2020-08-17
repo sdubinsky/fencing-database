@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<%=url("css/help.css")%>" >
 <div class="help" >
     <div class="api-help">
-        <div class="help-subtitle">API Documentation</div>
+        <div class="help-title">API Documentation</div>
         <div class="help-step">API Basics</div>
         <p>The API allows you to access fencer info, gfycat info, and derived info about tournaments and bouts.  It is still a work in progress, so let me know if you want any other data added.</p>
         <div class="help-step">Fencers</div>
@@ -13,11 +13,10 @@
         <div class="help-step">Tournaments</div>
         <p><code>GET /api/tournaments/:tournament_id?</code></p>
         <p>Get info on a tournament in the DB.  If you omit the ID, it'll give you all the tournaments in the DB.</p>
-        <div class="help-step">Gfycats</div>
-        <p><code>GET /api/gfycats/:gfycat_gfy_id?</code></p>
-        <p>Get details of a gfycat.  If you don't specify a gfycat gfy id, it'll give you info on every gfycat in the DB.</p>
         <div class="help-step">Clips</div>
-        <p><code>GET /api/clip/questions/:weapon?</code></p>
+        <p><code>GET /api/clips/:gfycat_gfy_id?</code></p>
+        <p>Get details of a gfycat.  If you don't specify a gfycat gfy id, it'll give you info on every gfycat in the DB.</p>
+        <p><code>GET /api/clips/questions/:weapon?</code></p>
         <p>Get the questions we ask for a given weapon.  The response will be a list of questions.  Here's the format of a question:
             <ul>
                 <li><code>type</code>: The type of question.  Right now they're all selects.</li>
@@ -27,7 +26,8 @@
                 <li><code>options</code>: The list of possible responses.  Each contains a value that should be returned when you submit, and a display name for the answer.</li>
             </ul>
         </p>
-        <p><code>POST /api/clip/submit</code></p>
-        <p>Submit a response you collected on your own site.  The format should be a dict, where the key is the id of the question and the value is the value of the option selected.  Please also include the gfycat gfy id under the key 'gfycat-gfy-id'.
+        <p><code>POST /api/clips/submit</code></p>
+        <p>Submit a response you collected on your own site.  The format should be a dict, where the key is the id of the question and the value is the value of the option selected.  Please also include the gfycat gfy id under the key 'gfycat-gfy-id'.</p>
+        <p>An API key is required.  Please send it as the X-Authentication-Header.  If you don't have one, contact me - developers@fencingdatabase.com.</p>
     </div>
 </div>
