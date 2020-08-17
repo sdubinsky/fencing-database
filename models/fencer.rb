@@ -33,15 +33,16 @@ class Fencer < Sequel::Model
 
   #In case of duplicate names, list all possibilities
   def self.find_name_possibilities name, tournament_id
+    levenshtein_threshold = 3
     query = Fencer.where(id: db[:fencers_tournaments].select(:fencers_id).where(tournaments_id: tournament_id)).where(
                            Sequel.join([:last_name, :first_name], ' ').ilike(name + "%") |
                            Sequel.join([:last_name, :first_name]).ilike(name.gsub(" ", "") + "%") |
                            Sequel.join([:first_name, :last_name], ' ').ilike(name) |
                            Sequel.join([:first_name, :last_name]).ilike(name.gsub(" ", "") + "%") |
-                           (Sequel.function(:levenshtein, name.gsub(" ", ""), Sequel.join([:first_name, :last_name])) < 3) |
-                           (Sequel.function(:levenshtein, name.gsub(" ", ""), Sequel.join([:last_name, :first_name])) < 3) |
-                           (Sequel.function(:levenshtein, name, :last_name) < 3)
-                        )
+                           (Sequel.function(:levenshtein, name.downcase.gsub(" ", ""), Sequel.function(:lower, Sequel.join([:first_name, :last_name]))) < levenshtein_threshold) |
+                           (Sequel.function(:levenshtein, name.downcase.gsub(" ", ""), Sequel.function(:lower, Sequel.join([:last_name, :first_name]))) < levenshtein_threshold) |
+                           (Sequel.function(:levenshtein, name.downcase, Sequel.function(:lower, :last_name)) < levenshtein_threshold)
+    )
     if query.count == 0
       query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[0...-1].gsub(" ", "") + "%"))
       query = query.or(Sequel.join([:last_name, :first_name]).ilike(name[1..-1].gsub(" ", "") + "%"))
