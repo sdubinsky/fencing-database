@@ -68,6 +68,10 @@ get '/search/?' do
   end
 end
 
+get '/help' do
+  erb :help
+end
+
 post '/search' do
   @tournaments = Tournament.order_by(:tournament_name)
   if params['submit-search'] == 'Search Fencers'
@@ -261,10 +265,6 @@ post '/reels/create' do
     end
   end
   redirect "/reels/#{reel.id}"
-end
-
-get '/reels/help' do
-  erb :reel_help
 end
 
 get '/reels/:id/?' do
