@@ -138,8 +138,8 @@ class Gfycat < Sequel::Model
           left_fencer_id: left_name.first.id
         )
       end
-    rescue
-      "problem with gfy: #{gfycat_gfy_id}"
+    rescue => e
+      puts "problem with gfy: #{gfycat_gfy_id}"
     end
   end
 end
