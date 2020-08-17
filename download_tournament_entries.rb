@@ -105,7 +105,6 @@ url_ids.each do |tournament_key, urls|
               nationality: entry[1][0..2],
               birthday: entry[6],
               weapon: tournament.weapon,
-              gender: tournament.gender,
               fie_id: entry[4]
             )
           end
