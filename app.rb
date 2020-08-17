@@ -44,11 +44,7 @@ TODO:
 '''
 
 get '/' do
-  if session[:user_id]
-    redirect("/reels")
-  else
-    redirect("/search")
-  end
+  redirect '/stats'
 end
 
 get '/search/?' do
