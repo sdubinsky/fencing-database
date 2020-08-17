@@ -37,6 +37,10 @@ namespace :db do
       end
       Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'epee').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'epee').select(:right_fencer_id)).update(weapon: 'epee')
       Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'sabre').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'sabre').select(:right_fencer_id)).update(weapon: 'sabre')
+      Fencer.where(weapon: nil).where(id: Gfycat.where(weapon: 'foil').select(:left_fencer_id)).or(id: Gfycat.where(weapon: 'foil').select(:right_fencer_id)).update(weapon: 'foil')
+
+      Fencer.where(gender: nil).where(id: Gfycat.where(gender: 'male').select(:left_fencer_id)).or(id: Gfycat.where(gender: 'male').select(:right_fencer_id)).update(gender: 'male')
+      Fencer.where(gender: nil).where(id: Gfycat.where(gender: 'female').select(:left_fencer_id)).or(id: Gfycat.where(gender: 'female').select(:right_fencer_id)).update(gender: 'female')
     end
   end
 
