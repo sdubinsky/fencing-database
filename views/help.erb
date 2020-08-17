@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="<%=url("css/reel_help.css")%>" >
+<div class="help" >
+    <div class="reel-help">
+        <div class="help-subtitle">Making A Highlight Reel</div>
+        <div class="help-step">Step 1: Filtering</div>
+        <p>The first step to making a reel is to choose your subject.  There are a number of filtering options, and you can use any or all of them.  The available clips will fit all filter options.  So if you put in Jung Jinsun's name, and select the 2018/2019 season, you'll get all his touches from that year.</p>
+        <div class="help-step">Step 2: What's a Round?</div>
+        <p>The system is designed to make decisions as easy as possible.  The process of chosing clips for a video is broken up into multiple rounds, where each round contains the clips you approved in the previous round.  What this means is that if you're not sure whether you want a clip in the video, you can approve it and reconsider in the next round.</p>
+        <div class="help-step">Step 3: Choosing Clips</div>
+        <p>There are two ways to choose a clip.  You can use 'n/y' or the left/right arrows.  If you really can't decide, you can also push the down arrow to skip it and look at it again later in the round.</p>
+        <div class="help-step">Step 4: Exporting</div>
+        <p>The Fencing Database does not currently support actually creating your reel for you.  Instead, a command-line wget script will be generated for you, and you can use your favorite video editing program to put them together and add any effects you want.</p>
+    </div>
+    <div class="api-help">
+        <div class="help-subtitle">API Documentation</div>
+        <div class="help-step">API Basics</div>
+        <p>The API allows you to access fencer info, gfycat info, and derived info about tournaments and bouts.  It is still a work in progress, so let me know if you want any other data added.
+        <div class="help-step">Fencers</div>
+        <p><code>/api/fencers/:fie_id</code></p>
+        <p>Get fencer info by FIE ID.</p>
+        <p><code>/api/bouts</code></p>
+        <p>Get info on all the bouts in the DB.</p>
+</div>
