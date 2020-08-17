@@ -1,7 +1,9 @@
-* DB Improvements [2/6]
+* DB Improvements [2/7]
 - [ ] retest each clip for fencer names and scores
 - [ ] sanitize db for duplicate names
 - [ ] sanitize db for names that should be separated
+- [ ] sanitize db for extra bouts
+- [ ] retest gfycats for 
 - [X] add tournaments table
 - [X] add bouts table
   - [X] each tournament has many bouts
@@ -50,3 +52,16 @@
 * help additions [0/2]
 - [ ] API documentation
 - [ ] "upload it for me" explanation
+* Notes
+** To fix the bout/fencer info:
+*** update gfycats set left_fencer_id = NULL, right_fencer_id = NULL, bout_id = NULL;
+*** delete from bouts;
+*** delete from fencers;
+*** delete from fencers_tournaments;
+*** alter sequence fencers_tournaments_id_seq restart with 1;
+*** alter sequence fencers_id_seq restart with 1;
+*** alter sequence bout_id_seq restart with 1;
+*** ruby download_tournament_entries.rb
+*** rake db:normalize_names
+*** rake db:add_bouts
+*** DO NOT delete the gfycats table.  There's too much info there that can't be replicated anymore.

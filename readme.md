@@ -3,6 +3,7 @@
 ## Adding new GFYs
 
 1. Add the new tournament to the database.
+2. Download the entries via `ruby download_tournament_entries.rb`
 2. Run `ruby ./update_gfycat_list.rb` and pipe it to the right psql.
 3. run the rake tasks `db:normalize_names` and `db:add_bouts`.
 
@@ -10,7 +11,7 @@ This section is also a rake task named `db:update_gfycats` but that probably won
 
 ## To update the heroku db
 
-1. dump the db by running `pg_dump --inserts --no-owner fencingstats > dump.dump`
+1. dump the db by running `pg_dump -c --no-owner fencingstats > dump.dump`
 2. upload it to heroku by running `heroku pg:psql < dump.dump`
 
 ## To dump the heroku db
