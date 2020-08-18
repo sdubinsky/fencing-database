@@ -5,8 +5,12 @@ class Gfycat < Sequel::Model
   one_to_many :form_responses
   many_to_one :bout
   many_to_one :tournament, key: :tournament_id, primary_key: :tournament_id
-  def self.random_gfycat_id
-    gfycat = Gfycat.where(Sequel.~(Sequel.or(left_fencer_id: nil, right_fencer_id: nil))).all.sample
+  def self.random_gfycat_id weapon = nil
+    gfycat = Gfycat.where(Sequel.~(Sequel.or(left_fencer_id: nil, right_fencer_id: nil)))
+    if weapon
+      gfycat = gfycat.where(weapon: weapon)      
+    end
+    gfycat = gfycat.order_by(Sequel.function(:random)).first
     raise RuntimeError.new("no gfycats found") if not gfycat
     gfycat
   end

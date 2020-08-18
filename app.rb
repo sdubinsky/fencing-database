@@ -375,6 +375,11 @@ get '/api/clips/questions/?:weapon?/?' do
   end
 end
 
+get '/api/clips/random/?:weapon?/?' do
+  gfy = Gfycat.random_gfycat_id params['weapon']
+  return gfy.to_json
+end
+
 get '/api/clips/?:gfycat_gfy_id?/?' do
   if params["gfycat_gfy_id"]
     gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
