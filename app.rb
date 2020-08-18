@@ -6,6 +6,7 @@ require 'excon'
 require 'logger'
 require 'bcrypt'
 require 'securerandom'
+require 'digest/sha2'
 
 enable :sessions
 
@@ -386,22 +387,31 @@ end
 post '/api/clips/submit/?' do
   #To generate an API key:
   # key = SecureRandom.base64(16) # send this to the user
-  # key_hash = BCrypt::Password.new(user.password_hash)
+  # key_hash = Digest::SHA2.new << user.password_hash
   api_key = env['HTTP_X_AUTHENTICATION_HEADER']
+  key_hash = Digest::SHA2.new << api_key
+  api_key = ApiKey.first(key: key_hash.to_s)
   body = JSON.parse request.body.read
   
-#  user = api_key.user
-  keys = ['initiated-action', 'strip-location', 'score-body-select', 'gfycat-id']
-  keys.each do |key|
-    
+  if not api_key
+    status 401
+    return    
   end
+
+  user = api_key.user
+
+  if not body['gfycat-id']
+    status 400
+    return {"error_message" => "Error: Missing key #{key}"}.to_json
+  end
+  
   response = FormResponse.create(
     initiated: body['initiated-action'],
     strip_location: body['strip-location'],
     body_location: body['score-body-select'],
     stats_id: body['gfycat-id'],
     created_date: Time.now.to_i,
- #   user_id: user.id
+    user_id: user.id
   )
 
   logger.info("new submission: #{response.to_s}")
