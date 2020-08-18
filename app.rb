@@ -366,21 +366,21 @@ get '/api/fencers/?:fie_id' do
   return "fencer not found"
 end
 
+get '/api/clips/questions/?:weapon?/?' do
+  unless params['weapon']
+    status 400
+    {error_message: "Error: Please specify a weapon"}.to_json
+  else
+    FormResponse.questions(params['weapon']).to_json
+  end
+end
+
 get '/api/clips/?:gfycat_gfy_id?/?' do
   if params["gfycat_gfy_id"]
     gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
     return gfy.to_json if gfy and gfy.valid
     status 404
     return "gfycat not found"
-  end
-end
-
-get '/api/clips/questions/:weapon?/?' do
-  unless params['weapon']
-    status 400
-    {error_message: "Error: Please specify a weapon"}.to_json
-  else
-    FormResponse.questions(params['weapon']).to_json
   end
 end
 

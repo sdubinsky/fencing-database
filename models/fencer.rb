@@ -1,5 +1,6 @@
 require 'pry'
 require 'json'
+
 class Fencer < Sequel::Model
   many_to_many :tournaments
   def bouts
@@ -75,15 +76,20 @@ class Fencer < Sequel::Model
     query
   end
 
+  def opponents
+    bouts.select(:left_fencer_id).union(bouts.select(:right_fencer_id)).join(:fencers, id: :left_fencer_id).select(:fie_id).map{|a| a[:fie_id]}
+  end
+
   def as_dict
     {
-      id: id,
+      fie_id: fie_id,
       last_name: last_name,
       first_name: first_name,
       nationality: nationality,
       gender: gender,
       birthdate: birthday,
       weapon: weapon,
+      opponents: opponents,
       bouts: bouts.map{|a| a.id},
       gfycats: gfycats.map{|a| a.gfycat_gfy_id}
     }
