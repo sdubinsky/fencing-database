@@ -28,6 +28,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     method_source (1.0.0)
+    minitest (5.14.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     net-scp (3.0.0)
@@ -43,6 +44,8 @@ GEM
     rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
     rake (13.0.1)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
@@ -56,6 +59,7 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.8.1)
       tilt (~> 2.0)
+    sqlite3 (1.4.2)
     sshkit (1.21.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -75,13 +79,16 @@ DEPENDENCIES
   excon (~> 0.59)
   god (~> 0.13)
   levenshtein (~> 0.2.2)
+  minitest
   pg (~> 0.20)
   pry
   pry-byebug
+  rack-test
   rake (~> 13.0)
   rerun
   sequel (~> 4.47)
   sinatra (~> 2.0)
+  sqlite3
   thin (~> 1.7)
 
 RUBY VERSION

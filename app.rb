@@ -380,7 +380,7 @@ get '/api/clips/random/?:weapon?/?' do
   return gfy.to_json
 end
 
-get '/api/clips/?:gfycat_gfy_id?/?' do
+get '/api/clips/:gfycat_gfy_id/?' do
   if params["gfycat_gfy_id"]
     gfy = Gfycat.first(gfycat_gfy_id: params["gfycat_gfy_id"])
     return gfy.to_json if gfy and gfy.valid

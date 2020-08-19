@@ -177,3 +177,9 @@ namespace :db do
   desc "update the gfycats, normalize the names, and add bouts"
   task :update_gfycats => [:update_gfycat_list, :normalize_names, :add_bouts]
 end
+
+Rake::TestTask.new(:test) do |t|
+  t.libs << "test"
+  t.test_files =FileList['test/test*.rb']
+  t.warning = false
+end

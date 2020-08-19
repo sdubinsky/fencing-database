@@ -4,6 +4,12 @@ group :development do
   gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler', '~> 1.2'
 end
+
+group :test do
+  gem 'minitest'
+  gem 'rack-test'
+  gem 'sqlite3'
+end
 gem 'rake', '~> 13.0'
 gem 'pry'
 gem 'sinatra', '~> 2.0'
