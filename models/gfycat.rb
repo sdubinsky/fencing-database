@@ -84,15 +84,24 @@ class Gfycat < Sequel::Model
   end
 
   def to_s
+    begin
     left_fencer = Fencer[left_fencer_id]
     right_fencer = Fencer[right_fencer_id]
     "#{left_fencer.name} vs. #{right_fencer.name}"
+    rescue NoMethodError
+      "#{fotl_name} vs. #{fotr_name}"
+    end
   end
 
   def to_s_links
+    normalize_names
+    begin 
     left_fencer = Fencer[left_fencer_id]
     right_fencer = Fencer[right_fencer_id]
     "<a href=\"/fencers/#{left_fencer.fie_id}\" >#{left_fencer.name}</a> vs. <a href=\"/fencers/#{right_fencer.fie_id}\" >#{right_fencer.name}</a>"
+    rescue NoMethodError
+      to_s
+    end
   end
 
   def to_dict
@@ -123,7 +132,6 @@ class Gfycat < Sequel::Model
         name = fotr_name
       end
       right_name = Fencer.find_name_possibilities(name, tournament.id)
-
       if right_name.count == 1
         update(
           right_fencer_id: right_name.first.id
@@ -143,6 +151,7 @@ class Gfycat < Sequel::Model
         )
       end
     rescue => e
+      binding.pry
       puts "problem with gfy: #{gfycat_gfy_id}"
     end
   end
