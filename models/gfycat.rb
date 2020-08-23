@@ -151,7 +151,6 @@ class Gfycat < Sequel::Model
         )
       end
     rescue => e
-      binding.pry
       puts "problem with gfy: #{gfycat_gfy_id}"
     end
   end
