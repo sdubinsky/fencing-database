@@ -14,6 +14,7 @@ class TestNormalizeNames < Minitest::Test
   end
 
   def test_last_name_first_initial
+    #there are multiple ibragimovs in the tournament, so this finds just kamil.
     DB.transaction(rollback: :always) do
       test_gfycat = Gfycat.new(
         gfycat_gfy_id: 'testgfy',

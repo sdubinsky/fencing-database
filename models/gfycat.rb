@@ -151,7 +151,7 @@ class Gfycat < Sequel::Model
         )
       end
     rescue => e
-      puts "problem with gfy: #{gfycat_gfy_id}"
+      puts "problem with gfy:#{gfycat_gfy_id}: #{e.message}"
     end
   end
 end
