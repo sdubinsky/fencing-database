@@ -18,6 +18,6 @@
             <div class="fencer-partial-detail <%= even %>"><%= fencer[:touches_scored] %></div>
             <div class="fencer-partial-detail <%= even %>"><%= fencer[:touches_received] %></div>
         <% end %>
-        <div class="fencer-partial-detail <%= even %>"><a href=" <%= fencer[:fie_id] %>">View Profile</a></div>
+        <div class="fencer-partial-detail <%= even %>"><a href="/fencers/<%= fencer[:fie_id] %>">View Profile</a></div>
     <% end %>
 </div>
