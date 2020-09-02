@@ -16,6 +16,8 @@ class TestNormalizeNames < Minitest::Test
   def test_find_name_possibilities
     names = Fencer.find_name_possibilities 'ibragimov k', 29
     assert_equal 1, names.all.length
-    
+
+    names = Fencer.find_name_possibilities 'kovalav n', 29
+    assert_equal 1, names.count
   end
 end
