@@ -21,9 +21,8 @@ This section is also a rake task named `db:update_gfycats` but that probably won
 3. load the data in the the local database: `pg_restore --verbose --clean --no-acl --no-owner -d fencingstats latest.dump`
 
 ## To add a new list of entries for a tournament:
-1. Make sure the `download_tournament_entries.rb` file is set up to take arguments instead of processing the list
-2. Run the command and pipe it to psql locally, to make sure it's accurate.
-3. Pipe it to heroku psql
+* locally: `ruby download_tournament_entries.rb`
+* on heroku: DATABASE_URL=`heroku config:get DATABASE_URL -a fencing-db` ruby download_tournament_entries.rb
 
 ## To update the gfycat list:
 1. run the `update_gfycat_list.rb` file and pipe it to `heroku psql`.
