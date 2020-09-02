@@ -78,7 +78,8 @@ url_ids = {'budapest2020': ['https://fie.org/competition/2020/112/entry/pdf?lang
            'moscowsabre2012': ['https://fie.org/competition/2012/156/entry/pdf?lang=en',
                                'https://fie.org/competition/2012/468/entry/pdf?lang=en'],
            'katowicefoil2019': ['https://fie.org/competition/2019/118/entry/pdf?lang=en'],
-           'kazanfoil2020': ['https://fie.org/competition/2020/129/entry/pdf?lang=en']
+           'kazanfoil2020': ['https://fie.org/competition/2020/129/entry/pdf?lang=en'],
+           'stpetersburgfoil2019': ['https://fie.org/competition/2019/147/entry/pdf?lang=en']
 }
 
 Sequel.connect connstr do |db|
@@ -111,7 +112,7 @@ url_ids.each do |tournament_key, urls|
             )
           end
           select = Fencer.select(:id, tournament.id).where(fie_id: licenses)
-          puts db[:fencers_tournaments].insert([:fencers_id, :tournaments_id], select)
+          db[:fencers_tournaments].insert([:fencers_id, :tournaments_id], select)
         end
 
       end
