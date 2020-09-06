@@ -44,6 +44,19 @@ TODO:
 2. Save that code along with the heidenheim code
 '''
 
+before do
+  body = request.body.read
+    View.create(
+    endpoint: env['REQUEST_PATH'],
+    http_method: env['REQUEST_METHOD'],
+    form_data: body.empty? ? params.to_json : body,
+    country_code: env['HTTP_CF_IPCOUNTRY'],
+    viewer_ip: env['HTTP_CF_CONNECTING_IP'],
+    created_at: Time.now.to_i
+  )
+  @request.body.rewind
+end
+
 get '/' do
   redirect '/stats'
 end
@@ -396,12 +409,13 @@ post '/api/clips/submit/?' do
   api_key = env['HTTP_X_AUTHENTICATION_HEADER']
   key_hash = Digest::SHA2.new << api_key
   api_key = ApiKey.first(key: key_hash.to_s)
-  body = JSON.parse request.body.read
   
   if not api_key
     status 401
     return    
   end
+  request.body.rewind
+  body = JSON.parse request.body.read
 
   user = api_key.user
 
