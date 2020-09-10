@@ -1,15 +1,19 @@
-* DB Improvements [2/7]
+* DB Improvements [3/8]
 - [ ] retest each clip for fencer names and scores
 - [ ] sanitize db for duplicate names
 - [ ] sanitize db for names that should be separated
-- [ ] sanitize db for extra bouts
+- [X] sanitize db for extra bouts
+- [ ] investigate every clip that throws an error on running normalize_names
 - [ ] retest gfycats for 
 - [X] add tournaments table
+- [ ] data cleaning queries
+  - [ ] `update gfycats set tournament_id='budapestwch2019', gender='female' where valid and left_fencer_id is NULL and fotl_name = 'NAVARRIA M';`
+  - [ ] `insert into canonical_names (gfy_name, canonical_name) values ('kovalav n', 'kovalev nikolai');`
 - [X] add bouts table
   - [X] each tournament has many bouts
   - [X] each bout has many touches
   - [X] columns: id, tournament_id, round, left_fencer_id, right_fencer_id
-* Pages To Add [1/2]
+* Pages To Add [1/3]
 - [X] filter touches [4/4]
   - [X] touches by fencer
   - [X] touches by location on body
@@ -18,6 +22,10 @@
 - [-] fencer-specific page
   - [X] touches scored
   - [ ] touches scored per year
+- [ ] my account page
+  - [ ] logout button
+  - [ ] count of clips reviewed
+  - [ ] badges?
 * search page improvement [2/5]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them

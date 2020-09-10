@@ -21,6 +21,8 @@ This section is also a rake task named `db:update_gfycats` but that probably won
 3. load the data in the the local database: `pg_restore --verbose --clean --no-acl --no-owner -d fencingstats latest.dump`
 
 ## To add a new list of entries for a tournament:
+* Find the tournament on the fie page, click "entries".
+* add the entries page(s) to the hash in `download_tournament_entries.rb'.`
 * locally: `ruby download_tournament_entries.rb`
 * on heroku: DATABASE_URL=`heroku config:get DATABASE_URL -a fencing-db` ruby download_tournament_entries.rb
 
