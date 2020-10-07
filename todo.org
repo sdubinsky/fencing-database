@@ -36,10 +36,11 @@
 - [ ] get updated list of fencers
 - [X] get list of fencers in a tournament
 - [X] deduplicate fencers in gfycats based on the list of fencers in the tournament, not in the whole list
-* gfy page improvements [2/3]
+* gfy page improvements [2/4]
 - [X] add "report this touch" for errors
 - [X] show derived data, like fencer names and touch scored
 - [ ] add "which fencer" question for double touches
+- [ ] path should be `/clip/gfy_id` not `/clip?gfycat_gfy_id=gfy_id`
 * stats page improvements [1/1]
 - [X] filter stats by weapon
 - [ ] heatmap doesn't filter by weapon
@@ -51,12 +52,13 @@
 - [ ] sort clips by tournament, then bout
 * fencer page improvements [/]
 - [ ] add link to FIE page
-* add accounts [5/5]
+* add accounts [5/6]
 - [X] accounts table/model
 - [X] create new account
 - [X] login page
 - [X] associate reels with accounts
 - [X] associate form responses with accounts
+- [ ] catch invalid hash error
 * help additions [0/2]
 - [ ] API documentation
 - [ ] "upload it for me" explanation
