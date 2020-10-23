@@ -35,7 +35,7 @@ enable :sessions
 
 configure :development do
   set :show_exceptions, true
-  set :session_secret, File.read("#{root}/session_secret.txt")
+  set :session_secret, File.read("session_secret.txt")
   logger.level = Logger::DEBUG
 end
 
@@ -103,7 +103,7 @@ post '/search' do
   erb :search
 end
 
-get '/clip/?' do 
+get '/clip/?:gfycat_gfy_id?/?' do 
   @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
@@ -111,7 +111,7 @@ get '/clip/?' do
       @gfycat = Gfycat.first(gfycat_gfy_id: params['gfycat_gfy_id'])
     else
       @gfycat = Gfycat.random_gfycat_id
-      redirect "/clip?gfycat_gfy_id=#{@gfycat.gfycat_gfy_id}"
+      redirect "/clip/#{@gfycat.gfycat_gfy_id}"
     end
     logger.info "Showing #{@gfycat.gfycat_gfy_id}"
   rescue RuntimeError
@@ -232,7 +232,14 @@ post '/check_login/?' do
   if not user
     redirect '/'
   end
-  password = BCrypt::Password.new(user.password_hash)
+  begin
+    password = BCrypt::Password.new user.password_hash
+  rescue BCrypt::Errors::InvalidHash
+    @error_message = "Error: Invalid password"
+    logger.info "failed to log in user #{params['username']}"
+    return erb :login
+  end
+
   if password == params['login-password']
     session[:user_id] = user.id
   end
