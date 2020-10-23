@@ -31,11 +31,13 @@ require './helpers'
 include Helpers
 logger = Logger.new($stdout)
 
+enable :sessions
+
 configure :development do
   set :show_exceptions, true
+  set :session_secret, File.read("#{root}/session_secret.txt")
   logger.level = Logger::DEBUG
 end
-enable :sessions
 
 set :root, File.dirname(__FILE__)
 '''
@@ -282,6 +284,11 @@ post '/reels/create' do
   redirect "/reels/#{reel.id}"
 end
 
+
+get '/reels/help/?' do
+  erb :reel_help
+end
+
 get '/reels/:id/?' do
   reel_owner_check params['id']
   @reel = HighlightReel[params['id']]
@@ -305,11 +312,18 @@ get '/reels/:id/judge/?' do
   erb :reel_clip
 end
 
-get '/reels/:id/export' do
+get '/reels/:id/export/?' do
   reel_owner_check params['id']
   @reel = HighlightReel[params['id']]
   @reel.update(completed: true)
   @reel.export_reel
+end
+
+get '/reels/:id/upload/?' do
+  reel_owner_check params['id']
+  @reel = HighlightReel[params['id']]
+  @reel.update(completed: true, ready_for_upload: true)
+  redirect '/reels'
 end
 
 get '/reels/:id/newround' do
@@ -345,10 +359,6 @@ post '/reels/submit/?' do
     @clip.selected = false
   end
   @clip.save
-end
-
-get '/reels/help/?' do
-  erb :reel_help
 end
 
 get '/docs/?' do
