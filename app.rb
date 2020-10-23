@@ -372,6 +372,10 @@ get '/docs/?' do
   erb :docs
 end
 
+get '/api/help/?' do
+  erb :help
+end
+
 get '/api/bouts/?:id_number?' do
   if params["id_number"]
     bout = Bout[params["id_number"].to_i]

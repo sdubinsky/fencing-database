@@ -25,12 +25,13 @@
   - [ ] logout button
   - [X] count of clips reviewed
   - [ ] badges?
-* search page improvement [2/5]
+* search page improvement [2/6]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
 - [X] add second search option "search fencers" and "search touches"
 - [ ] search form should remember answers
 - [X] "next page" button isn't working
+- [ ] add foil to the various dropdown lists
 * gfy upload improvements [3/3]
 - [X] get updated list of fencers
 - [X] get list of fencers in a tournament
@@ -58,9 +59,9 @@
 - [X] associate reels with accounts
 - [X] associate form responses with accounts
 - [X] catch invalid hash error
-* help additions [0/2]
-- [ ] API documentation
-- [ ] "upload it for me" explanation
+* help additions [2/2]
+- [X] API documentation
+- [X] "upload it for me" explanation
 * Notes
 ** To fix the bout/fencer info:
 *** update gfycats set left_fencer_id = NULL, right_fencer_id = NULL, bout_id = NULL;
