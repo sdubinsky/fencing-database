@@ -47,37 +47,22 @@ module Helpers
 
   def self.get_touches_query_gfycats db, params
     logger = Logger.new($stdout)
-    left_query = Bout.join(:fencers, id: :left_fencer_id)
-    right_query = Bout.join(:fencers, id: :right_fencer_id)
+    fencer_query = Fencer.select(:id)
     
     if params["lastname"] and not params["lastname"].empty?
-      left_query = left_query.where(last_name: params["lastname"].upcase)
-      right_query = right_query.where(last_name: params["lastname"].upcase)
+      fencer_query = fencer_query.where(last_name: params["lastname"].upcase)
     end
 
     if params["firstname"] and not params["firstname"].empty?
-      left_query = left_query.where(first_name: params["firstname"].capitalize)
-      right_query = right_query.where(first_name: params["firstname"].capitalize)
-    end
-    if params["tournament"] and params['tournament'] != "all"
-      left_query = left_query.where(tournament_id: params["tournament"])
-      right_query = right_query.where(tournament_id: params["tournament"])
-    end
-    
-    if params['year'] and params['year'] != 'all'
-      tournaments = Tournament.select(:tournament_id).where(tournament_year: params['year'])
-      left_query = left_query.where(tournament_id: tournaments)
-      right_query = right_query.where(tournament_id: tournaments)
+      fencer_query = fencer_query.where(first_name: params["firstname"].capitalize)
     end
 
     if params['weapon'] and params['weapon'] != 'all'
-      left_query = left_query.where(weapon: params["weapon"])
-      right_query = right_query.where(weapon: params["weapon"])      
+      fencer_query = fencer_query.where(weapon: params["weapon"])
     end
 
     if params['gender'] and params['gender'] != 'all' 
-      left_query = left_query.where(gender: params["gender"])
-      right_query = right_query.where(gender: params["gender"])
+      fencer_query = fencer_query.where(gender: params["gender"])
     end
 
     #use min because the gfy with the lowest opponent's score is the one they scored on.
@@ -117,8 +102,19 @@ module Helpers
       left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(valid: true, touch: ['left', 'double'])
       right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).where(valid: true, touch: ['right', 'double'])
     end
-    left_query = left_query.join(left_gfys, bout_id: Sequel[:bouts][:id])
-    right_query = right_query.join(right_gfys, bout_id: Sequel[:bouts][:id])
+    if params["tournament"] and params['tournament'] != "all"
+      left_gfys = left_gfys.where(tournament_id: params["tournament"])
+      right_gfys = right_gfys.where(tournament_id: params["tournament"])
+    end
+    
+    if params['year'] and params['year'] != 'all'
+      tournaments = Tournament.select(:tournament_id).where(tournament_year: params['year'])
+      left_gfys = left_gfys.where(tournament_id: tournaments)
+      right_gfys = right_gfys.where(tournament_id: tournaments)
+    end
+
+    left_query = left_gfys.join(fencer_query, id: :left_fencer_id)
+    right_query = right_gfys.join(fencer_query, id: :right_fencer_id)
     left_query = left_query.distinct.select(:gfycat_gfy_id)
     right_query = right_query.distinct.select(:gfycat_gfy_id)
 
