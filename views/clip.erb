@@ -34,7 +34,8 @@
                         <% @score_strip_locations.each do |strip_location| %>
                             <option name="strip-location" id="<% strip_location.to_s %>" value="<%= strip_location.to_s%>"><%= strip_location.to_s.gsub("_", " ") %></option>
                         <% end %>
-                    </select><label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label>
+                    </select>
+                    <label><br/>Use their rear foot to judge.  One foot off the back line is still in the warning strip.</label>
                 </div>
                 <div class="form-group radio col-md-3">
                     <label for="initiated-action" class="h4">Who initiated the action?</label><br/>
@@ -47,8 +48,8 @@
                     <label class="h5 radio-inline"> Neither: 
                         <input type="radio" for="initiated-action" name="initiated-action" id="initiated-action-neither" value="neither" class="form-control radio">
                     </label>
+                    <div class="form-question h4"><label><br/>If you're not sure, choose the more aggressive fencer.</label></div>
                 </div>
-
                 <div class="form-group col-md-2">
                     <label for="body_location" class="form-question h4">Where was the hit?</label><br/>
                     <select class="form-control" name="score-body-select" id="score-body-select">
@@ -56,8 +57,8 @@
                             <option id="<%= body_location.to_s%>" class="col-md-16" value="<%= body_location.to_s%>"><%= body_location.to_s.gsub("_", " ")%></option>
                         <% end %>
                     </select>
+                    <label><br />If it's a double touch, answer as if the hit fencer was the fencer who didn't initiate the action.</label>
                 </div>
-
                 <input id="gfycat-id" name="gfycat-id" value="<%= @gfycat.gfycat_gfy_id%>" hidden="true">
                 <div class="form-group submit-button">
                     <input type="submit" value="Submit" class="btn btn-default btn-lg pull-right"/><br />
