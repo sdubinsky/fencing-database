@@ -35,6 +35,11 @@
     <div name="total-responses" class="stats">
         Total responses: <%= @total %><br/>
     </div>
+    <% if @current_user_responses %>
+        <div class="personal-responses">
+            You've rated <%= @current_user_responses %> clips.  Thanks for your help!
+        </div>
+    <% end %>
     <div name="stats-strip-location" class="stats">
         Most touches occur on <%= @most_popular_location %> of the strip<br />
     </div>
