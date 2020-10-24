@@ -5,7 +5,7 @@
     <form class="stats-filter form-inline" id="stats-filter-form" action="stats">
         <label for="weapon-filter" class="form-question h4">Weapon: </label>
         <select class="form-control" name="weapon-filter">
-            <% ["all", "epee", "sabre"].each do |weapon| %>
+            <% ["all", "epee", "sabre", "foil"].each do |weapon| %>
                 <% selected = weapon == params["weapon-filter"]? "selected" : '' %>
                 <option name="<%= weapon %>" <%= selected %> value="<%= weapon %>"><%= weapon.capitalize %></option>
             <% end %>
