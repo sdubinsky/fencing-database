@@ -263,6 +263,7 @@ get '/reels/new/?' do
 end
 
 post '/reels/create' do
+  logger.info "creating new reel for user #{@current_user&.username}"
   login_check
   params['page'] = -1
   gfycats = Helpers.get_touches_query_gfycats DB, params

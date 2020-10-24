@@ -135,9 +135,12 @@ helpers do
   end
 
   def login_check
+    logger.info "checking login for #{session[:user_id]}"
     if not logged_in?
+      logger.info "login failed"
       redirect "/login?url=#{request.path_info}"
     end
+    logger.info "login succeeded"
   end
 
   def current_user
