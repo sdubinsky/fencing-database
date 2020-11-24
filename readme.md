@@ -1,5 +1,20 @@
 # Fencing Database Site
 
+## Local Set Up
+
+1. Install a ruby version between 2.5 and 3.
+2. `bundle install`
+3. Install postgres, if you haven't already, and create yourself a database.
+3. Create a config.yml file in the app root dir.  You need a `db` key with the following subkeys:
+   1. `db_name`
+   2. `db_address`
+   3. `db_username`
+   4. `db_password`
+4. Run the migrations: `rake db:migrate`
+5. Add the tournaments.  `download_tournament_entries.rb` has the list of tournament keys.
+6. Add the GFYs to the DB as below.
+7. If you have any questions, open a ticket or email me. 
+
 ## Adding new GFYs
 
 1. Add the new tournament to the database.
@@ -25,6 +40,3 @@ This section is also a rake task named `db:update_gfycats` but that probably won
 * add the entries page(s) to the hash in `download_tournament_entries.rb'.`
 * locally: `ruby download_tournament_entries.rb`
 * on heroku: DATABASE_URL=`heroku config:get DATABASE_URL -a fencing-db` ruby download_tournament_entries.rb
-
-## To update the gfycat list:
-1. run the `update_gfycat_list.rb` file and pipe it to `heroku psql`.
