@@ -8,8 +8,6 @@ require 'bcrypt'
 require 'securerandom'
 require 'digest/sha2'
 
-enable :sessions
-
 if ENV['DATABASE_URL']
   connstr = ENV['DATABASE_URL']
 else
@@ -31,7 +29,8 @@ require './helpers'
 include Helpers
 logger = Logger.new($stdout)
 
-enable :sessions
+use Rack::Session::Cookie, key: 'rack.session', path: '/'
+                           
 
 configure :development do
   set :show_exceptions, true
