@@ -65,6 +65,12 @@ module Helpers
       fencer_query = fencer_query.where(gender: params["gender"])
     end
 
+    if params['double']
+      doubles_arr = ['double']
+    else
+      doubles_arr = []
+    end
+
     #use min because the gfy with the lowest opponent's score is the one they scored on.
     if params['score-fencer'] == 'highest'
       left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).qualify.join(
@@ -73,13 +79,13 @@ module Helpers
           .qualify.join(
             Gfycat.distinct
               .select(:bout_id, Sequel.function(:max, :left_score).as(:left_score))
-              .where(touch: ['left', 'double'], valid: true)
+              .where(touch: ['left'] + doubles_arr, valid: true)
               .group_by(:bout_id)
               .order_by(:left_score), bout_id: :bout_id, left_score: :left_score)
           .where(valid: true)
           .group_by(:bout_id, :left_score).qualify,
         bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
-                    .qualify.where(valid: true, touch: ['left', 'double'])
+                    .qualify.where(valid: true, touch: ['left'] + doubles_arr)
 
       right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).qualify.join(
         Gfycat.select(:bout_id, :right_score,
@@ -87,20 +93,20 @@ module Helpers
           .qualify.join(
             Gfycat.distinct
               .select(:bout_id, Sequel.function(:max, :right_score).as(:right_score))
-              .where(touch: ['right', 'double'], valid: true)
+              .where(touch: ['right'] + doubles_arr, valid: true)
               .group_by(:bout_id)
               .order_by(:right_score), bout_id: :bout_id, right_score: :right_score)
           .where(valid: true)
           .group_by(:bout_id, :right_score).qualify,
         bout_id: :bout_id, left_score: :left_score, right_score: :right_score)
-                     .qualify.where(valid: true, touch: ['right', 'double'])
+                     .qualify.where(valid: true, touch: ['right'] + doubles_arr)
     elsif params["score-fencer"] and params['score-fencer'] != 'all'
-      left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score-fencer'].to_i, touch: ['left', 'double'], valid: true)
+      left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(left_score: params['score-fencer'].to_i, touch: ['left'] + doubles_arr, valid: true)
 
-      right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score-fencer'].to_i, touch: ['right', 'double'], valid: true)
+      right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(right_score: params['score-fencer'].to_i, touch: ['right'] + doubles_arr, valid: true)
     else
-      left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(valid: true, touch: ['left', 'double'])
-      right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).where(valid: true, touch: ['right', 'double'])
+      left_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :left_score, :right_score).where(valid: true, touch: ['left'] + doubles_arr)
+      right_gfys = Gfycat.select(:gfycat_gfy_id, :bout_id, :right_score, :right_score).where(valid: true, touch: ['right'] + doubles_arr)
     end
     if params["tournament"] and params['tournament'] != "all"
       left_gfys = left_gfys.where(tournament_id: params["tournament"])

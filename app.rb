@@ -280,9 +280,6 @@ post '/reels/create' do
   params['page'] = -1
   DB.transaction do
     gfycats.each do |gfy|
-      unless params['double'] or Gfycat.first(gfycat_gfy_id: gfy[:gfycat_gfy_id]).touch != 'double'
-        next
-      end
       ReelClip.create(
         gfycat_gfy_id: gfy[:gfycat_gfy_id],
         highlight_reel: reel,
