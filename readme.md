@@ -19,7 +19,9 @@
 
 1. Add the new tournament to the database.
 2. Download the entries via `ruby download_tournament_entries.rb`
-2. Run `ruby ./update_gfycat_list.rb` and pipe it to the right psql.
+2. Run `ruby ./update_gfycat_list.rb`.
+   3. Locally, just run the script and it'll use whatever is in your `config.yml`
+   4. to update heroku, prepend it with DATABASE_URL=`heroku config:get DATABASE_URL -a fencing-db`
 3. run the rake tasks `db:normalize_names` and `db:add_bouts`.
 
 This section is also a rake task named `db:update_gfycats` but that probably won't work on heroku.
@@ -39,4 +41,4 @@ This section is also a rake task named `db:update_gfycats` but that probably won
 * Find the tournament on the fie page, click "entries".
 * add the entries page(s) to the hash in `download_tournament_entries.rb'.`
 * locally: `ruby download_tournament_entries.rb`
-* on heroku: DATABASE_URL=`heroku config:get DATABASE_URL -a fencing-db` ruby download_tournament_entries.rb
+* on heroku: DATABASE_URL=`heroku config:get DATABASE_URL -a fencing-db` ruby `download_tournament_entries.rb`

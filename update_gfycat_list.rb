@@ -39,7 +39,8 @@ end
 access_token = get_access_token
 
 #the list is just gfys that keep getting included for some reason
-old_gfycats = Gfycat.map(:gfycat_gfy_id) + ["EnchantedTatteredBasilisk", 'UltimateThoughtfulArizonaalligatorlizard', 'FormalWideIberianbarbel', 'CluelessFatCockatoo']
+old_gfycats = Gfycat.select(:gfycat_gfy_id).order(:gfycat_gfy_id).all
+extra_gfys = ["EnchantedTatteredBasilisk", 'UltimateThoughtfulArizonaalligatorlizard', 'FormalWideIberianbarbel', 'CluelessFatCockatoo']
 tournaments = Tournament.select(:tournament_id).to_a
 $stderr.puts "old gfycat count: #{old_gfycats.length}"
 connection = Excon.new "https://api.gfycat.com", persistent: true
@@ -52,8 +53,8 @@ until (not cursor) or cursor.empty? do
   cursor = next_round['cursor']
   all_gfycats = all_gfycats + next_round['gfycats'] if next_round['gfycats']
 end
-old_gfycats.sort!
-new_gfycats = all_gfycats.reject{|a| old_gfycats.bsearch{|b| a['gfyName'] <=> b }}
+
+new_gfycats = all_gfycats.reject{|a| extra_gfys.include?(a) || old_gfycats.bsearch{|b| a['gfyName'] <=> b }}
 
 $stderr.puts "new gfycats count: #{new_gfycats.length}"
 DB = Sequel.connect connstr
