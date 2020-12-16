@@ -102,21 +102,22 @@ post '/search' do
   erb :search
 end
 
-get '/clip/?:gfycat_gfy_id?/?' do 
+get '/clip/:gfycat_gfy_id/?' do 
   @score_strip_locations = [:fotl_warning_box, :fotl_half, :middle, :fotr_half, :fotr_warning_box]
   @score_body_locations = [:hand, :front_arm, :torso, :head, :front_leg, :foot, :back_arm, :back_leg]
   begin
-    if params['gfycat_gfy_id']
-      @gfycat = Gfycat.first(gfycat_gfy_id: params['gfycat_gfy_id'])
-    else
-      @gfycat = Gfycat.random_gfycat_id
-      redirect "/clip/#{@gfycat.gfycat_gfy_id}"
-    end
+    @gfycat = Gfycat.first(gfycat_gfy_id: params['gfycat_gfy_id'])
+    redirect "/clip/" unless @gfycat
     logger.info "Showing #{@gfycat.gfycat_gfy_id}"
   rescue RuntimeError
     return "Please seed the DB by sending a GET request to /update_gfycat_list"
   end
   erb :clip
+end
+
+get '/clip/?' do
+  @gfycat = Gfycat.random_gfycat_id
+  redirect "/clip/#{@gfycat.gfycat_gfy_id}"
 end
 
 post '/clip/submit/?' do
@@ -130,7 +131,7 @@ post '/clip/submit/?' do
   )
 
   logger.info("new submission: #{response.to_s}")
-  redirect "/clip?gfycat_gfy_id=#{params['gfycat-id']}"
+  redirect "/clip/=#{params['gfycat-id']}"
 end
 
 get '/stats/?' do
