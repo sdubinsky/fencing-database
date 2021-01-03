@@ -82,7 +82,9 @@ url_ids = {'budapest2020': ['https://fie.org/competition/2020/112/entry/pdf?lang
            'stpetersburgfoil2019': ['https://fie.org/competition/2019/147/entry/pdf?lang=en'],
            'kazanwch2014': ['https://fie.org/competition/2014/242/entry/pdf?lang=en',
                             'https://fie.org/competition/2014/241/entry/pdf?lang=en'],
-           'tunissabre2017': ['https://fie.org/competition/2017/471/entry/pdf?lang=en']
+           'tunissabre2017': ['https://fie.org/competition/2017/471/entry/pdf?lang=en'],
+            'anaheimfoil2019': ['https://fie.org/competition/2019/140/entry/pdf?lang=en',
+                               'https://fie.org/competition/2019/121/entry/pdf?lang=en'],
 }
 
 Sequel.connect connstr do |db|
@@ -121,4 +123,3 @@ url_ids.each do |tournament_key, urls|
     end
   end
 end
-
