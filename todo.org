@@ -24,7 +24,26 @@
 - [-] my account page
   - [ ] logout button
   - [X] count of clips reviewed
-  - [ ] badges?
+  - [ ] badges? 
+* [0/6] Albert's Page
+- [ ] DB changes
+  - [ ] list of keycodes/meanings
+  - [ ] list of valid accounts?
+  - [ ] save reviewed touches - make them a special reel with all sabre clips, probably
+  - [ ] save results - who reviewed, what the result was, and what clip it was
+- [ ] clip page:
+  - [ ] fencers
+  - [ ] whose touch
+  - [ ] tournament name
+  - [ ] list of keycodes - pull from db
+- [ ] submit js
+  - [ ] pull keycodes/meanings from db
+- [ ] stats page:
+  - [ ] each key's total
+  - [ ] link to list of gfys for each key
+  - [ ] API variant
+- [ ] submit endpoint
+- [ ] keycodes endpoint
 * search page improvement [2/6]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
@@ -36,10 +55,9 @@
 - [X] get updated list of fencers
 - [X] get list of fencers in a tournament
 - [X] deduplicate fencers in gfycats based on the list of fencers in the tournament, not in the whole list
-* gfy page improvements [3/4]
+* gfy page improvements [3/3]
 - [X] add "report this touch" for errors
 - [X] show derived data, like fencer names and touch scored
-- [ ] add "which fencer" question for double touches
 - [X] path should be `/clip/gfy_id` not `/clip?gfycat_gfy_id=gfy_id`
 * stats page improvements [1/1]
 - [X] filter stats by weapon
@@ -52,7 +70,7 @@
 - [ ] sort clips by tournament, then bout
 - [ ] allow option to categorize, not just yes/no
 - [ ] report clip directly from selection page
-* fencer page improvements [/]
+* fencer page improvements [0/1]
 - [ ] add link to FIE page
 * add accounts [6/6]
 - [X] accounts table/model

@@ -1,0 +1,29 @@
+<script id='report_error' src="<%= url("js/report_error.js")%>" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="<%=url("css/reel_clip.css")%>" >
+<script id="fencing_ai_clip_js" src="<%= url("js/fencing_ai_clip.js") %>" type="text/javascript"></script>
+<script>setKeycodes(<%= @keycodes %>)</script>
+<div class="reel-clip-info">
+    <div class="<%=params['id']%>" id="reel-id-div"></div>
+    <div class="<%=@clip.gfycat_gfy_id%>" id="clip-id-div"></div>
+    <h3><%= @clip.gfycat_gfy_id %></h3>
+    <h4><%= @clip.gfycat.to_s_links %></h4>
+    <h4><%= @clip.gfycat.touch %> touch </h4>
+    <video class="video media" id="video-<%= @clip.gfycat_gfy_id %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= @clip.gfycat_gfy_id %>-mobile.jpg" tabindex="-1">
+        <source src="https://thumbs.gfycat.com/<%= @clip.gfycat_gfy_id %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= @clip.gfycat_gfy_id %>.webm" type="video/webm">
+        <source src="https://giant.gfycat.com/<%= @clip.gfycat_gfy_id %>.mp4" type="video/mp4">
+        <source src="https://thumbs.gfycat.com/<%= @clip.gfycat_gfy_id %>-mobile.mp4" type="video/mp4">
+        <meta itemprop="contentUrl" content="https://giant.gfycat.com/<%= @clip.gfycat_gfy_id %>.mp4">
+    </video>
+    <div class="clip-subtext">
+        <% if params['reported'] %>
+            <div class="report-error">
+                Thank you!
+            </div>
+        <% else %>
+            <div id="report-error" class="report-error" onclick="reportError('<%= @clip.gfycat_gfy_id %>');"">
+                <a href="#">Report Error</a>
+            </div>
+        <% end %>
+    </div>
+</div>
+<form id="submitForm">

@@ -366,6 +366,24 @@ post '/reels/submit/?' do
   @clip.save
 end
 
+post '/fencing-ai/submit/?' do
+  
+end
+
+get '/fencing-ai/keycodes/?' do
+  
+end
+
+get '/fencing-ai/error/?' do
+  "Oops"
+end
+
+get '/fencing-ai/clip/?' do
+  @clip = ReelClip.where(selected: nil, highlight_reel_id: 21).order_by(Sequel.lit('random()')).first
+  @keycodes =  FencingAiKeycodes.all.to_json
+  erb :fencing_ai_clip
+end
+
 get '/docs/?' do
   erb :docs
 end

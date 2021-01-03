@@ -11,3 +11,5 @@ require_relative 'error_report'
 require_relative 'user'
 require_relative 'api_keys'
 require_relative 'view'
+require_relative 'fencing_ai_keycodes'
+
