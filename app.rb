@@ -371,7 +371,7 @@ post '/fencing-ai/submit/?' do
 end
 
 get '/fencing-ai/keycodes/?' do
-  
+  FencingAiKeycodes.select(:keycode, :meaning).map{|a| a.to_hash}.to_json
 end
 
 get '/fencing-ai/error/?' do

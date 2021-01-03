@@ -25,14 +25,13 @@
   - [ ] logout button
   - [X] count of clips reviewed
   - [ ] badges? 
-* [0/6] Albert's Page
-- [ ] DB changes
-  - [ ] list of keycodes/meanings
-  - [ ] list of valid accounts?
+* [1/6] Albert's Page
+- [-] DB changes
+  - [X] list of keycodes/meanings
   - [ ] save reviewed touches - make them a special reel with all sabre clips, probably
   - [ ] save results - who reviewed, what the result was, and what clip it was
-- [ ] clip page:
-  - [ ] fencers
+- [-] clip page:
+  - [X] fencers
   - [ ] whose touch
   - [ ] tournament name
   - [ ] list of keycodes - pull from db
@@ -43,7 +42,7 @@
   - [ ] link to list of gfys for each key
   - [ ] API variant
 - [ ] submit endpoint
-- [ ] keycodes endpoint
+- [X] keycodes endpoint
 * search page improvement [2/6]
 - [ ] search by opponent's score
 - [ ] search by two fencers, get all touches between them
