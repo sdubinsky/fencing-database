@@ -380,7 +380,7 @@ end
 
 get '/fencing-ai/clip/?' do
   @clip = ReelClip.where(selected: nil, highlight_reel_id: 21).order_by(Sequel.lit('random()')).first
-  @keycodes =  FencingAiKeycodes.all.to_json
+  @keycodes = FencingAiKeycodes.order(:keycode).all
   erb :fencing_ai_clip
 end
 
