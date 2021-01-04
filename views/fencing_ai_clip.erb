@@ -8,6 +8,7 @@
     <div class="<%=@clip.gfycat_gfy_id%>" id="clip-id-div"></div>
     <h3><%= @clip.gfycat_gfy_id %></h3>
     <h4><%= @clip.gfycat.to_s_links %></h4>
+    <h4><%= @clip.gfycat.tournament.tournament_name %>, <%= @clip.gfycat.tournament.tournament_year %></h4>
     <h4><%= @clip.gfycat.touch %> touch </h4>
     <video class="video media" id="video-<%= @clip.gfycat_gfy_id %>" alt="fencing gfy" autoplay muted loop poster="https://thumbs.gfycat.com/<%= @clip.gfycat_gfy_id %>-mobile.jpg" tabindex="-1">
         <source src="https://thumbs.gfycat.com/<%= @clip.gfycat_gfy_id %>-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/<%= @clip.gfycat_gfy_id %>.webm" type="video/webm">
