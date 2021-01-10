@@ -36,10 +36,14 @@ def get_access_token
   response['access_token']
 end
 
+def log_time
+  Time.now.strftime("%H:%M:%S")
+end
+
 access_token = get_access_token
 
 #the list is just gfys that keep getting included for some reason
-old_gfycats = Gfycat.select(:gfycat_gfy_id).order(:gfycat_gfy_id).all
+old_gfycats = Gfycat.select(:gfycat_gfy_id).all.sort{|a, b| a.gfycat_gfy_id <=> b.gfycat_gfy_id}
 extra_gfys = ["EnchantedTatteredBasilisk", 'UltimateThoughtfulArizonaalligatorlizard', 'FormalWideIberianbarbel', 'CluelessFatCockatoo']
 tournaments = Tournament.select(:tournament_id).to_a
 $stderr.puts "old gfycat count: #{old_gfycats.length}"
@@ -54,8 +58,11 @@ until (not cursor) or cursor.empty? do
   all_gfycats = all_gfycats + next_round['gfycats'] if next_round['gfycats']
 end
 
-new_gfycats = all_gfycats.reject{|a| extra_gfys.include?(a) || old_gfycats.bsearch{|b| a['gfyName'] <=> b }}
+$stderr.puts "finished getting gfy list and started filtering at " + log_time
 
+new_gfycats = all_gfycats.reject{|a| extra_gfys.include?(a['gfyName']) ||
+                                 old_gfycats.bsearch{|b| a['gfyName'] <=> b.gfycat_gfy_id }}
+$stderr.puts "finished filtering at " + log_time
 $stderr.puts "new gfycats count: #{new_gfycats.length}"
 DB = Sequel.connect connstr
 require './models/init'
@@ -93,3 +100,4 @@ DB.transaction do
     end
   end
 end
+$stderr.puts "done at " + log_time
