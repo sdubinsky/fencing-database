@@ -1,3 +1,5 @@
+* [/] Bugs
+- [ ] https://www.fencingdatabase.com/clip/WhichFarArcticseal is reported as Karoline Loit but should be Oh Sanguk
 * DB Improvements [4/8]
 - [ ] retest each clip for fencer names and scores
 - [ ] sanitize db for duplicate names
@@ -25,16 +27,16 @@
   - [ ] logout button
   - [X] count of clips reviewed
   - [ ] badges? 
-* [1/6] Albert's Page
+* [2/6] Albert's Page
 - [-] DB changes
   - [X] list of keycodes/meanings
   - [ ] save reviewed touches - make them a special reel with all sabre clips, probably
   - [ ] save results - who reviewed, what the result was, and what clip it was
-- [-] clip page:
+- [X] clip page:
   - [X] fencers
-  - [ ] whose touch
-  - [ ] tournament name
-  - [ ] list of keycodes - pull from db
+  - [X] whose touch
+  - [X] tournament name
+  - [X] list of keycodes - pull from db
 - [ ] submit js
   - [ ] pull keycodes/meanings from db
 - [ ] stats page:
@@ -94,3 +96,12 @@
 *** rake db:normalize_names
 *** rake db:add_bouts
 *** DO NOT delete the gfycats table.  There's too much info there that can't be replicated anymore.
+* Update Gfycats Bug
+** b-search requires a sorted array to work properly
+** Postgres search, by default (in my locale) sorts case-insensitive, but bsearch works case-sensitive
+** This causes bsearch to miss the gfy id DimwittedWealthyHalicore
+** The difference is in index 3446 (for the nonce).  For that, postgres sorts 'AppropriateOldfashionedEstuarinecrocodile' before 'AppropriateOldIndianjackal', but array#sort flips the order.
+** Getting postgres to sort case-insensitive is locale dependent and depends on the machine you're running it on
+** So we'll lowercase everything
+** that didn't work, so we'll stop using bsearch?
+** that's super slow, so we'll just sort in ruby instead of postgres
